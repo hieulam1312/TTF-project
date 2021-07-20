@@ -127,21 +127,21 @@ def check_plan(plan):
         st.markdown('')    
         st.write(plan_today)
         st.markdown('')
-        plan_late=plan_toweek.loc[plan_toweek.REMARKS=="TRỄ"]
-        plan_late=plan_late.reset_index(drop=True)
-        st.markdown("<h4 style='text-align: left; color:red'>ĐANG TRỄ </h4>", unsafe_allow_html=True)
-        st.markdown('')  
-        st.write(plan_late)
-    #Plan ngày mai
-    with col2:
         plan_tomorrow=plan_toweek.loc[plan_toweek.REMARKS=="NGÀY MAI"]
         plan_tomorrow=plan_tomorrow.reset_index(drop=False)
         st.markdown("<h4 style='text-align: left'>NGÀY MAI</h4>", unsafe_allow_html=True)
         st.markdown('')
         st.write(plan_tomorrow)
         st.markdown('')
-    #plan đang bị trễ
+    #Plan ngày mai
+    with col2:
 
+    #plan đang bị trễ
+        plan_late=plan_toweek.loc[plan_toweek.REMARKS=="TRỄ"]
+        plan_late=plan_late.reset_index(drop=True)
+        st.markdown("<h4 style='text-align: left; color:red'>ĐANG TRỄ </h4>", unsafe_allow_html=True)
+        st.markdown('')  
+        st.write(plan_late)
 
         st.markdown("<h4 style='text-align: left; color:blue'>ĐÃ GIAO HÀNG TRẮNG</h4>", unsafe_allow_html=True)
         st.markdown('')  
