@@ -2,6 +2,7 @@ import streamlit as st
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
 from datetime import datetime as dt #-> Để xử lý data dạng datetime
+import gspread #-> Để update data lên Google Spreadsheet
 import numpy as np
 import pandas as pd #-> Để update data dạng bản
 import json 
