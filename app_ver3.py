@@ -68,7 +68,7 @@ st.cache()
 def check_attend(attend):
 
     st.markdown("")
-    col1,col2=st.beta_columns((1,1))
+    c,col1,e,col2,d=st.beta_columns((.5,2,.2,2,.5))
     with col1:
         st.markdown('Bản vẽ')
         drawing=attend.loc[attend['VỊ TRÍ']=='TRIỂN KHAI ĐH']
@@ -127,15 +127,15 @@ def check_plan(plan):
         st.markdown('')    
         st.write(plan_today)
         st.markdown('')
+
+    #Plan ngày mai
+    with col2:
         plan_tomorrow=plan_toweek.loc[plan_toweek.REMARKS=="NGÀY MAI"]
         plan_tomorrow=plan_tomorrow.reset_index(drop=False)
         st.markdown("<h4 style='text-align: left'>NGÀY MAI</h4>", unsafe_allow_html=True)
         st.markdown('')
         st.write(plan_tomorrow)
         st.markdown('')
-    #Plan ngày mai
-    with col2:
-
     #plan đang bị trễ
         plan_late=plan_toweek.loc[plan_toweek.REMARKS=="TRỄ"]
         plan_late=plan_late.reset_index(drop=True)
@@ -191,7 +191,7 @@ if choose=='NV_PTM':
     c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
     if c=='VỊ TRÍ CỦA MẪU':
         check_by_per=attend_df.loc[attend_df['NV_PTM_y']==choose_type]
-        check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','MÃ_KHÁCH_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
+        check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
         check_attend(check_by_per)
     else:
         plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
@@ -203,7 +203,7 @@ elif choose=="NHÀ_MÁY":
     _1= ['NM1','NM3','X4','NM NỆM']
     choose_type=col1.selectbox('Chọn đối tượng 2',_1)
     check_by_per=attend_df.loc[attend_df['NHÀ_MÁY_x']==choose_type]
-    check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','MÃ_KHÁCH_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
+    check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
     
     c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
     if c=='VỊ TRÍ CỦA MẪU':
