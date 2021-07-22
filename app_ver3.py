@@ -1,3 +1,4 @@
+from pandas.tseries.offsets import Week
 import streamlit as st
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
@@ -8,7 +9,7 @@ import pandas as pd #-> Để update data dạng bản
 import json 
 import matplotlib.image as mpimg
 from google.oauth2 import service_account
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from datetime import datetime as dt
 from typing import Text
 from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
@@ -53,6 +54,16 @@ process_=sheet10.get_all_records()
 process_df=pd.DataFrame(process_)
 process_df.columns=process_df.columns.str.replace(' ',"_")
 process_df=process_df.replace("",np.nan)
+
+sheet11=gc3.open("MẪU - dataset for Python").worksheet('CALC')
+calc_=sheet11.get_all_records()
+calc_df=pd.DataFrame(calc_)
+calc_df=calc_df[['SỐ ĐƠN HÀNG','TÊN SẢN PHẨM','NHÀ MÁY','NVLM','NGÀY NVLM GIAO','THÁNG GIAO','T/G TTF']]
+calc_df['NGÀY NVLM GIAO']=pd.to_datetime(calc_df['NGÀY NVLM GIAO'])
+calc_df['TUẦN GIAO']=calc_df['NGÀY NVLM GIAO'].dt.week
+calc_df.columns=calc_df.columns.str.replace(' ',"_")
+calc_df=calc_df.replace("",np.nan)
+###
 plan_df.columns=plan_df.columns.str.replace(' ',"_")
 attend_=error_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
 error_all=error_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
@@ -180,8 +191,61 @@ def check_error(error):
         doing=error.loc[error['TÌNH_TRẠNG_x']=='Đang xử lí']
         doing_df=doing[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM','NHÀ_MÁY_x']] 
         doing_df
-def operation(df,bp):
+def operation(df,bp,calc,plan):
+    month=date.today().month
+    week_=date.today().isocalendar()[1]
     c,col1,d,col2,e=st.beta_columns((.5,10,.2,8,.5))
+    done_=calc.loc[calc['THÁNG_GIAO']==month]
+    done_month=done_.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
+    total_month=done_month['SỐ_ĐƠN_HÀNG'].sum()
+    done_['T/G_TTF']=done_['T/G_TTF'].astype(float)
+    time_month=done_.loc[done_['T/G_TTF'].isnull()==False]
+    avg_month=time_month['T/G_TTF'].mean()
+
+    done_w=calc.loc[calc['TUẦN_GIAO']==week_]
+    done_week=done_w.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
+    total_week=done_week['SỐ_ĐƠN_HÀNG'].sum()
+
+    time_week=done_w.loc[done_['T/G_TTF'].isnull()==False]
+    avg_week=time_week['T/G_TTF'].mean()
+
+    _1,_2,_3,_4,_5=st.beta_columns((.5,10,.2,10,.5))
+    fig3, ax = plt.subplots()   
+    sns.set_palette("pastel")
+
+    st.set_option('deprecation.showPyplotGlobalUse',False)
+    sns.barplot(data=done_month,x=done_month['NVLM'],y=done_month['SỐ_ĐƠN_HÀNG'],color='Green')
+    plt.xticks(rotation=90)
+    plt.show()
+    fig4, ax = plt.subplots()   
+    st.set_option('deprecation.showPyplotGlobalUse',False)
+    sns.set_palette("pastel")
+    sns.barplot(data=done_week,x=done_week['NVLM'],y=done_week['SỐ_ĐƠN_HÀNG'])
+    plt.xticks(rotation=90)
+    plt.show()
+    with _2:
+        st.markdown('Kết quả tháng: **{}**'.format(month))
+        st.markdown('Số lượng đã xong hàng trắng: **{}**'.format(total_month))
+        st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_month))
+        st.pyplot(fig3)
+    with _4:
+        st.markdown('Kết quả tuần: **{}**'.format(week_))
+        st.markdown('Số lượng đã xong hàng trắng: **{}**'.format(total_week))
+        st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_week))
+
+        st.pyplot(fig4) 
+
+
+        plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
+        plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
+        plan__=plan_.loc[plan_.WEEK==week_+1]
+        plan_toweek=plan__[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
+        plan_doing=plan__.loc[plan__.REMARKS!='Done']
+        plan_doing=plan_doing[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
+        plan_doing=plan_doing.reset_index(drop=True)
+        st.markdown("")
+        plan_doing
+
     with col1:
         df_=df.loc[df['TÌNH_TRẠNG_x']!='Chưa giao']
         doing_count=df_.groupby(df_['BỘ_PHẬN']).SỐ_ĐƠN_HÀNG.count()
@@ -242,7 +306,7 @@ with r1:
 if ch=='OVERVIEW':
     st.markdown('### OVERVIEW')
     st.markdown('Danh sách mẫu tại mỗi bộ phận')
-    operation(error_all,process_df)
+    operation(error_all,process_df,calc_df,plan_df)
 else:
     choose=col1.selectbox('Chọn đối tượng 1',['NHÀ_MÁY','NV_PTM','BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
     if choose=='NV_PTM':
