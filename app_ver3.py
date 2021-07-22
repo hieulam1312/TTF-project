@@ -201,6 +201,7 @@ def operation(df,bp):
     NM_df=NM.reset_index()
     NM_df['NHÀ_MÁY_x']=NM_df['NHÀ_MÁY_x'].str.replace('#N/A','Chưa phân bổ')
     fig, ax = plt.subplots()   
+    st.set_option('deprecation.showPyplotGlobalUse',False)
     sns.barplot(data=NM_df,x=NM_df['NHÀ_MÁY_x'],y=NM_df['SỐ_ĐƠN_HÀNG'])
     with col2:
         st.pyplot(fig)
