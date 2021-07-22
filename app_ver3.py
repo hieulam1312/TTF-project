@@ -238,7 +238,7 @@ with t1:
     st.title('OPERATION DASHBOARD')
 r1,r2,r3,r4,r5=st.beta_columns((.5,.5,.1,1,.5))
 with r1:
-    ch=st.selectbox('',['OVERVIEW','KIỂM TRA TIẾN ĐỘ'])
+    ch=st.sidebar.selectbox('',['OVERVIEW','KIỂM TRA TIẾN ĐỘ'])
 if ch=='OVERVIEW':
     st.markdown('### OVERVIEW')
     st.markdown('Danh sách mẫu tại mỗi bộ phận')
