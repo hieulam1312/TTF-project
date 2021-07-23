@@ -71,9 +71,9 @@ xl_sl=sh6.get_all_records()
 xl_sl_df=pd.DataFrame(xl_sl)
 #order_df
 
-sh5=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('T.DÕI')
-td_old=sh5.get_all_records()
-td_old_df=pd.DataFrame(td_old)
+# sh5=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('T.DÕI')
+# td_old=sh5.get_all_records()
+# td_old_df=pd.DataFrame(td_old)
 
 sh7=gc3.open('TTF - MẪU 2021 - DƯỚI 12').worksheet('D.SÁCH')
 under_12ds=sh7.get_all_records()
@@ -92,7 +92,7 @@ td_new_df=td_new_df[['SỐ ĐƠN HÀNG','BƯỚC','IN','OT','NHÀ MÁY','NMVLM',
 td_new_df=td_new_df.rename(columns={'IN': 'NGÀY NHẬN','OT':'NGÀY GIAO','NMVLM':'NVLM'})
 
 # td_old_df.columns=td_old_df.columns.str.replace(" ","_")
-td_all_df=pd.concat([td_old_df,td_new_df,under_12td_df])
+td_all_df=pd.concat([td_new_df,under_12td_df])
 td_all_df=td_all_df.replace('',np.nan)
 td_2021_df=td_all_df[td_all_df['SỐ ĐƠN HÀNG'].notnull()]
 td_2021_df.columns=td_2021_df.columns.str.replace(' ','_')
