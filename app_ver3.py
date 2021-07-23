@@ -50,7 +50,6 @@ sh5=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('T.ĐỘ SX')
 plan_df=sh5.get_all_records()
 plan_df=pd.DataFrame(plan_df)
 order_df.columns = order_df.columns.str.replace(' ', '_')
-
 sheet10=gc3.open("MẪU - dataset for Python").worksheet('TD')
 process_=sheet10.get_all_records()
 process_df=pd.DataFrame(process_)
@@ -76,7 +75,8 @@ conditions = [
 choices = ['TRIỂN KHAI ĐH','THU MUA','THU MUA','RA RẬP','RA RẬP','RA PHÔI','LÀM MẪU','QC MẪU','SƠN & NỆM']
 attend_df['VỊ TRÍ'] = np.select(conditions, choices, default="")
 hist_=process_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
-hist_df=hist_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM_y','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','NVLM','TÌNH_TRẠNG','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
+hist_
+hist_df=hist_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM_y','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','NVLM','TÌNH_TRẠNG_x','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
 
 
 st.cache()
