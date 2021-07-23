@@ -17,3 +17,4 @@ gspread
 streamlit-pandas-profiling==0.1.2
 sklearn
 waterfallcharts
+gspread-dataframe
