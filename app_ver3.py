@@ -32,9 +32,6 @@ credentials = service_account.Credentials.from_service_account_info(
     scopes=['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive'],
 )
-
-gc1 = gspread.authorize(credentials)
-spreadsheet_key = '1pMA3ZDjkL8gtIzQMyEkHwL_8-wDrXiO45OgtsPrkFec'
 gc2 = gspread.authorize(credentials)
 spreadsheet_key='1Kf79UeBTa0q2NAh4PaW2Y1nqE__S0wiSQSOkk2dkQm0'
 
@@ -52,94 +49,13 @@ order_df=pd.DataFrame(order_df)
 sh5=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('T.ĐỘ SX')
 plan_df=sh5.get_all_records()
 plan_df=pd.DataFrame(plan_df)
-# order_df.columns = order_df.columns.str.replace(' ', '_')
+order_df.columns = order_df.columns.str.replace(' ', '_')
 
-#scan_df
-sh1 = gc1.open("MẪU 2021 - COLLECT DATA").worksheet('UNPIVOT')
-scan_df=sh1.get_all_records()
-scan_df=pd.DataFrame(scan_df)
-#td_df
-sh2=gc1.open("MẪU 2021 - COLLECT DATA").worksheet('TD')
-td_df=sh2.get_all_records()
-td_df=pd.DataFrame(td_df)
-#td_x4_df
-sh3=gc1.open("MẪU 2021 - COLLECT DATA").worksheet('TD X4-NỆM')
-td_x4_df=sh3.get_all_records()
-td_x4_df=pd.DataFrame(td_x4_df)
-sh6=gc1.open("MẪU 2021 - COLLECT DATA").worksheet('XL+ SL')
-xl_sl=sh6.get_all_records()
-xl_sl_df=pd.DataFrame(xl_sl)
-#order_df
-
-# sh5=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('T.DÕI')
-# td_old=sh5.get_all_records()
-# td_old_df=pd.DataFrame(td_old)
-
-sh7=gc3.open('TTF - MẪU 2021 - DƯỚI 12').worksheet('D.SÁCH')
-under_12ds=sh7.get_all_records()
-under_12ds_df=pd.DataFrame(under_12ds)
-sh8=gc3.open('TTF - MẪU 2021 - DƯỚI 12').worksheet('T.DÕI')
-under_12td=sh8.get_all_records()
-under_12td_df=pd.DataFrame(under_12td)
-
-
-nm_df=td_df.loc[(td_df['NHÀ MÁY']!='X4')|(td_df['NHÀ MÁY']!='NM NỆM')]
-td_new_df=pd.concat([nm_df,td_x4_df])
-td_new_df=td_new_df[['SỐ ĐƠN HÀNG','BƯỚC','IN','OT','NHÀ MÁY','NMVLM','BỘ PHẬN','NGÀY GIẢI QUYẾT','NHÓM MẪU']]
-td_new_df=td_new_df.rename(columns={'IN': 'NGÀY NHẬN','OT':'NGÀY GIAO','NMVLM':'NVLM'})
-
-# td_old_df.columns=td_old_df.columns.str.replace(" ","_")
-td_all_df=pd.concat([td_new_df,under_12td_df])
-td_all_df=td_all_df.replace('',np.nan)
-td_2021_df=td_all_df[td_all_df['SỐ ĐƠN HÀNG'].notnull()]
-td_2021_df.columns=td_2021_df.columns.str.replace(' ','_')
-
-# under_12ds_df=under_12ds_df.rename(columns={'NV LÀM MẪU':'NVLM'})
-under_12ds_df=under_12ds_df.drop(['BƯỚC'],axis=1)
-nvlm=td_all_df
-nvlm=nvlm[['SỐ ĐƠN HÀNG','NVLM']]
-nvlm_df=nvlm.drop_duplicates()
-nvlm_df=nvlm_df.dropna()
-
-# xl_sl_df.columns=xl_sl_df.columns.str.replace(' ','_')
-xl=xl_sl_df.loc[xl_sl_df['THAO TÁC']==' Giao đơn hàng']
-xl_df=xl[['SỐ ĐH','XẾP LOẠI','SL THỰC TẾ']]
-xl_df=xl_df.rename(columns={'SỐ ĐH':'SỐ ĐƠN HÀNG'})
-
-
-under_12ds_df=under_12ds_df.drop(['NV LÀM MẪU'],axis=1)
-order_df=order_df.drop(['GỖ','SƠN','NỆM','BAO BÌ','GHI CHÚ','HÌNH ẢNH'], axis = 1)
-new_order=order_df.merge(xl_df,how='left',on='SỐ ĐƠN HÀNG')
-
-order_2021_df=pd.concat([new_order,under_12ds_df])
-order_new=order_2021_df.merge(nvlm_df,how='left',on='SỐ ĐƠN HÀNG')
-order_new=order_new.replace(np.nan,0)
-order_new['NGÀY GIAO']=pd.to_datetime(order_new['NGÀY GIAO'],dayfirst=True,errors='coerce')
-# order_2021_df['NGÀY GIAO'].astype('datetime64')
-# df['date'].astype('datetime64')
-order_new['NGÀY GIAO']=pd.to_datetime(order_new['NGÀY GIAO'],dayfirst=True,errors='coerce')
-order_new['NGÀY LẬP']=pd.to_datetime(order_new['NGÀY LẬP'],dayfirst=True,errors='coerce')
-td_2021_df['NGÀY_NHẬN']=pd.to_datetime(td_2021_df['NGÀY_NHẬN'],dayfirst=True,errors='coerce')
-td_2021_df['NGÀY_GIAO']=pd.to_datetime(td_2021_df['NGÀY_GIAO'],dayfirst=True,errors='coerce')
-import gspread #-> Để update data lên Google Spreadsheet
-from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
-gc = gspread.authorize(credentials)
-# ACCES GOOGLE SHEET
-sheet_index_no1 = 0
-sheet_index_no2 = 1
-sheet_index_no3 = 3
-
-spreadsheet_key = '1ECQkxew8ixIxb43FVyd3d8LmtRo5VHr1fvt3A7a88L8' # input SPREADSHEET_KEY HERE
-sh = gc.open_by_key(spreadsheet_key)
-worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
-worksheet2 = sh.get_worksheet(sheet_index_no2)
-worksheet3= sh.get_worksheet(sheet_index_no3)
-
-set_with_dataframe(worksheet1, order_new) #-> Upload user_df vào Sheet đầu tiên trong Spreadsheet
-set_with_dataframe(worksheet2,td_2021_df) 
-sh8=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('Sheet53')
-dataaa=sh8.get_all_records()
-data=pd.DataFrame(dataaa)
+sheet10=gc3.open("MẪU - dataset for Python").worksheet('TD')
+process_=sheet10.get_all_records()
+process_df=pd.DataFrame(process_)
+process_df.columns=process_df.columns.str.replace(' ',"_")
+process_df=process_df.replace("",np.nan)
 
 sheet11=gc3.open("MẪU - dataset for Python").worksheet('CALC')
 calc_=sheet11.get_all_records()
@@ -149,25 +65,18 @@ calc_df['NGÀY NVLM GIAO']=pd.to_datetime(calc_df['NGÀY NVLM GIAO'])
 
 calc_df.columns=calc_df.columns.str.replace(' ',"_")
 calc_df=calc_df.replace("",np.nan)
-
-process_df=td_2021_df
-process_df.columns=process_df.columns.str.replace(' ',"_")
-order_2021_df.columns=order_2021_df.columns.str.replace(' ',"_")
-
+###
 plan_df.columns=plan_df.columns.str.replace(' ',"_")
-attend_=error_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
-error_all=error_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
+attend_=error_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+error_all=error_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
 attend_df=attend_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','TÌNH_TRẠNG_x','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
 conditions = [
     (attend_df['BƯỚC'] <= 3),(attend_df['BƯỚC'] == 5),(attend_df['BƯỚC'] == 6),(attend_df['BƯỚC'] ==7),(attend_df['BƯỚC'] ==8),(attend_df['BƯỚC'] ==9),(attend_df['BƯỚC'] ==10),
     (attend_df['BƯỚC'] ==11),(attend_df['BƯỚC'] >11)]
 choices = ['TRIỂN KHAI ĐH','THU MUA','THU MUA','RA RẬP','RA RẬP','RA PHÔI','LÀM MẪU','QC MẪU','SƠN & NỆM']
 attend_df['VỊ TRÍ'] = np.select(conditions, choices, default="")
-hist_=process_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
-hist_df=hist_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM_y','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','NVLM','TÌNH_TRẠNG','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
-
-
-
+hist_=process_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+hist_df=hist_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM_y','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','NVLM','TÌNH_TRẠNG_x','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
 
 
 st.cache()
@@ -327,7 +236,7 @@ def operation(df,bp,calc,plan):
         st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_week))
         st.pyplot(fig4) 
     done_pivot=done.pivot(index='NVLM',columns='TUẦN_GIAO',values='SỐ_ĐƠN_HÀNG')
-
+    done_pivot
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
     plan__=plan_.loc[plan_.WEEK==week_+1]
@@ -410,7 +319,7 @@ else:
             check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
             check_attend(check_by_per)
         else:
-            plan_=plan_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
+            plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
             check_by_per=plan_.loc[plan_['NV_PTM']==choose_type]
             check_plan(check_by_per)
@@ -425,7 +334,7 @@ else:
         if c=='VỊ TRÍ CỦA MẪU':
             check_attend(check_by_per)
         else:
-            plan_=plan_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
+            plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
             check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
             check_plan(check_by_per)
