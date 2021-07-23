@@ -96,6 +96,7 @@ td_all_df=pd.concat([td_old_df,td_new_df,under_12td_df])
 td_all_df=td_all_df.replace('',np.nan)
 td_2021_df=td_all_df[td_all_df['SỐ ĐƠN HÀNG'].notnull()]
 td_2021_df.head()
+td_2021_df.columns=td_2021_df.columns.str.replace(' ','_')
 
 # under_12ds_df=under_12ds_df.rename(columns={'NV LÀM MẪU':'NVLM'})
 under_12ds_df=under_12ds_df.drop(['BƯỚC'],axis=1)
@@ -136,19 +137,19 @@ calc_df=calc_df.replace("",np.nan)
 
 process_df=td_2021_df
 process_df.columns=process_df.columns.str.replace(' ',"_")
-order_2021_df
-
+order_2021_df.columns=order_2021_df.columns.str.replace(' ',"_")
+calc_df
 
 plan_df.columns=plan_df.columns.str.replace(' ',"_")
-attend_=error_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
-error_all=error_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+attend_=error_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
+error_all=error_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
 attend_df=attend_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','TÌNH_TRẠNG_x','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
 conditions = [
     (attend_df['BƯỚC'] <= 3),(attend_df['BƯỚC'] == 5),(attend_df['BƯỚC'] == 6),(attend_df['BƯỚC'] ==7),(attend_df['BƯỚC'] ==8),(attend_df['BƯỚC'] ==9),(attend_df['BƯỚC'] ==10),
     (attend_df['BƯỚC'] ==11),(attend_df['BƯỚC'] >11)]
 choices = ['TRIỂN KHAI ĐH','THU MUA','THU MUA','RA RẬP','RA RẬP','RA PHÔI','LÀM MẪU','QC MẪU','SƠN & NỆM']
 attend_df['VỊ TRÍ'] = np.select(conditions, choices, default="")
-hist_=process_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+hist_=process_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
 hist_df=hist_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM_y','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','NVLM','TÌNH_TRẠNG_x','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
 
 
