@@ -62,6 +62,7 @@ scan_df=pd.DataFrame(scan_df)
 sh2=gc1.open("MẪU 2021 - COLLECT DATA").worksheet('TD')
 td_df=sh2.get_all_records()
 td_df=pd.DataFrame(td_df)
+td_df
 #td_x4_df
 sh3=gc1.open("MẪU 2021 - COLLECT DATA").worksheet('TD X4-NỆM')
 td_x4_df=sh3.get_all_records()
