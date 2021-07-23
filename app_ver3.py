@@ -18,6 +18,7 @@ from numpy.core.numeric import NaN
 import streamlit as st
 import json
 import requests
+import altair as alt
 pd.plotting.register_matplotlib_converters()
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -58,9 +59,9 @@ process_df=process_df.replace("",np.nan)
 sheet11=gc3.open("MẪU - dataset for Python").worksheet('CALC')
 calc_=sheet11.get_all_records()
 calc_df=pd.DataFrame(calc_)
-calc_df=calc_df[['SỐ ĐƠN HÀNG','TÊN SẢN PHẨM','NHÀ MÁY','NVLM','NGÀY NVLM GIAO','THÁNG GIAO','T/G TTF']]
+calc_df=calc_df[['SỐ ĐƠN HÀNG','TÊN SẢN PHẨM','NHÀ MÁY','NVLM','NGÀY NVLM GIAO','THÁNG GIAO','TUẦN GIAO','T/G TTF']]
 calc_df['NGÀY NVLM GIAO']=pd.to_datetime(calc_df['NGÀY NVLM GIAO'])
-calc_df['TUẦN GIAO']=calc_df['NGÀY NVLM GIAO'].dt.week
+
 calc_df.columns=calc_df.columns.str.replace(' ',"_")
 calc_df=calc_df.replace("",np.nan)
 ###
@@ -201,6 +202,7 @@ def operation(df,bp,calc,plan):
     done_['T/G_TTF']=done_['T/G_TTF'].astype(float)
     time_month=done_.loc[done_['T/G_TTF'].isnull()==False]
     avg_month=time_month['T/G_TTF'].mean()
+    done=calc.groupby(['TUẦN_GIAO','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
 
     done_w=calc.loc[calc['TUẦN_GIAO']==week_]
     done_week=done_w.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
@@ -212,7 +214,6 @@ def operation(df,bp,calc,plan):
     _1,_2,_3,_4,_5=st.beta_columns((.5,10,.2,10,.5))
     fig3, ax = plt.subplots()   
     sns.set_palette("pastel")
-
     st.set_option('deprecation.showPyplotGlobalUse',False)
     sns.barplot(data=done_month,x=done_month['NVLM'],y=done_month['SỐ_ĐƠN_HÀNG'],color='Green')
     plt.xticks(rotation=90)
@@ -220,7 +221,7 @@ def operation(df,bp,calc,plan):
     fig4, ax = plt.subplots()   
     st.set_option('deprecation.showPyplotGlobalUse',False)
     sns.set_palette("pastel")
-    sns.barplot(data=done_week,x=done_week['NVLM'],y=done_week['SỐ_ĐƠN_HÀNG'])
+    sns.barplot(data=done_week,x=done_week['NVLM'],y=done_week['SỐ_ĐƠN_HÀNG'],color='Blue')
     plt.xticks(rotation=90)
     plt.show()
     with _2:
@@ -232,19 +233,18 @@ def operation(df,bp,calc,plan):
         st.markdown('Kết quả tuần: **{}**'.format(week_))
         st.markdown('Số lượng đã xong hàng trắng: **{}**'.format(total_week))
         st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_week))
-
         st.pyplot(fig4) 
-
-
-        plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
-        plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
-        plan__=plan_.loc[plan_.WEEK==week_+1]
-        plan_toweek=plan__[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
-        plan_doing=plan__.loc[plan__.REMARKS!='Done']
-        plan_doing=plan_doing[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
-        plan_doing=plan_doing.reset_index(drop=True)
-        st.markdown("")
-        plan_doing
+    done_pivot=done.pivot(index='NVLM',columns='TUẦN_GIAO',values='SỐ_ĐƠN_HÀNG')
+    # done_pivot
+    plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
+    plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
+    plan__=plan_.loc[plan_.WEEK==week_+1]
+    plan_toweek=plan__[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
+    plan_doing=plan__.loc[plan__.REMARKS!='Done']
+    plan_doing=plan_doing[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
+    plan_doing=plan_doing.reset_index(drop=True)
+    st.markdown("")
+    plan_doing
 
     with col1:
         df_=df.loc[df['TÌNH_TRẠNG_x']!='Chưa giao']
@@ -293,7 +293,7 @@ def operation(df,bp,calc,plan):
         st.markdown('## THỜI GIAN XỬ LÍ TRUNG BÌNH CỦA CÁC BỘ PHẬN')
         waterfall_chart.plot(avg['BỘ_PHẬN'], avg["NGÀY_GIẢI_QUYẾT"],rotation_value=70)
         st.pyplot()
-########################################
+#######################################
 
 # st.set_option('deprecation.showPyplotGlobalUse', False)
 col1 = st.sidebar
