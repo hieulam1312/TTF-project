@@ -1,4 +1,4 @@
-from pandas.tseries.offsets import Week
+from matplotlib import legend
 import streamlit as st
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
@@ -234,9 +234,8 @@ def operation(df,bp,calc,plan):
         st.markdown('Số lượng đã xong hàng trắng: **{}**'.format(total_week))
         st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_week))
         st.pyplot(fig4) 
-    done_pivot=done.pivot(index='NVLM',columns='TUẦN_GIAO',values='SỐ_ĐƠN_HÀNG')
-    # done_pivot
-    
+
+
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
     plan__=plan_.loc[plan_.WEEK==week_+1]
@@ -247,6 +246,15 @@ def operation(df,bp,calc,plan):
     st.markdown("")
     plan_doing
 
+    done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
+    done_pivot_df=done_pivot.loc[(done_pivot['TUẦN_GIAO']<=week_)&(done_pivot['TUẦN_GIAO']>=week_-4)]
+    done_pivot_df['TUẦN_GIAO']=done_pivot_df['TUẦN_GIAO'].astype(str)
+    done_pivot_df=done_pivot_df.set_index('TUẦN_GIAO')
+    sns.set_palette("Paired")
+    done_pivot_df.plot(kind='bar',stacked=True)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    st.pyplot()
+    
     with col1:
         df_=df.loc[df['TÌNH_TRẠNG_x']!='Chưa giao']
         doing_count=df_.groupby(df_['BỘ_PHẬN']).SỐ_ĐƠN_HÀNG.count()
