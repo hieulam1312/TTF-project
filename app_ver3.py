@@ -82,9 +82,6 @@ sh8=gc3.open('TTF - MẪU 2021 - DƯỚI 12').worksheet('T.DÕI')
 under_12td=sh8.get_all_records()
 under_12td_df=pd.DataFrame(under_12td)
 
-sh8=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('Sheet53')
-dataaa=sh8.get_all_records()
-data=pd.DataFrame(dataaa)
 
 nm_df=td_df.loc[(td_df['NHÀ MÁY']!='X4')|(td_df['NHÀ MÁY']!='NM NỆM')]
 td_new_df=pd.concat([nm_df,td_x4_df])
@@ -124,6 +121,26 @@ order_new['NGÀY GIAO']=pd.to_datetime(order_new['NGÀY GIAO'],dayfirst=True,err
 order_new['NGÀY LẬP']=pd.to_datetime(order_new['NGÀY LẬP'],dayfirst=True,errors='coerce')
 td_2021_df['NGÀY_NHẬN']=pd.to_datetime(td_2021_df['NGÀY_NHẬN'],dayfirst=True,errors='coerce')
 td_2021_df['NGÀY_GIAO']=pd.to_datetime(td_2021_df['NGÀY_GIAO'],dayfirst=True,errors='coerce')
+import gspread #-> Để update data lên Google Spreadsheet
+from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
+gc = gspread.authorize(credentials)
+# ACCES GOOGLE SHEET
+sheet_index_no1 = 0
+sheet_index_no2 = 1
+sheet_index_no3 = 3
+
+spreadsheet_key = '1ECQkxew8ixIxb43FVyd3d8LmtRo5VHr1fvt3A7a88L8' # input SPREADSHEET_KEY HERE
+sh = gc.open_by_key(spreadsheet_key)
+worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
+worksheet2 = sh.get_worksheet(sheet_index_no2)
+worksheet3= sh.get_worksheet(sheet_index_no3)
+
+set_with_dataframe(worksheet1, order_new) #-> Upload user_df vào Sheet đầu tiên trong Spreadsheet
+set_with_dataframe(worksheet2,td_2021_df) 
+sh8=gc2.open('TTF - MẪU 2021 - TRIỂN KHAI').worksheet('Sheet53')
+dataaa=sh8.get_all_records()
+data=pd.DataFrame(dataaa)
+
 sheet11=gc3.open("MẪU - dataset for Python").worksheet('CALC')
 calc_=sheet11.get_all_records()
 calc_df=pd.DataFrame(calc_)
@@ -148,6 +165,9 @@ choices = ['TRIỂN KHAI ĐH','THU MUA','THU MUA','RA RẬP','RA RẬP','RA PHÔ
 attend_df['VỊ TRÍ'] = np.select(conditions, choices, default="")
 hist_=process_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
 hist_df=hist_[['SỐ_ĐƠN_HÀNG','BƯỚC','MÃ_KHÁCH_HÀNG','NV_PTM_y','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','NVLM','TÌNH_TRẠNG','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO_x','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
+
+
+
 
 
 st.cache()
