@@ -387,7 +387,7 @@ else:
         c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
         if c=='VỊ TRÍ CỦA MẪU':
             check_by_per=attend_df.loc[attend_df['NV_PTM']==choose_type]
-            check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
+            check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
             check_attend(check_by_per)
         else:
             plan_=plan_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
