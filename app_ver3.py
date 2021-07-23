@@ -386,7 +386,7 @@ else:
         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
         c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
         if c=='VỊ TRÍ CỦA MẪU':
-            check_by_per=attend_df.loc[attend_df['NV_PTM_y']==choose_type]
+            check_by_per=attend_df.loc[attend_df['NV_PTM']==choose_type]
             check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
             check_attend(check_by_per)
         else:
