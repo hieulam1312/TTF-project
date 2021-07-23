@@ -13,7 +13,7 @@ from datetime import datetime, timedelta,date
 from datetime import datetime as dt
 from typing import Text
 from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
-# import waterfall_chart
+import waterfall_chart
 from numpy.core.numeric import NaN
 import streamlit as st
 import json
@@ -307,7 +307,7 @@ def operation(df,bp,calc,plan):
         st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_week))
         st.pyplot(fig4) 
     done_pivot=done.pivot(index='NVLM',columns='TUẦN_GIAO',values='SỐ_ĐƠN_HÀNG')
-    done_pivot
+
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
     plan__=plan_.loc[plan_.WEEK==week_+1]
