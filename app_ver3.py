@@ -390,7 +390,7 @@ else:
             check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
             check_attend(check_by_per)
         else:
-            plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+            plan_=plan_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
             check_by_per=plan_.loc[plan_['NV_PTM']==choose_type]
             check_plan(check_by_per)
@@ -405,7 +405,7 @@ else:
         if c=='VỊ TRÍ CỦA MẪU':
             check_attend(check_by_per)
         else:
-            plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+            plan_=plan_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
             check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
             check_plan(check_by_per)
