@@ -95,7 +95,6 @@ td_new_df=td_new_df.rename(columns={'IN': 'NGÀY NHẬN','OT':'NGÀY GIAO','NMVL
 td_all_df=pd.concat([td_old_df,td_new_df,under_12td_df])
 td_all_df=td_all_df.replace('',np.nan)
 td_2021_df=td_all_df[td_all_df['SỐ ĐƠN HÀNG'].notnull()]
-td_2021_df.head()
 td_2021_df.columns=td_2021_df.columns.str.replace(' ','_')
 
 # under_12ds_df=under_12ds_df.rename(columns={'NV LÀM MẪU':'NVLM'})
@@ -118,8 +117,7 @@ new_order=order_df.merge(xl_df,how='left',on='SỐ ĐƠN HÀNG')
 order_2021_df=pd.concat([new_order,under_12ds_df])
 order_new=order_2021_df.merge(nvlm_df,how='left',on='SỐ ĐƠN HÀNG')
 order_new=order_new.replace(np.nan,0)
-order_new['NGÀY GIAO']
-pd.to_datetime(order_new['NGÀY GIAO'],dayfirst=True,errors='coerce')
+order_new['NGÀY GIAO']=pd.to_datetime(order_new['NGÀY GIAO'],dayfirst=True,errors='coerce')
 # order_2021_df['NGÀY GIAO'].astype('datetime64')
 # df['date'].astype('datetime64')
 order_new['NGÀY GIAO']=pd.to_datetime(order_new['NGÀY GIAO'],dayfirst=True,errors='coerce')
@@ -138,7 +136,6 @@ calc_df=calc_df.replace("",np.nan)
 process_df=td_2021_df
 process_df.columns=process_df.columns.str.replace(' ',"_")
 order_2021_df.columns=order_2021_df.columns.str.replace(' ',"_")
-calc_df
 
 plan_df.columns=plan_df.columns.str.replace(' ',"_")
 attend_=error_df.merge(order_2021_df,how='left',on='SỐ_ĐƠN_HÀNG')
