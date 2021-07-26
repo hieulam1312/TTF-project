@@ -238,13 +238,6 @@ def operation(df,bp,calc,plan):
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
-    plan__=plan_.loc[plan_.WEEK==week_+1]
-    plan_toweek=plan__[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS',]]
-    plan_doing=plan__.loc[plan__.REMARKS!='Done']
-    plan_doing=plan_doing[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
-    plan_doing=plan_doing.reset_index(drop=True)
-    st.markdown("")
-    plan_doing
     check_plan(plan_)
 
     # done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
