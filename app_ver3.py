@@ -237,7 +237,7 @@ def operation(df,bp,calc,plan):
 
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
-    # plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
+    plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM_x','WEEK']]
     # plan__=plan_.loc[plan_.WEEK==week_] #+1]
     plan_
     # check_plan(plan__)
