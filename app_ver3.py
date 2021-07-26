@@ -1,29 +1,20 @@
 from matplotlib import legend
 import streamlit as st
-import requests #-> Để gọi API
-import re #-> Để xử lý data dạng string
 from datetime import datetime as dt #-> Để xử lý data dạng datetime
 import gspread #-> Để update data lên Google Spreadsheet
 import numpy as np
-import pandas as pd #-> Để update data dạng bản
-import json 
-import matplotlib.image as mpimg
+import pandas as pd #-> Để update data dạng bản 
 from google.oauth2 import service_account
 from datetime import datetime, timedelta,date
 from datetime import datetime as dt
 from typing import Text
 from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
-import waterfall_chart
 from numpy.core.numeric import NaN
 import streamlit as st
-import json
-import requests
-import altair as alt
-pd.plotting.register_matplotlib_converters()
 import matplotlib.pyplot as plt
 import seaborn as sns
 pd.plotting.register_matplotlib_converters()
-import matplotlib.pyplot as plt
+
 
 st.set_page_config(layout='wide')
 # Create a connection object.
@@ -166,7 +157,7 @@ def check_plan(plan):
         st.markdown("<h4 style='text-align: left; color:blue'>ĐÃ GIAO HÀNG TRẮNG</h4>", unsafe_allow_html=True)
         st.markdown('')  
         st.write(plan_done)
-def check_order(id):
+def check_order(id,order_df):
     hist_order=order_df.loc[order_df.SỐ_ĐƠN_HÀNG==id]
     hist_orderr=hist_df.loc[hist_df.SỐ_ĐƠN_HÀNG==id].reset_index(drop=True)
     product_name=hist_order[['TÊN_SẢN_PHẨM','NV_PTM','NHÀ_MÁY','MÃ_KHÁCH_HÀNG']].drop_duplicates().values.tolist()
@@ -192,11 +183,13 @@ def check_error(error):
         doing=error.loc[error['TÌNH_TRẠNG_x']=='Đang xử lí']
         doing_df=doing[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM','NHÀ_MÁY_x']] 
         doing_df
-def operation(df,bp,calc,plan):
+def operation(calc,plan):
     month=date.today().month
     week_=date.today().isocalendar()[1]
     c,col1,d,col2,e=st.beta_columns((.5,10,.2,8,.5))
+    
     done_=calc.loc[calc['THÁNG_GIAO']==month]
+
     done_month=done_.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
     total_month=done_month['SỐ_ĐƠN_HÀNG'].sum()
     done_['T/G_TTF']=done_['T/G_TTF'].astype(float)
@@ -226,13 +219,13 @@ def operation(df,bp,calc,plan):
     plt.show()
     with _2:
         st.markdown('Kết quả tháng: **{}**'.format(month))
-        st.markdown('Số lượng đã xong hàng trắng: **{}**'.format(total_month))
-        st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_month))
+        st.markdown('Hàng trắng: **{}**'.format(total_month))
+        st.markdown('Thời gian: **{}** ngày'.format(avg_month))
         st.pyplot(fig3)
     with _4:
         st.markdown('Kết quả tuần: **{}**'.format(week_))
-        st.markdown('Số lượng đã xong hàng trắng: **{}**'.format(total_week))
-        st.markdown('Thời gian xử lí hàng trắng: **{}**'.format(avg_week))
+        st.markdown('Hàng trắng: **{}**'.format(total_week))
+        st.markdown('Thời gian xử lí: **{}** ngày'.format(avg_week))
         st.pyplot(fig4) 
 
 
@@ -242,65 +235,8 @@ def operation(df,bp,calc,plan):
     # plan_
     check_plan(plan__)
 
-    # done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
-    # done_pivot_df=done_pivot.loc[(done_pivot['TUẦN_GIAO']<=week_)&(done_pivot['TUẦN_GIAO']>=week_-4)]
-    # done_pivot_df['TUẦN_GIAO']=done_pivot_df['TUẦN_GIAO'].astype(str)
-    # done_pivot_df=done_pivot_df.set_index('TUẦN_GIAO')
-    # sns.set_palette("Paired")
-    # done_pivot_df.plot(kind='bar',stacked=True)
-    # plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-    # st.pyplot()
-    
-    # with col1:
-    #     df_=df.loc[df['TÌNH_TRẠNG_x']!='Chưa giao']
-    #     doing_count=df_.groupby(df_['BỘ_PHẬN']).SỐ_ĐƠN_HÀNG.count()
-    #     doing_count=doing_count.reset_index()
-    #     fig1, ax = plt.subplots()   
-    #     plt.barh(doing_count['BỘ_PHẬN'], doing_count['SỐ_ĐƠN_HÀNG'], align='center')
-    #     # plt.xlabel(doing_count['BỘ_PHẬN'])
-    #     # plt.ylabel(doing_count['SỐ_ĐƠN_HÀNG'])
-    #     plt.show()
-    # c,col1,d,col2,e=st.beta_columns((.5,10,.2,8,.5))
-    # with col1:
-    #     st.pyplot(fig1)
-        
-    # st.markdown('')
-    # nm=df_.drop_duplicates(subset=['SỐ_ĐƠN_HÀNG'])
-    # NM=nm.groupby(nm['NHÀ_MÁY_x']).SỐ_ĐƠN_HÀNG.count()
-    # NM_df=NM.reset_index()
-    # NM_df['NHÀ_MÁY_x']=NM_df['NHÀ_MÁY_x'].str.replace('#N/A','Chưa phân bổ')
-    # fig, ax = plt.subplots()   
-    # st.set_option('deprecation.showPyplotGlobalUse',False)
-    # sns.barplot(data=NM_df,x=NM_df['NHÀ_MÁY_x'],y=NM_df['SỐ_ĐƠN_HÀNG'])
-    # with col2:
-    #     st.pyplot(fig)
-
-#     time=bp.loc[(bp['NGÀY_GIẢI_QUYẾT'].isnull==False)+(bp['NGÀY_GIẢI_QUYẾT']<1000)]
-#     time_df=time[['SỐ_ĐƠN_HÀNG','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
-#     time_df['NGÀY_GIAO']=pd.to_datetime(time_df['NGÀY_GIAO'])
-#     time_df['THÁNG_GIAO']=time_df['NGÀY_GIAO'].dt.month
-#     water_df=time_df.groupby(['BỘ_PHẬN','THÁNG_GIAO']).mean()
-#     water_df=water_df.reset_index()
 
 
-#     r1,r2,r3,r4,r5=st.beta_columns((.5,.5,.1,1,.5))
-#     with r2:
-#         month=st.number_input('Nhập tháng để xem:',step=1)
-#     h,c1,d=st.beta_columns((.5,2,.5))
-#     with c1:
-#         if not month:
-#             avg=water_df.groupby('BỘ_PHẬN').mean()
-#             avg=avg.reset_index()
-#         else:
-#             m_water=water_df.loc[water_df['THÁNG_GIAO']==month]
-#             avg=m_water.groupby('BỘ_PHẬN').mean()
-#             avg=avg.reset_index()  
-#         st.markdown('## THỜI GIAN XỬ LÍ TRUNG BÌNH CỦA CÁC BỘ PHẬN')
-#         waterfall_chart.plot(avg['BỘ_PHẬN'], avg["NGÀY_GIẢI_QUYẾT"],rotation_value=70)
-#         st.pyplot()
-#######################################
-
-# st.set_option('deprecation.showPyplotGlobalUse', False)
 col1 = st.sidebar
 t1,t2,t3,t4,t5=st.beta_columns((5,.5,.1,1,.5))
 with t1:
@@ -311,43 +247,14 @@ with r1:
 if ch=='OVERVIEW':
     st.markdown('### OVERVIEW')
     st.markdown('Danh sách mẫu tại mỗi bộ phận')
-    operation(error_all,process_df,calc_df,plan_df)
-# else:
-#     choose=col1.selectbox('Chọn đối tượng 1',[])
-#     if choose=='NV_PTM':
-#         _1 = ["A. Hoàng","A. Sáng",'A. Bảo','C. Hai','C. Như','C. Thy']
-#         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-#         c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
-#         if c=='VỊ TRÍ CỦA MẪU':
-#             check_by_per=attend_df.loc[attend_df['NV_PTM_y']==choose_type]
-#             check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
-#             check_attend(check_by_per)
-#         else:
-#             plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
-#             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
-#             check_by_per=plan_.loc[plan_['NV_PTM']==choose_type]
-#             check_plan(check_by_per)
+    operation(calc_df,plan_df)
 
-#     elif choose=="NHÀ_MÁY":
-#         _1= ['NM1','NM3','X4','NM NỆM']
-#         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-#         check_by_per=attend_df.loc[attend_df['NHÀ_MÁY_x']==choose_type]
-#         check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','MÃ_KHÁCH_HÀNG','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
-        
-#         c=st.sidebar.selectbox('',['KẾ HOẠCH MẪU TUẦN NÀY','VỊ TRÍ CỦA MẪU'])
-#         if c=='VỊ TRÍ CỦA MẪU':
-#             check_attend(check_by_per)
-#         else:
-#             plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
-#             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
-#             check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
-#             check_plan(check_by_per)
 elif ch=='SỐ_ĐƠN_HÀNG':
     choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
     if not choose_type:
         st.error('Hãy nhập mã đơn hàng!')
     else:
-        check_order(choose_type)
+        check_order(choose_type,order_df)
 else:
     _1=process_df['BỘ_PHẬN'].unique().tolist()
     choose_type=col1.selectbox('Chọn đối tượng 2',_1)
