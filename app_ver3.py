@@ -59,7 +59,7 @@ process_df=process_df.replace("",np.nan)
 sheet11=gc3.open("MẪU - dataset for Python").worksheet('CALC')
 calc_=sheet11.get_all_records()
 calc_df=pd.DataFrame(calc_)
-calc_df=calc_df[['SỐ ĐƠN HÀNG','TÊN SẢN PHẨM','NHÀ MÁY','NVLM','NGÀY NVLM GIAO','THÁNG GIAO','TUẦN GIAO','T/G TTF']]
+calc_df=calc_df[['SỐ ĐƠN HÀNG','NV PTM','TÊN SẢN PHẨM','NHÀ MÁY','NVLM','NGÀY NVLM GIAO','THÁNG GIAO','TUẦN GIAO','T/G TTF']]
 calc_df['NGÀY NVLM GIAO']=pd.to_datetime(calc_df['NGÀY NVLM GIAO'])
 
 calc_df.columns=calc_df.columns.str.replace(' ',"_")
@@ -126,9 +126,9 @@ def check_plan(plan):
 
     _week=date.today().isocalendar()[1]
     # plan_=plan.loc[plan.WEEK==_week+1]
-    plan_toweek=plan[['NV_PTM','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
+    plan_toweek=plan[['NV_PTM_x','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan.loc[plan.REMARKS=='Done']
-    plan_done=plan_done[['NV_PTM','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
+    plan_done=plan_done[['NV_PTM_x','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan_done.reset_index(drop=True)
     st.markdown("""
     ### A. DANH SÁCH KẾ HOẠCH MẪU
@@ -238,9 +238,9 @@ def operation(df,bp,calc,plan):
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM_x','WEEK']]
-    # plan__=plan_.loc[plan_.WEEK==week_] #+1]
-    plan_
-    # check_plan(plan__)
+    plan__=plan_.loc[plan_.WEEK==week_] #+1]
+    # plan_
+    check_plan(plan__)
 
     # done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
     # done_pivot_df=done_pivot.loc[(done_pivot['TUẦN_GIAO']<=week_)&(done_pivot['TUẦN_GIAO']>=week_-4)]
