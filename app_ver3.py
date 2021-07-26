@@ -126,9 +126,9 @@ def check_plan(plan):
 
     _week=date.today().isocalendar()[1]
     # plan_=plan.loc[plan.WEEK==_week+1]
-    plan_toweek=plan[['NV_PTM_x','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
+    plan_toweek=plan[['NV_PTM','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan.loc[plan.REMARKS=='Done']
-    plan_done=plan_done[['NV_PTM_x','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
+    plan_done=plan_done[['NV_PTM','NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan_done.reset_index(drop=True)
     st.markdown("""
     ### A. DANH SÁCH KẾ HOẠCH MẪU
@@ -237,7 +237,7 @@ def operation(df,bp,calc,plan):
 
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
-    plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM_x','WEEK']]
+    plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
     plan__=plan_.loc[plan_.WEEK==week_] #+1]
     # plan_
     check_plan(plan__)
