@@ -245,63 +245,64 @@ def operation(df,bp,calc,plan):
     plan_doing=plan_doing.reset_index(drop=True)
     st.markdown("")
     plan_doing
+    check_plan(plan_toweek)
 
-    done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
-    done_pivot_df=done_pivot.loc[(done_pivot['TUẦN_GIAO']<=week_)&(done_pivot['TUẦN_GIAO']>=week_-4)]
-    done_pivot_df['TUẦN_GIAO']=done_pivot_df['TUẦN_GIAO'].astype(str)
-    done_pivot_df=done_pivot_df.set_index('TUẦN_GIAO')
-    sns.set_palette("Paired")
-    done_pivot_df.plot(kind='bar',stacked=True)
-    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-    st.pyplot()
+    # done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
+    # done_pivot_df=done_pivot.loc[(done_pivot['TUẦN_GIAO']<=week_)&(done_pivot['TUẦN_GIAO']>=week_-4)]
+    # done_pivot_df['TUẦN_GIAO']=done_pivot_df['TUẦN_GIAO'].astype(str)
+    # done_pivot_df=done_pivot_df.set_index('TUẦN_GIAO')
+    # sns.set_palette("Paired")
+    # done_pivot_df.plot(kind='bar',stacked=True)
+    # plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    # st.pyplot()
     
-    with col1:
-        df_=df.loc[df['TÌNH_TRẠNG_x']!='Chưa giao']
-        doing_count=df_.groupby(df_['BỘ_PHẬN']).SỐ_ĐƠN_HÀNG.count()
-        doing_count=doing_count.reset_index()
-        fig1, ax = plt.subplots()   
-        plt.barh(doing_count['BỘ_PHẬN'], doing_count['SỐ_ĐƠN_HÀNG'], align='center')
-        # plt.xlabel(doing_count['BỘ_PHẬN'])
-        # plt.ylabel(doing_count['SỐ_ĐƠN_HÀNG'])
-        plt.show()
-    c,col1,d,col2,e=st.beta_columns((.5,10,.2,8,.5))
-    with col1:
-        st.pyplot(fig1)
+    # with col1:
+    #     df_=df.loc[df['TÌNH_TRẠNG_x']!='Chưa giao']
+    #     doing_count=df_.groupby(df_['BỘ_PHẬN']).SỐ_ĐƠN_HÀNG.count()
+    #     doing_count=doing_count.reset_index()
+    #     fig1, ax = plt.subplots()   
+    #     plt.barh(doing_count['BỘ_PHẬN'], doing_count['SỐ_ĐƠN_HÀNG'], align='center')
+    #     # plt.xlabel(doing_count['BỘ_PHẬN'])
+    #     # plt.ylabel(doing_count['SỐ_ĐƠN_HÀNG'])
+    #     plt.show()
+    # c,col1,d,col2,e=st.beta_columns((.5,10,.2,8,.5))
+    # with col1:
+    #     st.pyplot(fig1)
         
-    st.markdown('')
-    nm=df_.drop_duplicates(subset=['SỐ_ĐƠN_HÀNG'])
-    NM=nm.groupby(nm['NHÀ_MÁY_x']).SỐ_ĐƠN_HÀNG.count()
-    NM_df=NM.reset_index()
-    NM_df['NHÀ_MÁY_x']=NM_df['NHÀ_MÁY_x'].str.replace('#N/A','Chưa phân bổ')
-    fig, ax = plt.subplots()   
-    st.set_option('deprecation.showPyplotGlobalUse',False)
-    sns.barplot(data=NM_df,x=NM_df['NHÀ_MÁY_x'],y=NM_df['SỐ_ĐƠN_HÀNG'])
-    with col2:
-        st.pyplot(fig)
+    # st.markdown('')
+    # nm=df_.drop_duplicates(subset=['SỐ_ĐƠN_HÀNG'])
+    # NM=nm.groupby(nm['NHÀ_MÁY_x']).SỐ_ĐƠN_HÀNG.count()
+    # NM_df=NM.reset_index()
+    # NM_df['NHÀ_MÁY_x']=NM_df['NHÀ_MÁY_x'].str.replace('#N/A','Chưa phân bổ')
+    # fig, ax = plt.subplots()   
+    # st.set_option('deprecation.showPyplotGlobalUse',False)
+    # sns.barplot(data=NM_df,x=NM_df['NHÀ_MÁY_x'],y=NM_df['SỐ_ĐƠN_HÀNG'])
+    # with col2:
+    #     st.pyplot(fig)
 
-    time=bp.loc[(bp['NGÀY_GIẢI_QUYẾT'].isnull==False)+(bp['NGÀY_GIẢI_QUYẾT']<1000)]
-    time_df=time[['SỐ_ĐƠN_HÀNG','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
-    time_df['NGÀY_GIAO']=pd.to_datetime(time_df['NGÀY_GIAO'])
-    time_df['THÁNG_GIAO']=time_df['NGÀY_GIAO'].dt.month
-    water_df=time_df.groupby(['BỘ_PHẬN','THÁNG_GIAO']).mean()
-    water_df=water_df.reset_index()
+#     time=bp.loc[(bp['NGÀY_GIẢI_QUYẾT'].isnull==False)+(bp['NGÀY_GIẢI_QUYẾT']<1000)]
+#     time_df=time[['SỐ_ĐƠN_HÀNG','BỘ_PHẬN','NGÀY_NHẬN','NGÀY_GIAO','NGÀY_GIẢI_QUYẾT','NHÓM_MẪU']]
+#     time_df['NGÀY_GIAO']=pd.to_datetime(time_df['NGÀY_GIAO'])
+#     time_df['THÁNG_GIAO']=time_df['NGÀY_GIAO'].dt.month
+#     water_df=time_df.groupby(['BỘ_PHẬN','THÁNG_GIAO']).mean()
+#     water_df=water_df.reset_index()
 
 
-    r1,r2,r3,r4,r5=st.beta_columns((.5,.5,.1,1,.5))
-    with r2:
-        month=st.number_input('Nhập tháng để xem:',step=1)
-    h,c1,d=st.beta_columns((.5,2,.5))
-    with c1:
-        if not month:
-            avg=water_df.groupby('BỘ_PHẬN').mean()
-            avg=avg.reset_index()
-        else:
-            m_water=water_df.loc[water_df['THÁNG_GIAO']==month]
-            avg=m_water.groupby('BỘ_PHẬN').mean()
-            avg=avg.reset_index()  
-        st.markdown('## THỜI GIAN XỬ LÍ TRUNG BÌNH CỦA CÁC BỘ PHẬN')
-        waterfall_chart.plot(avg['BỘ_PHẬN'], avg["NGÀY_GIẢI_QUYẾT"],rotation_value=70)
-        st.pyplot()
+#     r1,r2,r3,r4,r5=st.beta_columns((.5,.5,.1,1,.5))
+#     with r2:
+#         month=st.number_input('Nhập tháng để xem:',step=1)
+#     h,c1,d=st.beta_columns((.5,2,.5))
+#     with c1:
+#         if not month:
+#             avg=water_df.groupby('BỘ_PHẬN').mean()
+#             avg=avg.reset_index()
+#         else:
+#             m_water=water_df.loc[water_df['THÁNG_GIAO']==month]
+#             avg=m_water.groupby('BỘ_PHẬN').mean()
+#             avg=avg.reset_index()  
+#         st.markdown('## THỜI GIAN XỬ LÍ TRUNG BÌNH CỦA CÁC BỘ PHẬN')
+#         waterfall_chart.plot(avg['BỘ_PHẬN'], avg["NGÀY_GIẢI_QUYẾT"],rotation_value=70)
+#         st.pyplot()
 #######################################
 
 # st.set_option('deprecation.showPyplotGlobalUse', False)
