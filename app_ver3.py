@@ -128,7 +128,7 @@ def check_plan(plan):
     # plan_=plan.loc[plan.WEEK==_week+1]
     plan_toweek=plan[['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan.loc[plan.REMARKS=='Done']
-    plan_done=plan_done[['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
+    plan_done=plan_done['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan_done.reset_index(drop=True)
     st.markdown("""
     ### A. DANH SÁCH KẾ HOẠCH MẪU
@@ -238,7 +238,8 @@ def operation(df,bp,calc,plan):
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
-    check_plan(plan_)
+    plan__=plan_.loc[plan_.WEEK==week_+1]
+    check_plan(plan__)
 
     # done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
     # done_pivot_df=done_pivot.loc[(done_pivot['TUẦN_GIAO']<=week_)&(done_pivot['TUẦN_GIAO']>=week_-4)]
