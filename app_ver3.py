@@ -307,13 +307,13 @@ with t1:
     st.title('OPERATION DASHBOARD')
 r1,r2,r3,r4,r5=st.beta_columns((.5,.5,.1,1,.5))
 with r1:
-    ch=st.sidebar.selectbox('',['OVERVIEW','KIỂM TRA TIẾN ĐỘ'])
+    ch=st.sidebar.selectbox('',['OVERVIEW','BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
 if ch=='OVERVIEW':
     st.markdown('### OVERVIEW')
     st.markdown('Danh sách mẫu tại mỗi bộ phận')
     operation(error_all,process_df,calc_df,plan_df)
-else:
-    choose=col1.selectbox('Chọn đối tượng 1',['BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
+# else:
+#     choose=col1.selectbox('Chọn đối tượng 1',[])
 #     if choose=='NV_PTM':
 #         _1 = ["A. Hoàng","A. Sáng",'A. Bảo','C. Hai','C. Như','C. Thy']
 #         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
@@ -342,15 +342,15 @@ else:
 #             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
 #             check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
 #             check_plan(check_by_per)
-    if choose=='SỐ_ĐƠN_HÀNG':
-        choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
-        if not choose_type:
-            st.error('Hãy nhập mã đơn hàng!')
-        else:
-            check_order(choose_type)
+elif ch=='SỐ_ĐƠN_HÀNG':
+    choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
+    if not choose_type:
+        st.error('Hãy nhập mã đơn hàng!')
     else:
-        _1=process_df['BỘ_PHẬN'].unique().tolist()
-        choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-        _error=error_all.loc[error_df['BỘ_PHẬN']==choose_type]
-        check_error(_error)
+        check_order(choose_type)
+else:
+    _1=process_df['BỘ_PHẬN'].unique().tolist()
+    choose_type=col1.selectbox('Chọn đối tượng 2',_1)
+    _error=error_all.loc[error_df['BỘ_PHẬN']==choose_type]
+    check_error(_error)
 
