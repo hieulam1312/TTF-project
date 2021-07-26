@@ -126,9 +126,9 @@ def check_plan(plan):
 
     _week=date.today().isocalendar()[1]
     # plan_=plan.loc[plan.WEEK==_week+1]
-    plan_toweek=plan[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
+    plan_toweek=plan[['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan.loc[plan.REMARKS=='Done']
-    plan_done=plan_done[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NHÀ_MÁY','REMARKS']]
+    plan_done=plan_done[['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan_done.reset_index(drop=True)
     st.markdown("""
     ### A. DANH SÁCH KẾ HOẠCH MẪU
