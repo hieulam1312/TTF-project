@@ -156,7 +156,7 @@ def check_plan(plan):
     #Plan ngày mai
     with col2:
         plan_tomorrow=plan_toweek.loc[plan_toweek.REMARKS=="NGÀY MAI"]
-        plan_tomorrow=plan_tomorrow.reset_index(drop=False)
+        plan_tomorrow=plan_tomorrow.reset_index(drop=True)
         st.markdown("<h4 style='text-align: left'>NGÀY MAI</h4>", unsafe_allow_html=True)
         st.markdown('')
         st.write(plan_tomorrow)
@@ -312,8 +312,8 @@ if ch=='OVERVIEW':
     st.markdown('### OVERVIEW')
     st.markdown('Danh sách mẫu tại mỗi bộ phận')
     operation(error_all,process_df,calc_df,plan_df)
-# else:
-#     choose=col1.selectbox('Chọn đối tượng 1',['NHÀ_MÁY','NV_PTM','BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
+else:
+    choose=col1.selectbox('Chọn đối tượng 1',['BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
 #     if choose=='NV_PTM':
 #         _1 = ["A. Hoàng","A. Sáng",'A. Bảo','C. Hai','C. Như','C. Thy']
 #         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
@@ -342,15 +342,15 @@ if ch=='OVERVIEW':
 #             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
 #             check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
 #             check_plan(check_by_per)
-#     elif  choose=='SỐ_ĐƠN_HÀNG':
-#         choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
-#         if not choose_type:
-#             st.error('Hãy nhập mã đơn hàng!')
-#         else:
-#             check_order(choose_type)
-#     else:
-#         _1=process_df['BỘ_PHẬN'].unique().tolist()
-#         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-#         _error=error_all.loc[error_df['BỘ_PHẬN']==choose_type]
-#         check_error(_error)
+    if choose=='SỐ_ĐƠN_HÀNG':
+        choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
+        if not choose_type:
+            st.error('Hãy nhập mã đơn hàng!')
+        else:
+            check_order(choose_type)
+    else:
+        _1=process_df['BỘ_PHẬN'].unique().tolist()
+        choose_type=col1.selectbox('Chọn đối tượng 2',_1)
+        _error=error_all.loc[error_df['BỘ_PHẬN']==choose_type]
+        check_error(_error)
 
