@@ -312,45 +312,45 @@ if ch=='OVERVIEW':
     st.markdown('### OVERVIEW')
     st.markdown('Danh sách mẫu tại mỗi bộ phận')
     operation(error_all,process_df,calc_df,plan_df)
-else:
-    choose=col1.selectbox('Chọn đối tượng 1',['NHÀ_MÁY','NV_PTM','BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
-    if choose=='NV_PTM':
-        _1 = ["A. Hoàng","A. Sáng",'A. Bảo','C. Hai','C. Như','C. Thy']
-        choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-        c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
-        if c=='VỊ TRÍ CỦA MẪU':
-            check_by_per=attend_df.loc[attend_df['NV_PTM_y']==choose_type]
-            check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
-            check_attend(check_by_per)
-        else:
-            plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
-            plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
-            check_by_per=plan_.loc[plan_['NV_PTM']==choose_type]
-            check_plan(check_by_per)
+# else:
+#     choose=col1.selectbox('Chọn đối tượng 1',['NHÀ_MÁY','NV_PTM','BỘ_PHẬN','SỐ_ĐƠN_HÀNG'])
+#     if choose=='NV_PTM':
+#         _1 = ["A. Hoàng","A. Sáng",'A. Bảo','C. Hai','C. Như','C. Thy']
+#         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
+#         c=st.sidebar.selectbox('Chọn',['VỊ TRÍ CỦA MẪU','KẾ HOẠCH MẪU TUẦN NÀY'])
+#         if c=='VỊ TRÍ CỦA MẪU':
+#             check_by_per=attend_df.loc[attend_df['NV_PTM_y']==choose_type]
+#             check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_y','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
+#             check_attend(check_by_per)
+#         else:
+#             plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+#             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
+#             check_by_per=plan_.loc[plan_['NV_PTM']==choose_type]
+#             check_plan(check_by_per)
 
-    elif choose=="NHÀ_MÁY":
-        _1= ['NM1','NM3','X4','NM NỆM']
-        choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-        check_by_per=attend_df.loc[attend_df['NHÀ_MÁY_x']==choose_type]
-        check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','MÃ_KHÁCH_HÀNG','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
+#     elif choose=="NHÀ_MÁY":
+#         _1= ['NM1','NM3','X4','NM NỆM']
+#         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
+#         check_by_per=attend_df.loc[attend_df['NHÀ_MÁY_x']==choose_type]
+#         check_by_per=check_by_per[['SỐ_ĐƠN_HÀNG','MÃ_KHÁCH_HÀNG','TÊN_SẢN_PHẨM','NHÀ_MÁY_x','TÌNH_TRẠNG_x','VỊ TRÍ']]
         
-        c=st.sidebar.selectbox('',['KẾ HOẠCH MẪU TUẦN NÀY','VỊ TRÍ CỦA MẪU'])
-        if c=='VỊ TRÍ CỦA MẪU':
-            check_attend(check_by_per)
-        else:
-            plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
-            plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
-            check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
-            check_plan(check_by_per)
-    elif  choose=='SỐ_ĐƠN_HÀNG':
-        choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
-        if not choose_type:
-            st.error('Hãy nhập mã đơn hàng!')
-        else:
-            check_order(choose_type)
-    else:
-        _1=process_df['BỘ_PHẬN'].unique().tolist()
-        choose_type=col1.selectbox('Chọn đối tượng 2',_1)
-        _error=error_all.loc[error_df['BỘ_PHẬN']==choose_type]
-        check_error(_error)
+#         c=st.sidebar.selectbox('',['KẾ HOẠCH MẪU TUẦN NÀY','VỊ TRÍ CỦA MẪU'])
+#         if c=='VỊ TRÍ CỦA MẪU':
+#             check_attend(check_by_per)
+#         else:
+#             plan_=plan_df.merge(order_df,how='left',on='SỐ_ĐƠN_HÀNG')
+#             plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
+#             check_by_per=plan_.loc[plan_['NHÀ_MÁY']==choose_type]
+#             check_plan(check_by_per)
+#     elif  choose=='SỐ_ĐƠN_HÀNG':
+#         choose_type=st.sidebar.text_input('Nhập tên đơn hàng','M.00.00.00')
+#         if not choose_type:
+#             st.error('Hãy nhập mã đơn hàng!')
+#         else:
+#             check_order(choose_type)
+#     else:
+#         _1=process_df['BỘ_PHẬN'].unique().tolist()
+#         choose_type=col1.selectbox('Chọn đối tượng 2',_1)
+#         _error=error_all.loc[error_df['BỘ_PHẬN']==choose_type]
+#         check_error(_error)
 
