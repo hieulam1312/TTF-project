@@ -238,7 +238,7 @@ def operation(df,bp,calc,plan):
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','WEEK']]
-    plan__=plan_ #.loc[plan_.WEEK==week_+1]
+    plan__=plan_.loc[plan_.WEEK==week_] #+1]
     check_plan(plan__)
 
     # done_pivot=done.pivot(index='TUẦN_GIAO',columns='NVLM',values='SỐ_ĐƠN_HÀNG').reset_index()
