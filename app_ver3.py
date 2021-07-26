@@ -128,7 +128,7 @@ def check_plan(plan):
     # plan_=plan.loc[plan.WEEK==_week+1]
     plan_toweek=plan[['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan.loc[plan.REMARKS=='Done']
-    plan_done=plan_done['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
+    plan_done=plan_done[['NHÀ_MÁY','SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','REMARKS']]
     plan_done=plan_done.reset_index(drop=True)
     st.markdown("""
     ### A. DANH SÁCH KẾ HOẠCH MẪU
