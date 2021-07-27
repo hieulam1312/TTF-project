@@ -197,44 +197,46 @@ def operation(calc,plan):
     avg_month=time_month['T/G_TTF'].mean()
     done=calc.groupby(['TUẦN_GIAO','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
 
-    done_w=calc.loc[calc.TUẦN_GIAO==week_+1]
-    done_w
-    # done_week=done_w.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
-    # total_week=done_week['SỐ_ĐƠN_HÀNG'].sum()
+    if not calc.loc[calc.TUẦN_GIAO==week_+1]:
+        done_w=calc.loc[calc.TUẦN_GIAO==week_]
+    else:
+        calc.loc[calc.TUẦN_GIAO==week_+1]
+    done_week=done_w.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
+    total_week=done_week['SỐ_ĐƠN_HÀNG'].sum()
 
-    # time_week=done_w.loc[done_['T/G_TTF'].isnull()==False]
-    # avg_week=time_week['T/G_TTF'].mean()
+    time_week=done_w.loc[done_['T/G_TTF'].isnull()==False]
+    avg_week=time_week['T/G_TTF'].mean()
 
-    # _1,_2,_3,_4,_5=st.beta_columns((.5,10,.2,10,.5))
-    # fig3, ax = plt.subplots()   
-    # sns.set_palette("pastel")
-    # st.set_option('deprecation.showPyplotGlobalUse',False)
-    # sns.barplot(data=done_month,x=done_month['NVLM'],y=done_month['SỐ_ĐƠN_HÀNG'],color='Green')
-    # plt.xticks(rotation=90)
-    # plt.show()
-    # fig4, ax = plt.subplots()   
-    # st.set_option('deprecation.showPyplotGlobalUse',False)
-    # sns.set_palette("pastel")
-    # sns.barplot(data=done_week,x=done_week['NVLM'],y=done_week['SỐ_ĐƠN_HÀNG'],color='Blue')
-    # plt.xticks(rotation=90)
-    # plt.show()
-    # with _2:
-    #     st.markdown('Kết quả tháng: **{}**'.format(month))
-    #     st.markdown('Hàng trắng: **{}**'.format(total_month))
-    #     st.markdown('Thời gian: **{}** ngày'.format(avg_month))
-    #     st.pyplot(fig3)
-    # with _4:
-    #     st.markdown('Kết quả tuần: **{}**'.format(week_))
-    #     st.markdown('Hàng trắng: **{}**'.format(total_week))
-    #     st.markdown('Thời gian xử lí: **{}** ngày'.format(avg_week))
-    #     st.pyplot(fig4) 
+    _1,_2,_3,_4,_5=st.beta_columns((.5,10,.2,10,.5))
+    fig3, ax = plt.subplots()   
+    sns.set_palette("pastel")
+    st.set_option('deprecation.showPyplotGlobalUse',False)
+    sns.barplot(data=done_month,x=done_month['NVLM'],y=done_month['SỐ_ĐƠN_HÀNG'],color='Green')
+    plt.xticks(rotation=90)
+    plt.show()
+    fig4, ax = plt.subplots()   
+    st.set_option('deprecation.showPyplotGlobalUse',False)
+    sns.set_palette("pastel")
+    sns.barplot(data=done_week,x=done_week['NVLM'],y=done_week['SỐ_ĐƠN_HÀNG'],color='Blue')
+    plt.xticks(rotation=90)
+    plt.show()
+    with _2:
+        st.markdown('Kết quả tháng: **{}**'.format(month))
+        st.markdown('Hàng trắng: **{}**'.format(total_month))
+        st.markdown('Thời gian: **{}** ngày'.format(avg_month))
+        st.pyplot(fig3)
+    with _4:
+        st.markdown('Kết quả tuần: **{}**'.format(week_))
+        st.markdown('Hàng trắng: **{}**'.format(total_week))
+        st.markdown('Thời gian xử lí: **{}** ngày'.format(avg_week))
+        st.pyplot(fig4) 
 
 
-    # plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
-    # plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
-    # plan__=plan_.loc[plan_.WEEK==week_+1]
-    # # plan_
-    # check_plan(plan__)
+    plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
+    plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
+    plan__=plan_.loc[plan_.WEEK==week_+1]
+    # plan_
+    check_plan(plan__)
 
 
 
