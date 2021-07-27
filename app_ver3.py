@@ -197,10 +197,11 @@ def operation(calc,plan):
     avg_month=time_month['T/G_TTF'].mean()
     done=calc.groupby(['TUẦN_GIAO','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
 
-    if not calc.loc[calc.TUẦN_GIAO==week_+1]:
+    done_w=calc.loc[calc.TUẦN_GIAO==week_+1]
+    if done_w.empty ==True:
         done_w=calc.loc[calc.TUẦN_GIAO==week_]
     else:
-        calc.loc[calc.TUẦN_GIAO==week_+1]
+        done_w=calc.loc[calc.TUẦN_GIAO==week_+1]
     done_week=done_w.groupby(['NHÀ_MÁY','NVLM']).SỐ_ĐƠN_HÀNG.count().reset_index()
     total_week=done_week['SỐ_ĐƠN_HÀNG'].sum()
 
