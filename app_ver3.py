@@ -97,7 +97,6 @@ def check_plan(plan):
         st.markdown("<h4 style='text-align: left; color:blue'>ĐÃ GIAO HÀNG TRẮNG</h4>", unsafe_allow_html=True)
         st.markdown('')  
         st.write(plan_done)
-
 def check_error(error):
     c,col1,e,col2,d=st.beta_columns((.5,2,.2,2,.5))
     with col1:
