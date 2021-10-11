@@ -13,16 +13,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
+from google.oauth2 import service_account
 
 
 
 
 def collect_data():
     ## Collect QR scan database from Googlesheet
-    scope = ['https://spreadsheets.google.com/feeds',
-            'https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-        'speedy-precept-314204-30d59f2d7609.json', scope)
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=['https://spreadsheets.google.com/feeds',
+            'https://www.googleapis.com/auth/drive'],
+    )
     gc1 = gspread.authorize(credentials)
     spreadsheet_key = '1pMA3ZDjkL8gtIzQMyEkHwL_8-wDrXiO45OgtsPrkFec' # input SPREADSHEET_KEY HERE
 
