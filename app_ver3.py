@@ -48,7 +48,7 @@ plan_df=pd.DataFrame(plan_df)
 plan_df=plan_df.astype(str)
 plan_df.columns = plan_df.columns.str.replace(' ', '_')
 order_df.columns = order_df.columns.str.replace(' ', '_')
-
+# plan_df
 
 sheet11=gc3.open("MẪU - dataset for Python").worksheet('CALC')
 calc_=sheet11.get_all_records()
@@ -164,11 +164,17 @@ def operation(calc,plan):
     #     st.markdown('Thời gian xử lí: **{}** ngày'.format(avg_week))
     #     st.pyplot(fig4) 
 
-
+    plan=plan.replace("",0)
+    plan['SỐ_ĐƠN_HÀNG']=plan['SỐ_ĐƠN_HÀNG'].astype(str)
+    plan['SỐ_ĐƠN_HÀNG']=plan['SỐ_ĐƠN_HÀNG'].astype(str)
 
     plan_=plan.merge(calc,how='left',on='SỐ_ĐƠN_HÀNG')
+    plan_=plan_.astype(str)
+    plan_['WEEK']=plan_['WEEK'].astype(int)
+
     plan_=plan_[['SỐ_ĐƠN_HÀNG','TÊN_SẢN_PHẨM_x','NGÀY_KẾ_HOẠCH','REMARKS','NHÀ_MÁY','NV_PTM','WEEK']]
     plan__=plan_.loc[plan_.WEEK==week_+1]
+    # week_
     # plan_
     check_plan(plan__)
 
