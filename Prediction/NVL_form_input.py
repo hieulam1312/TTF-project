@@ -1,20 +1,64 @@
 import streamlit as st
+r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
 if 'count' not in st.session_state:
     st.session_state.count = 0
-list=['D','R','D']
-r=st.columns(5)
-for i,col in enumerate(r):
-        with col:
-            if i<=2:
-                b=st.text_input(list[i],key=i)
-            if i==3:
-                sum=0
-                # with col
-                if st.button('\n+ 1\n'):
-                    st.session_state.count += 1
-                if st.button('- 1'):
-                    st.session_state.count -= 1
 
-            if i==4:
-                st.write("Counts:",st.session_state.count)
-                st.write('Q.')
+def increment_counter(increment_value=0):
+    st.session_state.count += increment_value
+
+def decrement_counter(decrement_value=0):
+    st.session_state.count -= decrement_value
+c1,c2,c3,c4,c5=st.columns((1,1,1,2,2))
+with c1:
+    st.button('Increment', on_click=increment_counter,
+        kwargs=dict(increment_value=5))
+with c2:
+    st.button('Decrement', on_click=decrement_counter,
+        kwargs=dict(decrement_value=1))
+with c4:
+    st.write('Count = ', st.session_state.count)
+h=st.session_state.count
+h
+
+with r1:
+        a=[st.text_input('Dày',)]
+        for n in range(st.session_state.count):
+            a.append(st.text_input(label='', key=f'Question {n}'))
+with r2:
+        b=[st.text_input('Rộng',)]
+        for nr in range(st.session_state.count):
+            b.append(st.text_input(label='', key=f'2`1 {nr}'))
+with r3:
+        c=[st.text_input('Dài',)]
+        for ng in range(st.session_state.count):
+            c.append(st.text_input(label='', key=f'dfuestion {ng}'))
+with r4:
+        d= [st.number_input('Số thanh',step=1)]
+        for ngg in range(st.session_state.count):
+            d.append(st.number_input(label='', key=f'Quesdfgtion {ngg}',step=  1))
+with r5: 
+    if a:
+        st.markdown("")
+        g=[st.write("Số lượng:\n",d[0])]
+        st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)
+        st.markdown("")
+
+
+        for nr in range(st.session_state.count):
+            if not a[nr]:
+                b.append(st.write("Số lượng:\n",d[nr]))
+                st.write('Số khối',0)
+                st.markdown("")
+
+ 
+            elif a[nr]:   
+                b.append(st.write("Số lượng:\n",d[nr]))
+                st.write('Số khối',(int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/1000000)
+                st.markdown("")
+
+                
+    
+            
+
+
+# submitted = st.form_submit_button("Submit")
