@@ -1,7 +1,7 @@
 import streamlit as st
 if 'count' not in st.session_state:
     st.session_state.count = 0
-list=['Dày','Rộng','Dài']
+list=['D','R','D']
 r=st.columns(5)
 for i,col in enumerate(r):
         with col:
@@ -10,11 +10,11 @@ for i,col in enumerate(r):
             if i==3:
                 sum=0
                 # with col
-                if st.button('\nCộng 1\n'):
+                if st.button('\n+ 1\n'):
                     st.session_state.count += 1
-                if st.button('Trừ 1'):
+                if st.button('- 1'):
                     st.session_state.count -= 1
 
             if i==4:
-                st.write("Số lượng:",st.session_state.count)
-                st.write('Số khối')
+                st.write("Counts:",st.session_state.count)
+                st.write('Q.')
