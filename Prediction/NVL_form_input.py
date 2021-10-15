@@ -39,7 +39,7 @@ with r5:
     if a[0]:
         st.markdown("")
         g=[st.write("Số lượng:\n",d[0])]
-        hh=st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)
+        hh=[st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)]
         st.markdown("")
 
 
@@ -51,8 +51,8 @@ with r5:
 
  
             elif a[nr]:   
-                hh.append(st.write("Số lượng:\n",d[nr]))
-                st.write('Số khối',(int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/1000000)
+                g.append(st.write("Số lượng:\n",d[nr]))
+                h.append(st.write('Số khối',(int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/1000000))
                 st.markdown("")
 
                 
