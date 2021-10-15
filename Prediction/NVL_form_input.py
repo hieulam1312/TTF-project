@@ -43,7 +43,7 @@ with r5:
         st.markdown("")
 
 
-        for nr in range(st.session_state.count):
+        for nr in range(1,st.session_state.count):
             if not a[nr]:
                 g.append(st.write("Số lượng:\n",d[nr]))
                 st.write('Số khối',0)
