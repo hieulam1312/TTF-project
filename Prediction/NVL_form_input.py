@@ -39,25 +39,30 @@ with r5:
     if a[0]:
         st.markdown("")
         g=[st.write("Số lượng:\n",d[0])]
-        st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)
+        hh=st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)
         st.markdown("")
 
 
         for nr in range(st.session_state.count):
             if not a[nr]:
-                b.append(st.write("Số lượng:\n",d[nr]))
+                g.append(st.write("Số lượng:\n",d[nr]))
                 st.write('Số khối',0)
                 st.markdown("")
 
  
             elif a[nr]:   
-                b.append(st.write("Số lượng:\n",d[nr]))
+                hh.append(st.write("Số lượng:\n",d[nr]))
                 st.write('Số khối',(int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/1000000)
                 st.markdown("")
 
                 
     
-            
+a
+b
+c
+d
+g
+hh
 
 
 # submitted = st.form_submit_button("Submit")
