@@ -10,13 +10,13 @@ def decrement_counter(decrement_value=0):
     st.session_state.count -= decrement_value
 c1,c2,c3,c4,c5=st.columns((1,1,1,2,2))
 with c1:
-    st.button('Increment', on_click=increment_counter,
+    st.button('Thêm dòng', on_click=increment_counter,
         kwargs=dict(increment_value=5))
 with c2:
-    st.button('Decrement', on_click=decrement_counter,
+    st.button('Giảm dòng', on_click=decrement_counter,
         kwargs=dict(decrement_value=1))
 with c4:
-    st.write('Count = ', st.session_state.count)
+    st.write('Tổng số dòng = ', st.session_state.count)
 h=st.session_state.count
 h
 
