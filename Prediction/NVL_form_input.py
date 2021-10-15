@@ -18,7 +18,6 @@ with c2:
 with c4:
     st.write('Tổng số dòng = ', st.session_state.count)
 h=st.session_state.count
-h
 
 with r1:
         a=[st.text_input('Dày',)]
