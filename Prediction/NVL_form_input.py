@@ -1,4 +1,6 @@
 import streamlit as st
+if 'count' not in st.session_state:
+    st.session_state.count = 0
 list=['Dày','Rộng','Dài']
 r=st.columns(5)
 for i,col in enumerate(r):
