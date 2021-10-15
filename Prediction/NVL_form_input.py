@@ -37,11 +37,11 @@ with r4:
         for ngg in range(st.session_state.count):
             d.append(st.number_input(label='', key=f'Quesdfgtion {ngg}',step=  1))
 with r5: 
-    # if a:
-    #     st.markdown("")
-    #     g=[st.write("Số lượng:\n",d[0])]
-    #     st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)
-    #     st.markdown("")
+    if a[0]:
+        st.markdown("")
+        g=[st.write("Số lượng:\n",d[0])]
+        st.write('Số khối',(int(a[0])*int(b[0])*int(c[0])*int(d[0]))/1000000)
+        st.markdown("")
 
 
         for nr in range(st.session_state.count):
