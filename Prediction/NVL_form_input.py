@@ -52,7 +52,7 @@ with r5:
  
             elif a[nr]:   
                 g.append(st.write("Số lượng:\n",d[nr]))
-                h.append(st.write('Số khối',(int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/1000000))
+                hh.append(st.write('Số khối',(int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/1000000))
                 st.markdown("")
 
                 
