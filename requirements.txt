@@ -19,4 +19,4 @@ sklearn
 waterfallcharts
 gspread-dataframe
 barcode
-barcode.writer
+barcode-writer
