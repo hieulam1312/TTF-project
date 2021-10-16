@@ -1,5 +1,6 @@
 # from typing_extensions import Concatenate
 from logging import error
+from mimetypes import MimeTypes
 import streamlit as st
 import email, smtplib, ssl # to automate email
 import email as mail
@@ -7,26 +8,20 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 import datetime as dt # to work with date, time
 from bs4 import BeautifulSoup # to work with web scrapping (HTML)
 import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
 from streamlit.elements import multiselect # to display HTML in the notebook
-from barcode import EAN13
+import PIL
+import barcode
 from barcode.writer import ImageWriter
-# Make sure to pass the number as string
-number = '5901234123457'
-  
-# Now, let's create an object of EAN13
-# class and pass the number
-my_code = EAN13(number)
-my_code = EAN13(number, writer=ImageWriter())
-
-# st.image(my_code)
-a=my_code.save("new_code1")
-
-st.write(a)
-st.set_page_config(layout='wide')
+def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
+        ean = barcode.get('code128', link, writer=ImageWriter())
+        filename = ean.save('code128',{"module_width":0.1, "module_height":3, "font_size":7, "text_distance": 1, "quiet_zone": 1})
+        return filename
+# st.set_page_config(layout='wide')
 from list_info import ncc_list,qc_list,go_list
 
 a1,a2,a3,a4=st.columns((1.5,1.5,1,1))
@@ -123,8 +118,17 @@ else:
     # st.write('Gỗ:',go[0])
     # st.write('QC kiểm: ',qc[0])
     total=round(sum(df['SỐ KHỐI']),4)
+    c1,c2=st.columns(2)
+    with c1:
+        st.write('**Thẻ kiện:** ',tk)
+    with c2:
+        image=st.image(qr_code(link=tk))
     st.write('**Tổng số khối:** ',total)
     df
+
+
+
+
 
 def send_email(subject,total):
     # (1) Create the email head (sender, receiver, and subject)
@@ -133,8 +137,7 @@ def send_email(subject,total):
     receiver_email='hieulam1312@gmail.com'
     email = MIMEMultipart()
     email["From"] = sender_email
-    email["To"] = 'quangpham@tanthanhgroup.com'
-    email["Subject"] =subject
+    email["To"] = 'abc'
 
     # (2) Create Body part
     html2 = """
@@ -145,16 +148,21 @@ def send_email(subject,total):
     """.format(dt.datetime.now().isoformat())
 
     part4 = MIMEText(html2, 'html')
+    html4="""
+        <html>
+            <body>
+                <p>This is an HTML body.<br>
+                It also has an image.
+                </p>
+                <img src="cid:{image_cid}">
+            </body>
+        </html>
+        """.format(image_cid=image)
+
     html3="""
     <html>
-    Em chào anh, <br>
     <br>
-    Đây là email test được gửi tự động ghi submit trên form nhập NVL. <br>
-     <br>
-    QC sẽ in phiếu trực tiếp trên mail. <br>
-     <br>
-    Nội dung in bắt đầu từ đây:
-    <br>
+    Thẻ kiện: 
      <br>
     Tổng số khối: <b>{}</b><br>
     <br>
@@ -172,11 +180,21 @@ def send_email(subject,total):
             </body>
             </html>
             """.format(df.to_html(index=False,col_space=100,justify='center'))
+    # image
+    # fp = open(image, 'rb')
+    # msgImage = MIMEImage(image)
+    # fp.close()
+    # # Define the image's ID as referenced above
+    # msgImage.add_header('Content-ID', '<image1>')
+    # email.attach(msgImage)
+
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
     email.attach(part2)
     email.attach(part1)
     email.attach(part4)
+    part3=MIMEText(html4,'html')
+    email.attach(part3)
     session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
     session.starttls() #enable security
     session.login(sender_email, password) #login with mail_id and password
