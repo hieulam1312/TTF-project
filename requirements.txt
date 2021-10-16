@@ -18,5 +18,5 @@ streamlit-pandas-profiling==0.1.2
 sklearn
 waterfallcharts
 gspread-dataframe
-barcode
-barcode-writer>=1.0.1
+# barcode
+# barcode-writer>=1.0.1
