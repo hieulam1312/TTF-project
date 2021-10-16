@@ -116,7 +116,7 @@ def send_email(subject,total):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
-    receiver_email='hieulam1312@gmail.com'
+    receiver_email='quangpham@tanthanhgroup.com'
     email = MIMEMultipart()
     email["From"] = sender_email
     email["To"] = 'quangpham@tanthanhgroup.com'
