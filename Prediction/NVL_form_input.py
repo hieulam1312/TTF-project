@@ -12,6 +12,20 @@ from bs4 import BeautifulSoup # to work with web scrapping (HTML)
 import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
 from streamlit.elements import multiselect # to display HTML in the notebook
+from barcode import EAN13
+from barcode.writer import ImageWriter
+# Make sure to pass the number as string
+number = '5901234123457'
+  
+# Now, let's create an object of EAN13
+# class and pass the number
+my_code = EAN13(number)
+my_code = EAN13(number, writer=ImageWriter())
+
+# st.image(my_code)
+a=my_code.save("new_code1")
+
+st.write(a)
 st.set_page_config(layout='wide')
 from list_info import ncc_list,qc_list,go_list
 
@@ -70,7 +84,7 @@ c=[0 if v =="" else v for v in c]
 d=[0 if v =="" else v for v in d]
 
 if a[0]==0:
-    st.success('Nhập đầy đủ thông tin vào form phía trên')
+    st.info('Nhập đầy đủ thông tin vào form phía trên')
 else:
     with r5: 
         g=[]
@@ -116,7 +130,7 @@ def send_email(subject,total):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
-    receiver_email='quangpham@tanthanhgroup.com'
+    receiver_email='hieulam1312@gmail.com'
     email = MIMEMultipart()
     email["From"] = sender_email
     email["To"] = 'quangpham@tanthanhgroup.com'
@@ -168,9 +182,9 @@ def send_email(subject,total):
     session.login(sender_email, password) #login with mail_id and password
     text = email.as_string()
     session.sendmail(sender_email, receiver_email, text)
-
+    st.success('Đã gửi mail thành công')
 
 
 if st.button('Hoàn tất'):
     send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total)
-
+    
