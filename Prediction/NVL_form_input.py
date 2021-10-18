@@ -28,9 +28,7 @@ def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
 # st.set_page_config(layout='wide')
 from list_info import ncc_list,qc_list,go_list
 
-a1,a2,a3,a4=st.columns((1.5,1.5,1,1))
-with a1:
-    tk=st.text_input('Thẻ Kiện:',)
+a2,a3,a4,a5=st.columns((1.5,1.5,1,1))
 with a2:
     ncc=st.multiselect('NCC:',ncc_list)
 with a3:
@@ -77,12 +75,29 @@ with r4:
         d= [st.number_input('Số thanh',step=1)]
         for ngg in range(st.session_state.count):
             d.append(st.number_input(label='', key=f'Quesdfgtion {ngg}',step=  1))
+
 a=[0 if v =="" else v for v in a]
 b=[0 if v =="" else v for v in b]
 c=[0 if v =="" else v for v in c]
 d=[0 if v =="" else v for v in d]
 
-if a[0]==0:
+a1 = []
+b1=[]
+c1=[]
+
+
+for a_ in a:
+    new_string = a_.replace(',','.')
+    a1.append(new_string)
+
+for b_ in b:
+    new_string = b_.replace('.',',')
+    b1.append(new_string)
+for c_ in c:
+    new_string = c_.replace('.',',')
+    c1.append(new_string)
+
+if a1[0]==0:
     st.info('Nhập đầy đủ thông tin vào form phía trên')
 else:
     with r5: 
@@ -90,26 +105,28 @@ else:
         hh=[]
         st.markdown("")
         g=[st.write("Số lượng:\n",d[0])]
-        hh=[st.write('Số khối',round((int(a[0])*int(b[0])*int(c[0])*int(d[0]))/10**9,4))]
+        hh=[st.write('Số khối',round((float(a1[0])*float(b1[0])*float(c1[0])*float(d[0]))/10**9,4))]
         st.markdown("")
 
 
         for nr in range(1,st.session_state.count+1):
-            if not a[nr]:
+            if not a1[nr]:
                 g.append(st.write("Số lượng:\n",d[nr]))
                 st.write('Số khối',0)
                 st.markdown("")
 
 
-            elif a[nr]:   
+            elif a1[nr]:   
                 g.append(st.write("Số lượng:\n",d[nr]))
-                hh.append(st.write('Số khối',(round((int(a[nr])*int(b[nr])*int(c[nr])*d[nr])/10**9,4))))
+                hh.append(st.write('Số khối',(round((float(a1[nr])*float(b1[nr])*float(c1[nr])*d[nr])/10**9,4))))
                 st.markdown("")
-
-    dict={'Dày':a,'Rộng':b,'Dài':c,'Số thanh':d}
+    cl1,cl2=st.columns(2)
+    with cl1:
+        tk=st.text_input('Thẻ Kiện:',)
+    dict={'Dày':a1,'Rộng':b1,'Dài':c1,'Số thanh':d}
     import pandas as pd
     df=pd.DataFrame.from_dict(dict)    
-    df=df.astype(int)
+    df=df.astype(float)
     df['SỐ KHỐI']=round((df['Dày']*df['Rộng']*df['Dài']*df['Số thanh'])/10**9,4)
     df['NGÀY KIỂM']=pd.to_datetime('today')
     df['THẺ KIỆN']=tk
