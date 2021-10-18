@@ -125,6 +125,8 @@ else:
         cl1,cl2=st.columns(2)
         with cl1:
             tk=st.text_input('Thẻ Kiện:',)
+        with cl2:
+            ncc_num=st.number_input('Số khối NCC:',format="%.4f")
         dict={'Dày':a1,'Rộng':b1,'Dài':c1,'Số thanh':d}
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
@@ -137,11 +139,22 @@ else:
         df['QC KIỂM']=qc[0]
     
         st.subheader('KẾT QUẢ:')
-        # st.write('Thẻ kiện: ',tk)
-        # st.write('NCC:',ncc[0])
-        # st.write('Gỗ:',go[0])
-        # st.write('QC kiểm: ',qc[0])
         total=round(sum(df['SỐ KHỐI']),4)
+    
+        #Cân đối số liệu
+        _du=0
+
+        if total>ncc_num:
+            _du=total-ncc_num
+            # _du
+        _row0=df['Số thanh']
+        new_row=round((_row0[0]*_du)/total,0)
+
+        test=_row0[0]-new_row
+        test
+
+
+
         c1,c2=st.columns(2)
         with c1:
             st.write('**Thẻ kiện:** ',tk)
@@ -149,11 +162,6 @@ else:
         #    image= image=st.image(qr_code(link=tk))
         st.write('**Tổng số khối:** ',total)
         df
-
-
-
-
-
 def send_email(subject,total,tk,filename):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
