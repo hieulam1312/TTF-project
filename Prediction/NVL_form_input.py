@@ -19,8 +19,12 @@ import barcode
 from barcode.writer import ImageWriter
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
-        filename = ean.save('code128',{"module_width":0.1, "module_height":3, "font_size":7, "text_distance": 1, "quiet_zone": 1})
+        filename = ean.save('code128',{"module_width":0.2, "module_height":9, "font_size":14, "text_distance": 1, "quiet_zone": 1})
         return filename
+
+
+
+
 # st.set_page_config(layout='wide')
 from list_info import ncc_list,qc_list,go_list
 
@@ -121,8 +125,8 @@ else:
     c1,c2=st.columns(2)
     with c1:
         st.write('**Thẻ kiện:** ',tk)
-    with c2:
-        image=st.image(qr_code(link=tk))
+    # with c2:
+    #    image= image=st.image(qr_code(link=tk))
     st.write('**Tổng số khối:** ',total)
     df
 
@@ -130,7 +134,7 @@ else:
 
 
 
-def send_email(subject,total):
+def send_email(subject,total,tk,filename):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
@@ -138,6 +142,7 @@ def send_email(subject,total):
     email = MIMEMultipart()
     email["From"] = sender_email
     email["To"] = 'abc'
+    email['Subject']=subject
 
     # (2) Create Body part
     html2 = """
@@ -147,28 +152,19 @@ def send_email(subject,total):
     </html>
     """.format(dt.datetime.now().isoformat())
 
-    part4 = MIMEText(html2, 'html')
-    html4="""
-        <html>
-            <body>
-                <p>This is an HTML body.<br>
-                It also has an image.
-                </p>
-                <img src="cid:{image_cid}">
-            </body>
-        </html>
-        """.format(image_cid=image)
+    # part4 = MIMEText(html2, 'html')
+
 
     html3="""
     <html>
     <br>
-    Thẻ kiện: 
+    Thẻ kiện:  <b>{}</b><br>
      <br>
     Tổng số khối: <b>{}</b><br>
     <br>
 
     </html>
-    """.format(total)
+    """.format(tk,total)
 
     html = """ DANH SÁCH THẺ KIỆN\n
             <html>
@@ -180,21 +176,17 @@ def send_email(subject,total):
             </body>
             </html>
             """.format(df.to_html(index=False,col_space=100,justify='center'))
-    # image
-    # fp = open(image, 'rb')
-    # msgImage = MIMEImage(image)
-    # fp.close()
-    # # Define the image's ID as referenced above
-    # msgImage.add_header('Content-ID', '<image1>')
-    # email.attach(msgImage)
+    fp = open('code128.png', 'rb')
+    msgImage = MIMEImage(fp.read())
+    fp.close()
+    msgImage.add_header('Content-ID', 'barcode')
+    email.attach(msgImage)
 
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
     email.attach(part2)
     email.attach(part1)
-    email.attach(part4)
-    part3=MIMEText(html4,'html')
-    email.attach(part3)
+
     session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
     session.starttls() #enable security
     session.login(sender_email, password) #login with mail_id and password
@@ -204,5 +196,5 @@ def send_email(subject,total):
 
 
 if st.button('Hoàn tất'):
-    send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total)
+    send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total,tk,qr_code(link=tk))
     
