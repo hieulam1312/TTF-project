@@ -143,15 +143,14 @@ else:
     
         #Cân đối số liệu
         _du=0
+        _du=total-ncc_num
+        if _du>=0.01:
 
-        if total>ncc_num:
-            _du=total-ncc_num
-            # _du
-        _row0=df['Số thanh']
-        new_row=round((_row0[0]*_du)/total,0)
+            _row0=df['Số thanh']
+            new_row=round((_row0[0]*_du)/total,0)
 
-        test=_row0[0]-new_row
-        test
+            test=_row0[0]-new_row
+            test
 
 
 
