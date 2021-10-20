@@ -17,6 +17,8 @@ from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 import barcode
 from barcode.writer import ImageWriter
+from cv import ncc_list
+
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
         filename = ean.save('code128',{"module_width":0.2, "module_height":9, "font_size":14, "text_distance": 1, "quiet_zone": 1})
@@ -24,9 +26,8 @@ def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
 
 
 
-
 # st.set_page_config(layout='wide')
-from list_info import ncc_list,qc_list,go_list
+from list_info import qc_list,go_list
 
 a2,a3,a4,a5=st.columns((1.5,1.5,1,1))
 with a2:
