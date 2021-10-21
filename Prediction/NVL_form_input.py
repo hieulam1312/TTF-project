@@ -24,7 +24,7 @@ def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         filename = ean.save('code128',{"module_width":0.2, "module_height":9, "font_size":14, "text_distance": 1, "quiet_zone": 1})
         return filename
 
-
+st.subheader('Nhập thông tin:')
 
 # st.set_page_config(layout='wide')
 from list_info import qc_list,go_list
@@ -36,7 +36,8 @@ with a3:
     qc=st.multiselect('QC kiểm:',qc_list)
 with a4:
     go=st.multiselect('Loại gỗ:',go_list)
-
+with a5:
+    da=st.text_input('Độ ẩm:',)
 if not ncc:
     st.info('Nhập đầy đủ thông tin ở phía trên')
 else:
@@ -123,46 +124,65 @@ else:
                     g.append(st.write("Số lượng:\n",d[nr]))
                     hh.append(st.write('Số khối',(round((float(a1[nr])*float(b1[nr])*float(c1[nr])*d[nr])/10**9,4))))
                     st.markdown("")
-        cl1,cl2=st.columns(2)
-        with cl1:
-            tk=st.text_input('Thẻ Kiện:',)
-        with cl2:
-            ncc_num=st.number_input('Số khối NCC:',format="%.4f")
+
+    
         dict={'Dày':a1,'Rộng':b1,'Dài':c1,'Số thanh':d}
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
         df['SỐ KHỐI']=round((df['Dày']*df['Rộng']*df['Dài']*df['Số thanh'])/10**9,4)
         df['NGÀY KIỂM']=pd.to_datetime('today')
-        df['THẺ KIỆN']=tk
+        # df['THẺ KIỆN']=tk
         df['NCC']=ncc[0]
         df['LOẠI GỖ']=go[0]
         df['QC KIỂM']=qc[0]
-    
-        st.subheader('KẾT QUẢ:')
         total=round(sum(df['SỐ KHỐI']),4)
-        d1=df.sort_index(ascending=False).reset_index(drop=True)
-
+        d1=df.sort_index(ascending=False).reset_index(drop=True)      
         #Cân đối số liệu
         # _du=0
-        _du=total-ncc_num
-        # _du
-        if _du>0.01:
+        st.subheader('Cân đối số liệu')
+        cl1,cl2=st.columns(2)
+        with cl1:
+            ncc_num=st.number_input('Số khối NCC:',format="%.4f")
+        with cl2: 
+            st.write('**Tổng số khối thực kiểm:** ',total)
+            
+            _du=total-ncc_num
+            # _du
+            if _du>0.05:
 
-            _row0=d1['Số thanh']
-            new_row=round((_row0[0]*_du)/total,0)
-            test=_row0[0]-new_row
-            st.write('Số lượng sau điều chỉnh:',test)
+                _row0=d1['Số thanh']
+                new_row=round((_row0[0]*_du)/total,0)
+                test=_row0[0]-new_row
+                st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',test)
 
+        cls1,cls2,cls3=st.columns(3)
+        with cls1:
+            tk=st.text_input('Thẻ Kiện:',)
+        with cls2:
+            ml=st.text_input('Mã lô:',)
+        with cls3:
+            clg=st.text_input('Chất lượng gỗ',)
+
+        st.subheader('KẾT QUẢ:')
 
         c1,c2=st.columns(2)
         with c1:
             st.write('**Thẻ kiện:** ',tk)
+            st.write('**Mã lô:** ',ml)
+            NCC=ncc[0]+" "+"("+clg+")"
+            st.write('**NCC:** ',NCC)
+        df['THẺ KIỆN']=tk
+        df['Mã lô']=ml
+        df['NCC']=NCC
         # with c2:
         #    image= image=st.image(qr_code(link=tk))
+
+        df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI','NGÀY KIỂM']]
+        df2
         st.write('**Tổng số khối:** ',total)
-        df
-def send_email(subject,total,tk,filename):
+
+def send_email(subject,total,tk,QC,NCC,qc,ml):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
@@ -172,15 +192,6 @@ def send_email(subject,total,tk,filename):
     email["To"] = 'abc'
     email['Subject']=subject
 
-    # (2) Create Body part
-    html2 = """
-    <html>
-     <br>
-    Email được gửi vào lúc at <b>{}</b><br>
-    </html>
-    """.format(dt.datetime.now().isoformat())
-
-    # part4 = MIMEText(html2, 'html')
 
 
     html3="""
@@ -188,11 +199,17 @@ def send_email(subject,total,tk,filename):
     <br>
     Thẻ kiện:  <b>{}</b><br>
      <br>
+    Nhà cung cấp: <b>{}</b><br>
+    <br>
     Tổng số khối: <b>{}</b><br>
     <br>
-
+    QC kiểm: <b>{}</b><br>
+    <br>
+    Mã lô: <b>{}</b><br>
+    <br>
     </html>
-    """.format(tk,total)
+    """.format(tk,NCC,total,qc,ml)
+
 
     html = """ DANH SÁCH THẺ KIỆN\n
             <html>
@@ -203,18 +220,26 @@ def send_email(subject,total,tk,filename):
                  <br>
             </body>
             </html>
-            """.format(df.to_html(index=False,col_space=100,justify='center'))
+            """.format(df2.to_html(index=False,col_space=100,justify='center'))
     fp = open('code128.png', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
     msgImage.add_header('Content-ID', 'barcode')
     email.attach(msgImage)
 
+    html4="""
+    <html>
+    <br>
+    Tổng số khối: <b>{}</b><br>
+    <br>
+    </html>
+    """.format(total)
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
+    part3=MIMEText(html4,'html')
     email.attach(part2)
     email.attach(part1)
-
+    email.attach(part3)
     session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
     session.starttls() #enable security
     session.login(sender_email, password) #login with mail_id and password
@@ -224,5 +249,5 @@ def send_email(subject,total,tk,filename):
 
 
 if st.button('Hoàn tất'):
-    send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total,tk,qr_code(link=tk))
+    send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml)
     
