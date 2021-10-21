@@ -175,12 +175,15 @@ else:
         df['THẺ KIỆN']=tk
         df['Mã lô']=ml
         df['NCC']=NCC
+        df['ĐỘ ẨM']=da
         # with c2:
         #    image= image=st.image(qr_code(link=tk))
 
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI','NGÀY KIỂM']]
         df2
         st.write('**Tổng số khối:** ',total)
+        
+
 
 def send_email(subject,total,tk,QC,NCC,qc,ml):
     # (1) Create the email head (sender, receiver, and subject)
@@ -246,8 +249,36 @@ def send_email(subject,total,tk,QC,NCC,qc,ml):
     text = email.as_string()
     session.sendmail(sender_email, receiver_email, text)
     st.success('Đã gửi mail thành công')
+def push(df):
+    import streamlit as st
+    import pandas as pd
+    from google.oauth2 import service_account
+    import gspread #-> Để update data lên Google Spreadsheet
+    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
+    from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
+    credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive'],
+    )
+    gc = gspread.authorize(credentials)
+    spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
+    sheet_index_no1=1
+
+    sh = gc.open_by_key(spreadsheet_key)
+    worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
+
+    import gspread_dataframe as gd
+    import gspread as gs
+
+    ws = gc.open("Kho NVL - NCC").worksheet('Sheet2')
+    existing = gd.get_as_dataframe(ws)
+    updated = existing.append(df)
+    gd.set_with_dataframe(ws, updated)
+    st.success('Tải lại trang để tiếp tục nhập liệu')
+# from cv import push
 
 if st.button('Hoàn tất'):
     send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml)
-    
+    push(df)
