@@ -55,30 +55,7 @@ if st.button('Xuất danh sách'):
     existing = gd.get_as_dataframe(ws)
     updated = existing.append(table_df)
     gd.set_with_dataframe(ws, updated)
-def report():
-    credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive'],
-    )
-    gc1 = gspread.authorize(credentials)
-    spreadsheet_key="1eWQcw2FFziobQY8rODoYCjfzV3b-_dksTjSDm0Okdpg"
-    sh1=gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('Sheet1')
-    report=sh1.get_all_records()
-    report_df=pd.DataFrame(report)
-    # report_df['NGÀY']=report_df['NGÀY'].dt.date
-    nm1_muon=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='NM1')&(report_df['THAO TÁC']=='Trả mẫu')]
-    nm3_muon=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='NM3')&(report_df['THAO TÁC']=='Trả mẫu')]
-    x4_muon=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='X4')&(report_df['THAO TÁC']=='Trả mẫu')]
-    NMNEM_muon=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='NM NỆM')&(report_df['THAO TÁC']=='Trả mẫu')]
-    TD_muon=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='TD')&(report_df['THAO TÁC']=='Trả mẫu')]
-
-    nm1_TRA=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='NM1')&(report_df['THAO TÁC']=='Trả mẫu')]
-    nm3_TRA=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='NM3')&(report_df['THAO TÁC']=='Trả mẫu')]
-    x4_TRA=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='X4')&(report_df['THAO TÁC']=='Trả mẫu')]
-    NMNEM_TRA=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='NM NỆM')&(report_df['THAO TÁC']=='Trả mẫu')]
-    TD_TRA=report_df[(report_df['TUẦN']==pd.to_datetime("today").week)&(report_df['BỘ PHẬN']=='TD')&(report_df['THAO TÁC']=='Trả mẫu')]    
-
+    st.success('Done')
 
 
     
