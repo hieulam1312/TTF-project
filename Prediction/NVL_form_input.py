@@ -141,18 +141,18 @@ else:
     
         st.subheader('KẾT QUẢ:')
         total=round(sum(df['SỐ KHỐI']),4)
-    
+        d1=df.sort_index(ascending=False).reset_index(drop=True)
+
         #Cân đối số liệu
-        _du=0
+        # _du=0
         _du=total-ncc_num
-        if _du>=0.01:
+        # _du
+        if _du>0.01:
 
-            _row0=df['Số thanh']
+            _row0=d1['Số thanh']
             new_row=round((_row0[0]*_du)/total,0)
-
             test=_row0[0]-new_row
-            test
-
+            st.write('Số lượng sau điều chỉnh:',test)
 
 
         c1,c2=st.columns(2)
