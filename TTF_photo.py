@@ -251,11 +251,7 @@ lsx_final=lsx_final.drop_duplicates()
 lsx_final.sort_values(by='Time')
 
 
-scope = ['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name(
-    'speedy-precept-314204-30d59f2d7609.json', scope)
-gc = gspread.authorize(credentials)
+
 
 
 # ACCES GOOGLE SHEET
@@ -265,7 +261,7 @@ sheet_index_no3 = 2
 sheet_index_no4 = 3
 sheet_index_no5 = 4
 spreadsheet_key = '13P--4fYhCsFXUZLUnr1vHUHZYQ6RohL7jcFVOJWDYz4' # input SPREADSHEET_KEY HERE
-sh = gc.open_by_key(spreadsheet_key)
+sh = gc1.open_by_key(spreadsheet_key)
 worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
 worksheet2 = sh.get_worksheet(sheet_index_no2)
 worksheet3 = sh.get_worksheet(sheet_index_no3)
