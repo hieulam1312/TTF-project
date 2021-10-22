@@ -94,87 +94,49 @@ else:
             for ngg in range(st.session_state.count):
                 d.append(st.number_input(label='', key=f'Quesdfgsdtion {ngg}',step=  1))
 
+    mol3,mol4=st.columns(2)
+    with mol3:
+        st.subheader('KIỆN 3')
+    with mol4:
+        st.subheader('Kiện 4')
+    r__1,r__2,r__3,r__4,r__5,r__6=st.columns((1,1,1,1,1,1))
+    k1,k2,k3,k4,k5,k6=st.columns((1,1,2,1,1,2))
+    if 'count' not in st.session_state:
+        st.session_state.count = 0
+    c_1,c_2,c_3,c_4,c_5,c_6=st.columns((1,1,1,1,1,1))
+    with c_1:
+        st.button('Thêm dòng2', on_click=increment_counter,
+            kwargs=dict(increment_value=1))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # mol3,mol4=st.columns(2)
-    # with mol3:
-    #     st.subheader('KIỆN 3')
-    # with mol4:
-    #     st.subheader('Kiện 4')
-    # r__1,r__2,r__3,r__4,r__5,r__6=st.columns((1,1,1,1,1,1))
-    # k1,k2,k3,k4,k5,k6=st.columns((1,1,1,1,1,1))
-    # if 'count' not in st.session_state:
-    #     st.session_state.count = 0
-    # c_1,c_2,c_3,c_4,c_5,c_6=st.columns((1,1,1,1,1,1))
-    # with c_1:
-    #     st.button('Thêm dòng2', on_click=increment_counter,
-    #         kwargs=dict(increment_value=1))
-
-    # with c_3:
-    #     st.write('Tổng số dòng2 = ', st.session_state.count+1)
-    # h=st.session_state.count
+    with c_3:
+        st.write('Tổng số dòng2 = ', st.session_state.count+1)
+    h=st.session_state.count
         
-    # with r__1:
-    #     a=st.text_input('Dày3',)
-    # with r__4:
-    #     a=st.text_input('Dày4',)
-    # with k1:
-    #         b=[st.text_input('Rộng2',)]
-    #         for nr in range(st.session_state.count):
-    #             b.append(st.text_input(label='', key=f'2`xv1 {nr}'))
-    # with k2:
-    #         c=[st.text_input('Dài2',)]
-    #         for ng in range(st.session_state.count):
-    #             c.append(st.text_input(label='', key=f'dfuesdftion {ng}'))
-    # with k3:
-    #         d= [st.number_input('Số thanh2',step=1)]
-    #         for ngg in range(st.session_state.count):
-    #             d.append(st.number_input(label='', key=f'Quđsesdfdfgtion {ngg}',step=  1))
-    # with k4:
-    #         b=[st.text_input('Rộng3',)]
-    #         for nr in range(st.session_state.count):
-    #             b.append(st.text_input(label='', key=f'2`sd1dsfsd {nr}'))
-    # with k5:
-    #         c=[st.text_input('Dài3',)]
-    #         for ng in range(st.session_state.count):
-    #             c.append(st.text_input(label='', key=f'dfuestsdddsfsdffion {ng}'))
-    # with k6:
-    #         d= [st.number_input('Số thanh3',step=1)]
-    #         for ngg in range(st.session_state.count):
-    #             d.append(st.number_input(label='', key=f'Quesdfgsddfsdftion {ngg}',step=  1))
+    with r__1:
+        a=st.text_input('Dày3',)
+    with r__4:
+        a=st.text_input('Dày4',)
+    with k1:
+            b=[st.selectbox('Rộng3',list_r)]
+            for nr in range(st.session_state.count):
+                b.append(st.selectbox('',list_r[nr+1:], key=f'dfuestsdidn {nr}'))
+    with k2:
+            c=[st.text_input('Dài2',)]
+            for ng in range(st.session_state.count):
+                c.append(st.text_input(label='', key=f'dfuesdftion {ng}'))
+    with k3:
+            d= [st.number_input('Số thanh2',step=1)]
+            for ngg in range(st.session_state.count):
+                d.append(st.number_input(label='', key=f'Quđsesdfdfgtion {ngg}',step=  1))
+    with k4:
+            b=[st.selectbox('Rộng4',list_r)]
+            for nr in range(st.session_state.count):
+                b.append(st.selectbox('',list_r[nr+1:], key=f'dfuesdsteidn {nr}'))
+    with k5:
+            c=[st.text_input('Dài3',)]
+            for ng in range(st.session_state.count):
+                c.append(st.text_input(label='', key=f'dfuestsdddsfsdffion {ng}'))
+    with k6:
+            d= [st.number_input('Số thanh3',step=1)]
+            for ngg in range(st.session_state.count):
+                d.append(st.number_input(label='', key=f'Quesdfgsddfsdftion {ngg}',step=  1))
