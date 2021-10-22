@@ -52,6 +52,7 @@ else:
 
     def decrement_counter(decrement_value=0):
         st.session_state.count -= decrement_value
+    
     c1,c2,c3,c4,c5=st.columns((1,1,1,2,2))
     with c1:
         st.button('Thêm dòng', on_click=increment_counter,
@@ -64,9 +65,9 @@ else:
     h=st.session_state.count
         
     with r1:
-            a=[st.text_input('Dày',)]
-            for n in range(st.session_state.count):
-                a.append(st.text_input(label='', key=f'Question {n}'))
+        a=st.text_input('Dày',)
+
+
     with r2:
             b=[st.text_input('Rộng',)]
             for nr in range(st.session_state.count):
@@ -80,28 +81,24 @@ else:
             for ngg in range(st.session_state.count):
                 d.append(st.number_input(label='', key=f'Quesdfgtion {ngg}',step=  1))
 
-    a=["0" if v =="" else v for v in a]
+    
     b=["0" if v =="" else v for v in b]
     c=["0" if v =="" else v for v in c]
     d=["0 "if v =="" else v for v in d]
 
-    a1 = []
+
     b1=[]
     c1=[]
-
-
-    for a_ in a:
-        new_string = a_.replace(',','.')
-        a1.append(new_string)
+    a1=a.replace(',','.')
 
     for b_ in b:
-        new_string = b_.replace('.',',')
+        new_string = b_.replace(',','.')
         b1.append(new_string)
     for c_ in c:
-        new_string = c_.replace('.',',')
+        new_string = c_.replace(',','.')
         c1.append(new_string)
 
-    if a1[0]=="0":
+    if a=="0":
         st.info('Nhập đầy đủ thông tin vào form phía trên')
     else:
         with r5: 
@@ -109,27 +106,29 @@ else:
             hh=[]
             st.markdown("")
             g=[st.write("Số lượng:\n",d[0])]
-            hh=[st.write('Số khối',round((float(a1[0])*float(b1[0])*float(c1[0])*float(d[0]))/10**9,4))]
+            hh=[st.write('Số khối',round((float(a1)*float(b1[0])*float(c1[0])*float(d[0]))/10**9,4))]
             st.markdown("")
 
 
             for nr in range(1,st.session_state.count+1):
-                if not a1[nr]:
+                if not a[0]:
                     g.append(st.write("Số lượng:\n",d[nr]))
                     st.write('Số khối',0)
                     st.markdown("")
 
 
-                elif a1[nr]:   
+                elif a[0]:   
                     g.append(st.write("Số lượng:\n",d[nr]))
-                    hh.append(st.write('Số khối',(round((float(a1[nr])*float(b1[nr])*float(c1[nr])*d[nr])/10**9,4))))
+                    hh.append(st.write('Số khối',(round((float(a1)*float(b1[nr])*float(c1[nr])*d[nr])/10**9,4))))
                     st.markdown("")
 
     
-        dict={'Dày':a1,'Rộng':b1,'Dài':c1,'Số thanh':d}
+        dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
+    
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
+        df['Dày']=float(a1)
         df['SỐ KHỐI']=round((df['Dày']*df['Rộng']*df['Dài']*df['Số thanh'])/10**9,4)
         df['NGÀY KIỂM']=pd.to_datetime('today')
         # df['THẺ KIỆN']=tk
