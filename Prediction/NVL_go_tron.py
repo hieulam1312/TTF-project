@@ -53,7 +53,7 @@ else:
         st.subheader('Kiện 2')
     list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
     r_1,r_2,r_3,r_4,r_5,r_6=st.columns((1,1,1,1,1,1))
-    r1,r2,r3,r4,r5,r6=st.columns((1,1,3,1,1,3))
+    r1,r2,r3,r4,r5,r6=st.columns((1,1,2,1,1,2))
     if 'count' not in st.session_state:
         st.session_state.count = 0
     c1,c2,c3,c4,c5,c6=st.columns((1,1,1,1,1,1))
