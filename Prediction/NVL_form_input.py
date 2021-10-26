@@ -1,4 +1,5 @@
 # from typing_extensions import Concatenate
+import numpy as np
 from logging import error
 from mimetypes import MimeTypes
 import streamlit as st
@@ -21,7 +22,7 @@ from cv import ncc_list
 
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
-        filename = ean.save('code128',{"module_width":0.2, "module_height":9, "font_size":14, "text_distance": 1, "quiet_zone": 1})
+        filename = ean.save('code128',{"module_width":0.2, "module_height":6, "font_size":11, "text_distance": 1, "quiet_zone": 1})
         return filename
 
 st.subheader('Nhập thông tin:')
@@ -100,29 +101,7 @@ else:
 
     if a=="0":
         st.info('Nhập đầy đủ thông tin vào form phía trên')
-    else:
-        with r5: 
-            g=[]
-            hh=[]
-            st.markdown("")
-            g=[st.write("Số lượng:\n",d[0])]
-            hh=[st.write('Số khối',round((float(a1)*float(b1[0])*float(c1[0])*float(d[0]))/10**9,4))]
-            st.markdown("")
-
-
-            for nr in range(1,st.session_state.count+1):
-                if not a[0]:
-                    g.append(st.write("Số lượng:\n",d[nr]))
-                    st.write('Số khối',0)
-                    st.markdown("")
-
-
-                elif a[0]:   
-                    g.append(st.write("Số lượng:\n",d[nr]))
-                    hh.append(st.write('Số khối',(round((float(a1)*float(b1[nr])*float(c1[nr])*d[nr])/10**9,4))))
-                    st.markdown("")
-
-    
+    else:  
         dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
     
         import pandas as pd
@@ -130,11 +109,14 @@ else:
         df=df.astype(float)
         df['Dày']=float(a1)
         df['SỐ KHỐI']=round((df['Dày']*df['Rộng']*df['Dài']*df['Số thanh'])/10**9,4)
-        df['NGÀY KIỂM']=pd.to_datetime('today')
+        td=pd.to_datetime('today')
+        df['NGÀY KIỂM']=td
         # df['THẺ KIỆN']=tk
         df['NCC']=ncc[0]
         df['LOẠI GỖ']=go[0]
         df['QC KIỂM']=qc[0]
+        df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
+
         total=round(sum(df['SỐ KHỐI']),4)
         d1=df.sort_index(ascending=False).reset_index(drop=True)      
         #Cân đối số liệu
@@ -178,51 +160,75 @@ else:
         # with c2:
         #    image= image=st.image(qr_code(link=tk))
 
-        df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI','NGÀY KIỂM']]
+        df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
         df2
         st.write('**Tổng số khối:** ',total)
-        
+   
+    len=len(df.index.tolist())
 
-
-def send_email(subject,total,tk,QC,NCC,qc,ml):
+    if len >20:
+        df_20=df2.iloc[:19]
+        # df_20
+        df_o=df_20.copy()
+        df_o=df_o.notnull()
+        df_o=df_o.replace(True,0)
+        # df_o
+        df_ov=df2.iloc[20:].reset_index(drop=True)
+        df_o.loc[df_ov.index, :] = df_ov[:]
+        df_over=df_o.copy()
+        # df_over
+        # df_over=df_0.loc[df1.index, :] = df1[:]
+        html = """ DANH SÁCH THẺ KIỆN\n
+                <body> 
+                <table  margin-bottom= "2000">     
+                <tr>         
+                <td>             
+                <table  margin-bottom= "2000">                  
+                <tr>                     
+                <td>{0}<td> 
+                <td>{1}</td>                 
+                </tr>             
+                </table>         
+                </td>     
+                </tr> 
+                </table> 
+                </body>
+                    """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
+    else:
+        html = """ DANH SÁCH THẺ KIỆN\n
+                <html>
+                <br>
+                <head></head>
+                <body>
+                    {0}
+                    <br>
+                </body>
+                </html>
+                """.format(df2.to_html(index=False,col_space=100,justify='center'))
+def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
-    receiver_email='hieulam1312@gmail.com'
+    # receiver_email='hieulam1312@gmail.com'
     email = MIMEMultipart()
     email["From"] = sender_email
-    email["To"] = 'abc'
+    # email["To"] = 'abc'
     email['Subject']=subject
 
 
 
     html3="""
     <html>
-    <br>
-    Thẻ kiện:  <b>{}</b><br>
-     <br>
-    Nhà cung cấp: <b>{}</b><br>
-    <br>
     Tổng số khối: <b>{}</b><br>
-    <br>
     QC kiểm: <b>{}</b><br>
-    <br>
     Mã lô: <b>{}</b><br>
-    <br>
+    Ngày kiểm: <b>{}</b><br>
+
     </html>
-    """.format(tk,NCC,total,qc,ml)
+    """.format(total,qc,ml,td)
 
 
-    html = """ DANH SÁCH THẺ KIỆN\n
-            <html>
-             <br>
-            <head></head>
-            <body>
-                {0}
-                 <br>
-            </body>
-            </html>
-            """.format(df2.to_html(index=False,col_space=100,justify='center'))
+   
     fp = open('code128.png', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
@@ -231,23 +237,30 @@ def send_email(subject,total,tk,QC,NCC,qc,ml):
 
     html4="""
     <html>
-    <br>
     Tổng số khối: <b>{}</b><br>
-    <br>
     </html>
     """.format(total)
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
     part3=MIMEText(html4,'html')
     email.attach(part2)
-    email.attach(part1)
     email.attach(part3)
-    session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
-    session.starttls() #enable security
-    session.login(sender_email, password) #login with mail_id and password
-    text = email.as_string()
-    session.sendmail(sender_email, receiver_email, text)
-    st.success('Đã gửi mail thành công')
+    email.attach(part1)
+    try:
+        session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
+        session.starttls() #enable security
+        session.login(sender_email, password) #login with mail_id and password
+    
+        for receiver_email in receiver_list:
+            email['To'] = receiver_email
+            text = email.as_string()
+            session.sendmail(sender_email, receiver_email, text)
+        st.success('Đã gửi mail thành công')
+        return(1)
+    except:
+        print("Could not send mail to {}".format(receiver_email))
+        return(0)
+
 def push(df):
     import streamlit as st
     import pandas as pd
@@ -277,7 +290,7 @@ def push(df):
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
 # from cv import push
-
+list_email=['hieulam1312@gmail.com','hieulam@tanthanhgroup.com']
 if st.button('Hoàn tất'):
-    send_email("Thẻ kiện - "+tk+" - "+ncc[0]+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml)
+    send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
     push(df)
