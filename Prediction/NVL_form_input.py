@@ -163,61 +163,56 @@ else:
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
         df2
         st.write('**Tổng số khối:** ',total)
+   
+    len=len(df.index.tolist())
 
-
-
-
- 
-        
-len=len(df.index.tolist())
-
-if len >20:
-    df_20=df2.iloc[:19]
-    # df_20
-    df_o=df_20.copy()
-    df_o=df_o.notnull()
-    df_o=df_o.replace(True,0)
-    # df_o
-    df_ov=df2.iloc[20:].reset_index(drop=True)
-    df_o.loc[df_ov.index, :] = df_ov[:]
-    df_over=df_o.copy()
-    # df_over
-    # df_over=df_0.loc[df1.index, :] = df1[:]
-    html = """ DANH SÁCH THẺ KIỆN\n
-            <body> 
-            <table  margin-bottom= "2000">     
-            <tr>         
-            <td>             
-            <table  margin-bottom= "2000">                  
-            <tr>                     
-            <td>{0}<td> 
-            <td>{1}</td>                 
-            </tr>             
-            </table>         
-            </td>     
-            </tr> 
-            </table> 
-            </body>
-                """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
-else:
-    html = """ DANH SÁCH THẺ KIỆN\n
-            <html>
-             <br>
-            <head></head>
-            <body>
-                {0}
-                 <br>
-            </body>
-            </html>
-            """.format(df2.to_html(index=False,col_space=100,justify='center'))
-def send_email(subject,total,tk,QC,NCC,qc,ml,td,html):
+    if len >20:
+        df_20=df2.iloc[:19]
+        # df_20
+        df_o=df_20.copy()
+        df_o=df_o.notnull()
+        df_o=df_o.replace(True,0)
+        # df_o
+        df_ov=df2.iloc[20:].reset_index(drop=True)
+        df_o.loc[df_ov.index, :] = df_ov[:]
+        df_over=df_o.copy()
+        # df_over
+        # df_over=df_0.loc[df1.index, :] = df1[:]
+        html = """ DANH SÁCH THẺ KIỆN\n
+                <body> 
+                <table  margin-bottom= "2000">     
+                <tr>         
+                <td>             
+                <table  margin-bottom= "2000">                  
+                <tr>                     
+                <td>{0}<td> 
+                <td>{1}</td>                 
+                </tr>             
+                </table>         
+                </td>     
+                </tr> 
+                </table> 
+                </body>
+                    """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
+    else:
+        html = """ DANH SÁCH THẺ KIỆN\n
+                <html>
+                <br>
+                <head></head>
+                <body>
+                    {0}
+                    <br>
+                </body>
+                </html>
+                """.format(df2.to_html(index=False,col_space=100,justify='center'))
+def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
-    receiver_email='hieulam1312@gmail.com'
+    # receiver_email='hieulam1312@gmail.com'
     email = MIMEMultipart()
     email["From"] = sender_email
-    email["To"] = 'abc'
+    # email["To"] = 'abc'
     email['Subject']=subject
 
 
@@ -251,12 +246,21 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html):
     email.attach(part2)
     email.attach(part3)
     email.attach(part1)
-    session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
-    session.starttls() #enable security
-    session.login(sender_email, password) #login with mail_id and password
-    text = email.as_string()
-    session.sendmail(sender_email, receiver_email, text)
-    st.success('Đã gửi mail thành công')
+    try:
+        session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
+        session.starttls() #enable security
+        session.login(sender_email, password) #login with mail_id and password
+    
+        for receiver_email in receiver_list:
+            email['To'] = receiver_email
+            text = email.as_string()
+            session.sendmail(sender_email, receiver_email, text)
+        st.success('Đã gửi mail thành công')
+        return(1)
+    except:
+        print("Could not send mail to {}".format(receiver_email))
+        return(0)
+
 def push(df):
     import streamlit as st
     import pandas as pd
@@ -286,7 +290,7 @@ def push(df):
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
 # from cv import push
-
+list_email=['hieulam1312@gmail.com','hieulam@tanthanhgroup.com']
 if st.button('Hoàn tất'):
-    send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html)
+    send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
     push(df)
