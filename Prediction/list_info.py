@@ -22,6 +22,6 @@
 
 go_list=['WHITE OAK','CAO SU','VÁN MDF','WALNUT','OAK','BEECH','TRÀM','SỌ KHỈ','THÔNG','VÁN ÉP']
 
-intiatals=["WOK","CSU","MDF","WAL","OAK","BEE",'TRM',"SOK","THO",'VEP']
+in_list=["WOK","CSU","MDF","WAL","OAK","BEE",'TRM',"SOK","THO",'VEP']
 
 qc_list=['Tuấn','Mứt','Trúc']
