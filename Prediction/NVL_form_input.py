@@ -19,7 +19,8 @@ import PIL
 import barcode
 from barcode.writer import ImageWriter
 from cv import ncc_list
-from list_info import qc_list,go_list,in_list
+from list_info import qc_list,go_list
+in_list=['WOK','CSU','MDF','WAL','OAK','BEE','TRM','SOK','THO','VEP']
 
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
