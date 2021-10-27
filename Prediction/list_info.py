@@ -20,8 +20,8 @@
 # 'AG WOOD GMBH (AA)',
 # 'AG WOOD GMBH (ABC)']
 
-intiatals=["WOK","CSU","MDF","WAL","OAK","BEE",'TRM',"SOK","THO",'VEP']
 go_list=['WHITE OAK','CAO SU','VÁN MDF','WALNUT','OAK','BEECH','TRÀM','SỌ KHỈ','THÔNG','VÁN ÉP']
 
+intiatals=["WOK","CSU","MDF","WAL","OAK","BEE",'TRM',"SOK","THO",'VEP']
 
 qc_list=['Tuấn','Mứt','Trúc']
