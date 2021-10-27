@@ -19,7 +19,7 @@ import PIL
 import barcode
 from barcode.writer import ImageWriter
 from cv import ncc_list
-from list_info import qc_list,go_list,intiatals
+from list_info import qc_list,go_list,in_list
 
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
@@ -149,7 +149,7 @@ else:
 
         c1,c2=st.columns(2)
         with c1:
-            tk="K."+intiatals[go_list.index(go[0])]+"."+str(tk)
+            tk="K."+in_list[go_list.index(go[0])]+"."+str(tk)
             st.write('**Thẻ kiện:** ',tk)
             st.write('**Mã lô:** ',ml)
             NCC=ncc[0]+" "+"("+clg+")"
