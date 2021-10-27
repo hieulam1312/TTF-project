@@ -20,7 +20,7 @@ import barcode
 from barcode.writer import ImageWriter
 from cv import ncc_list
 from list_info import qc_list,go_list
-in_list=['WOK','CSU','MDF','WAL','OAK','BEE','TRM','SOK','THO','VEP']
+in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
@@ -44,6 +44,7 @@ if not ncc:
     st.info('Nhập đầy đủ thông tin ở phía trên')
 else:
     st.subheader('Danh sách kiểm chi tiết:')
+    dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
 
     r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
     if 'count' not in st.session_state:
@@ -65,7 +66,6 @@ else:
     with c4:
         st.write('Tổng số dòng = ', st.session_state.count+1)
     h=st.session_state.count
-        
     with r1:
         a=st.text_input('Dày',)
 
@@ -109,7 +109,16 @@ else:
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
         df['Dày']=float(a1)
-        df['SỐ KHỐI']=round((df['Dày']*df['Rộng']*df['Dài']*df['Số thanh'])/10**9,4)
+
+        khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
+
+        if dv=='Inch':
+            df['SỐ KHỐI']=round(khoi*0.000016387064,4)
+        elif dv=='feet':
+            df['SỐ KHỐI']=round(khoi*0.0283,4)
+
+        else:
+            df['SỐ KHỐI']=round(khoi/10**9,4)
         td=pd.to_datetime('today')
         df['NGÀY KIỂM']=td
         # df['THẺ KIỆN']=tk
@@ -166,9 +175,9 @@ else:
         df2
         st.write('**Tổng số khối:** ',total)
    
-    len=len(df.index.tolist())
+    len_=len(df.index.tolist())
 
-    if len >20:
+    if len_ >20:
         df_20=df2.iloc[:19]
         # df_20
         df_o=df_20.copy()
@@ -263,7 +272,32 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
         print("Could not send mail to {}".format(receiver_email))
         return(0)
 
-def push(df):
+
+# new_dict = df.groupby('THẺ KIỆN').apply(lambda x: x.values.tolist()).to_dict()
+
+def eccount():
+    df4=df.copy()
+    uni_tk=df4['THẺ KIỆN'].unique().tolist()
+    uni_dai=df4['Dài'].unique().tolist()
+    uni_dai.sort()
+    if len(uni_dai)==2:
+
+        string_dai=str(int(uni_dai[0]))+"/"+str(int(uni_dai[-1]))
+    elif len(uni_dai)==1:
+        string_dai=str(int(uni_dai[0]))
+    else:
+
+        string_dai=str(int(uni_dai[0]))+"-"+str(int(uni_dai[-1]))
+    df4['DÀI 2']=string_dai
+    df4['THẺ KIỆN2']=tk
+    df4['THẺ KIỆN 3']=tk
+    df4['Dày2']=df['Dày']
+    # df4
+    eccount=df4[['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','LOẠI GỖ','Dày2','NCC','SỐ KHỐI']]
+    eccount_gr=eccount.groupby(['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','LOẠI GỖ','Dày2','NCC'])['SỐ KHỐI'].sum().reset_index()
+    return eccount_gr
+
+def push(df,str):
     import streamlit as st
     import pandas as pd
     from google.oauth2 import service_account
@@ -278,21 +312,26 @@ def push(df):
     gc = gspread.authorize(credentials)
     spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
-    sheet_index_no1=1
+    # sheet_index_no1=sheet_index_no1
 
-    sh = gc.open_by_key(spreadsheet_key)
-    worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
+    # sh = gc.open_by_key(spreadsheet_key)
+    # worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
 
     import gspread_dataframe as gd
     import gspread as gs
 
-    ws = gc.open("Kho NVL - NCC").worksheet('Sheet2')
+    ws = gc.open("Kho NVL - NCC").worksheet(str)
     existing = gd.get_as_dataframe(ws)
+
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
 # from cv import push
-list_email=['qlcl@tanthanhgroup.com','hieulam@tanthanhgroup.com']
+ECC=eccount()
+sheet='Ecount'
+push(ECC,sheet)
+# list_email=['qlcl@tanthanhgroup.com','hieulam@tanthanhgroup.com']
 if st.button('Hoàn tất'):
-    send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
-    push(df)
+#     send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
+    # df
+    push(df,'Sheet2')
