@@ -25,6 +25,8 @@ in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA"
 LIST_=ncc()
 ncc_list=LIST_[0]
 initial_ncc=LIST_[1]
+ncc_list
+initial_ncc
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
         filename = ean.save('code128',{"module_width":0.2, "module_height":6, "font_size":11, "text_distance": 1, "quiet_zone": 1})
