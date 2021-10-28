@@ -49,7 +49,7 @@ if not ncc:
     st.info('Nhập đầy đủ thông tin ở phía trên')
 else:
     st.subheader('Danh sách kiểm chi tiết:')
-    dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
+    # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
 
     r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
     if 'count' not in st.session_state:
@@ -120,13 +120,7 @@ else:
 
         khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
 
-        if dv=='Inch':
-            df['SỐ KHỐI']=round(khoi*0.000016387064,4)
-        elif dv=='feet':
-            df['SỐ KHỐI']=round(khoi*0.0283,4)
-
-        else:
-            df['SỐ KHỐI']=round(khoi/10**9,4)
+        df['SỐ KHỐI']=round(khoi/10**9,4)
         td=pd.to_datetime('today')
         df['NGÀY KIỂM']=td
         # df['THẺ KIỆN']=tk
