@@ -20,7 +20,7 @@ import barcode
 from barcode.writer import ImageWriter
 # import cv
 # from cvcv import ncc_f
-from cv import ncc_list
+from cv import ncc_list,initial_ncc
 from list_info import qc_list,go_list
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 
