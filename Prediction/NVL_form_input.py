@@ -18,11 +18,14 @@ from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 import barcode
 from barcode.writer import ImageWriter
-from cv import ncc_list,initial_ncc
+from cv import ncc_f
 # from cv import initial_ncc
 from list_info import qc_list,go_list
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
-
+LIST_=ncc_f()
+LIST_
+ncc_list=LIST_[0]
+initial_ncc=LIST_[1]
 
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
