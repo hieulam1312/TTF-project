@@ -1,7 +1,7 @@
 from gspread.utils import A1_ADDR_ROW_COL_RE
 
 
-def ncc():
+def ncc_f():
     import streamlit as st
     import pandas as pd
     from google.oauth2 import service_account
@@ -22,8 +22,9 @@ def ncc():
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
     A = ncc['TÊN NCC'].unique().tolist()
-    return A
-ncc_list=ncc()
+    B= ncc['MÃ'].unique().tolist()
+    return A,B
+# ncc_list=ncc()
 
 def push(df):
     import streamlit as st
@@ -53,5 +54,6 @@ def push(df):
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Done')
-
-ncc_list=ncc()
+# LIST_=ncc_f()
+# ncc_list=LIST_[0]
+# initial_ncc=LIST_[1]
