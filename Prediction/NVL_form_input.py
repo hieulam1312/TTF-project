@@ -18,7 +18,7 @@ from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 import barcode
 from barcode.writer import ImageWriter
-from cv import ncc_list
+from cv import ncc_list,initial_ncc
 from list_info import qc_list,go_list
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 
@@ -103,12 +103,15 @@ else:
     if a=="0":
         st.info('Nhập đầy đủ thông tin vào form phía trên')
     else:  
+        ncc_index=ncc_list.index(ncc[0])
+        ini=initial_ncc[ncc_index]
+
         dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
     
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
-        df['Dày']=float(a1)
+        df['Dày']= float(a1)
 
         khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
 
@@ -172,29 +175,36 @@ else:
         #    image= image=st.image(qr_code(link=tk))
 
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
-        df2
+        df2['Số thanh']=df2['Số thanh'].astype(int)
+        df2['SỐ KHỐI']=df2['SỐ KHỐI'].astype(str)
+
+        df2=df2.astype(str)
+        df2=df2.replace("0"," ")
+        df2=df2.replace("0.0"," ")
         st.write('**Tổng số khối:** ',total)
    
     len_=len(df.index.tolist())
 
     if len_ >20:
         df_20=df2.iloc[:19]
-        # df_20
+        df_20
         df_o=df_20.copy()
         df_o=df_o.notnull()
         df_o=df_o.replace(True,0)
         # df_o
         df_ov=df2.iloc[20:].reset_index(drop=True)
         df_o.loc[df_ov.index, :] = df_ov[:]
+        df_o=df_o.astype(str)
+        df_o=df_o.replace("0","-")
         df_over=df_o.copy()
         # df_over
         # df_over=df_0.loc[df1.index, :] = df1[:]
         html = """ DANH SÁCH THẺ KIỆN\n
                 <body> 
-                <table  margin-bottom= "2000">     
+                <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">     
                 <tr>         
                 <td>             
-                <table  margin-bottom= "2000">                  
+                <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">                  
                 <tr>                     
                 <td>{0}<td> 
                 <td>{1}</td>                 
@@ -246,16 +256,12 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
     msgImage.add_header('Content-ID', 'barcode')
     email.attach(msgImage)
 
-    html4="""
-    <html>
-    Tổng số khối: <b>{}</b><br>
-    </html>
-    """.format(total)
+
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
-    part3=MIMEText(html4,'html')
+    # part3=MIMEText(html4,'html')
     email.attach(part2)
-    email.attach(part3)
+    # email.attach(part3)
     email.attach(part1)
     try:
         session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
@@ -292,9 +298,11 @@ def eccount():
     df4['THẺ KIỆN2']=tk
     df4['THẺ KIỆN 3']=tk
     df4['Dày2']=df['Dày']
-    # df4
-    eccount=df4[['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','LOẠI GỖ','Dày2','NCC','SỐ KHỐI']]
-    eccount_gr=eccount.groupby(['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','LOẠI GỖ','Dày2','NCC'])['SỐ KHỐI'].sum().reset_index()
+    df4["ncc"]=ini
+    df4['Loại Gỗ']=in_list[go_list.index(go[0])]
+    eccount=df4[['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc','SỐ KHỐI']]
+
+    eccount_gr=eccount.groupby(['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc'])['SỐ KHỐI'].sum().reset_index()
     return eccount_gr
 
 def push(df,str):
@@ -312,11 +320,6 @@ def push(df,str):
     gc = gspread.authorize(credentials)
     spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
-    # sheet_index_no1=sheet_index_no1
-
-    # sh = gc.open_by_key(spreadsheet_key)
-    # worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
-
     import gspread_dataframe as gd
     import gspread as gs
 
@@ -326,12 +329,14 @@ def push(df,str):
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
-# from cv import push
-ECC=eccount()
-sheet='Ecount'
-push(ECC,sheet)
-# list_email=['qlcl@tanthanhgroup.com','hieulam@tanthanhgroup.com']
+
+
+
+list_email=['qlcl@tanthanhgroup.com','hieulam@tanthanhgroup.com']
 if st.button('Hoàn tất'):
-#     send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
-    # df
+    send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
+    sheet='Ecount'
+    # from cv import push
+    ECC=eccount()
+    push(ECC,sheet)
     push(df,'Sheet2')
