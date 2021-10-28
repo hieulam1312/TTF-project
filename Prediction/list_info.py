@@ -20,8 +20,44 @@
 # 'AG WOOD GMBH (AA)',
 # 'AG WOOD GMBH (ABC)']
 
-go_list=['WHITE OAK','CAO SU','VÁN MDF','WALNUT','OAK','BEECH','TRÀM','SỌ KHỈ','THÔNG','VÁN ÉP']
+go_list=["ALDER",
+"ASH VN",
+"ASH",
+"BẠCH ĐÀN",
+"BEECH",
+"CĂM XE",
+"CAO SU ĐEN",
+"CAO SU",
+"CHERRY",
+"CHÒ CHỈ",
+"SYCAMORE",
+"DỪA",
+"DƯƠNG LIỄU",
+"GÒN",
+"HICKORY",
+"KAPUS",
+"LÒNG MỨT",
+"MAPLE",
+"MÍT",
+"MUỒNG",
+"NEP PALLET",
+"OAK",
+"PƠ MU",
+"POPLAR",
+"RED ELM",
+"RED OAK",
+"SỌ KHỈ",
+"TẠP",
+"TEAK",
+"THÔNG",
+"TRÀM",
+"TRÅU",
+"WALNUT",
+"WHITE OAK",
+"WHITE POPLAR",
+"WILLOW",
+"XOÀI"
+]
 
-in_list=['WOK','CSU','MDF','WAL','OAK','BEE','TRM','SOK','THO','VEP']
 
 qc_list=['Tuấn','Mứt','Trúc']
