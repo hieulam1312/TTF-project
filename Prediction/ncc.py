@@ -21,7 +21,7 @@ def ncc_f():
     ncc=pd.DataFrame(sheet)
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
-    ncc
+    # ncc
     A = ncc['TÊN NCC'].unique().tolist()
     B= ncc['MÃ'].unique().tolist()
     return A,B
@@ -57,5 +57,6 @@ def push(df):
     st.success('Done')
 # LIST_=ncc_f()
 abv=ncc_f()
-ncc_list=abv[0]
+ncc_list=abv[1]
+ncc_list
 # initial_ncc=LIST_[1]
