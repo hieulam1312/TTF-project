@@ -180,6 +180,7 @@ else:
         #    image= image=st.image(qr_code(link=tk))
 
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
+        df2
         df2['Số thanh']=df2['Số thanh'].astype(int)
         df2['SỐ KHỐI']=df2['SỐ KHỐI'].astype(str)
 
