@@ -57,6 +57,6 @@ def push(df):
     st.success('Done')
 # LIST_=ncc_f()
 abv=ncc_f()
-ncc_list=abv[1]
+ncc_list=abv[0]
 ncc_list
-# initial_ncc=LIST_[1]
+initial_ncc=abv[1]
