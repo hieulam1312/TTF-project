@@ -21,7 +21,45 @@ from barcode.writer import ImageWriter
 # import cv
 # from cvcv import ncc_f
 from ncc import ncc_list
-from list_info import qc_list,go_list
+from list_info import qc_list
+go_list=["ALDER",
+"ASH VN",
+"ASH",
+"BẠCH ĐÀN",
+"BEECH",
+"CĂM XE",
+"CAO SU ĐEN",
+"CAO SU",
+"CHERRY",
+"CHÒ CHỈ",
+"SYCAMORE",
+"DỪA",
+"DƯƠNG LIỄU",
+"GÒN",
+"HICKORY",
+"KAPUS",
+"LÒNG MỨT",
+"MAPLE",
+"MÍT",
+"MUỒNG",
+"NEP PALLET",
+"OAK",
+"PƠ MU",
+"POPLAR",
+"RED ELM",
+"RED OAK",
+"SỌ KHỈ",
+"TẠP",
+"TEAK",
+"THÔNG",
+"TRÀM",
+"TRÅU",
+"WALNUT",
+"WHITE OAK",
+"WHITE POPLAR",
+"WILLOW",
+"XOÀI"
+]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 # list_ncc
 list_ncc = ncc_list['TÊN NCC'].unique().tolist()
