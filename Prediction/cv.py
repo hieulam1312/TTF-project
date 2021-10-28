@@ -54,6 +54,6 @@ def push(df):
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Done')
-LIST_=ncc_f()
-ncc_list=LIST_[0]
-initial_ncc=LIST_[1]
+# LIST_=ncc_f()
+# ncc_list=LIST_[0]
+# initial_ncc=LIST_[1]
