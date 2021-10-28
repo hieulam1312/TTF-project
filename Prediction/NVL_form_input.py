@@ -23,6 +23,7 @@ from cv import ncc
 from list_info import qc_list,go_list
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 LIST_=ncc()
+LIST_
 ncc_list=LIST_[0]
 initial_ncc=LIST_[1]
 ncc_list
