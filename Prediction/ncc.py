@@ -22,9 +22,9 @@ def ncc_f():
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
     ncc
-    # A = ncc
-    # B= ncc['MÃ'].unique().tolist()
-    return ncc
+    A = ncc['TÊN NCC'].unique().tolist()
+    B= ncc['MÃ'].unique().tolist()
+    return A,B
 # ncc_list=ncc()
 
 def push(df):
@@ -56,6 +56,6 @@ def push(df):
     gd.set_with_dataframe(ws, updated)
     st.success('Done')
 # LIST_=ncc_f()
-ncc_list=ncc_f()
+abv=ncc_f()
 ncc_list
 # initial_ncc=LIST_[1]
