@@ -23,11 +23,9 @@ from barcode.writer import ImageWriter
 from ncc import ncc_list
 from list_info import qc_list,go_list
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
-ncc_list
-A = ncc_list['TÊN NCC'].unique().tolist()
-B= ncc_list['MÃ'].unique().tolist()
-A
-B
+# list_ncc
+list_ncc = ncc_list['TÊN NCC'].unique().tolist()
+list_int= ncc_list['MÃ'].unique().tolist()
 # cv.ncc_f()
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
@@ -40,7 +38,7 @@ st.subheader('Nhập thông tin:')
 
 a2,a3,a4,a5=st.columns((1.5,1.5,1,1))
 with a2:
-    ncc=st.multiselect('NCC:',ncc_list)
+    ncc=st.multiselect('NCC:',list_ncc)
 with a3:
     qc=st.multiselect('QC kiểm:',qc_list)
 with a4:
@@ -110,8 +108,8 @@ else:
     if a=="0":
         st.info('Nhập đầy đủ thông tin vào form phía trên')
     else:  
-        ncc_index=ncc_list.index(ncc[0])
-        ini=initial_ncc[ncc_index]
+        ncc_index=list_ncc.index(ncc[0])
+        ini=list_int[ncc_index]
 
         dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
     
