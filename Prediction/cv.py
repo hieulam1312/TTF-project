@@ -24,7 +24,7 @@ def ncc():
     A = ncc['TÊN NCC'].unique().tolist()
     B= ncc['MÃ'].unique().tolist()
     return A,B
-ncc_list=ncc()
+# ncc_list=ncc()
 
 def push(df):
     import streamlit as st
@@ -57,3 +57,5 @@ def push(df):
 LIST_=ncc()
 ncc_list=LIST_[0]
 initial_ncc=LIST_[1]
+LIST_[0]
+LIST_[1]
