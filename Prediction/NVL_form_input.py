@@ -337,7 +337,7 @@ def push(df,str):
 
 
 
-list_email=['qlcl@tanthanhgroup.com','hieulam@tanthanhgroup.com']
+list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
 if st.button('Hoàn tất'):
     send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
     sheet='Ecount'
