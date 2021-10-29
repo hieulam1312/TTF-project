@@ -106,7 +106,7 @@ done=d[0]
 pl=d[1]
 if st.button('Xác nhận'):
     st.balloons()
-    st.title('THÀNH QUẢN CỦA HÔM NÀY NÈ!:smile:')
+    st.title('THÀNH QUẢ CỦA HÔM NÀY NÈ!:smile:')
     run(done,pl)
 
 
