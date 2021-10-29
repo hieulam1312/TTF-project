@@ -18,8 +18,53 @@ from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 import barcode
 from barcode.writer import ImageWriter
-from cv import ncc_list
-
+# import cv
+# from cvcv import ncc_f
+from ncc import ncc_list
+from list_info import qc_list
+go_list=["ALDER",
+"ASH VN",
+"ASH",
+"BẠCH ĐÀN",
+"BEECH",
+"CĂM XE",
+"CAO SU ĐEN",
+"CAO SU",
+"CHERRY",
+"CHÒ CHỈ",
+"SYCAMORE",
+"DỪA",
+"DƯƠNG LIỄU",
+"GÒN",
+"HICKORY",
+"KAPUS",
+"LÒNG MỨT",
+"MAPLE",
+"MÍT",
+"MUỒNG",
+"NEP PALLET",
+"OAK",
+"PƠ MU",
+"POPLAR",
+"RED ELM",
+"RED OAK",
+"SỌ KHỈ",
+"TẠP",
+"TEAK",
+"THÔNG",
+"TRÀM",
+"TRÅU",
+"WALNUT",
+"WHITE OAK",
+"WHITE POPLAR",
+"WILLOW",
+"XOÀI"
+]
+in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
+# list_ncc
+list_ncc = ncc_list['TÊN NCC'].unique().tolist()
+list_int= ncc_list['MÃ'].unique().tolist()
+# cv.ncc_f()
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
         filename = ean.save('code128',{"module_width":0.2, "module_height":6, "font_size":11, "text_distance": 1, "quiet_zone": 1})
@@ -28,11 +73,10 @@ def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
 st.subheader('Nhập thông tin:')
 
 # st.set_page_config(layout='wide')
-from list_info import qc_list,go_list
 
 a2,a3,a4,a5=st.columns((1.5,1.5,1,1))
 with a2:
-    ncc=st.multiselect('NCC:',ncc_list)
+    ncc=st.multiselect('NCC:',list_ncc)
 with a3:
     qc=st.multiselect('QC kiểm:',qc_list)
 with a4:
@@ -43,6 +87,7 @@ if not ncc:
     st.info('Nhập đầy đủ thông tin ở phía trên')
 else:
     st.subheader('Danh sách kiểm chi tiết:')
+    # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
 
     r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
     if 'count' not in st.session_state:
@@ -64,7 +109,6 @@ else:
     with c4:
         st.write('Tổng số dòng = ', st.session_state.count+1)
     h=st.session_state.count
-        
     with r1:
         a=st.text_input('Dày',)
 
@@ -102,13 +146,19 @@ else:
     if a=="0":
         st.info('Nhập đầy đủ thông tin vào form phía trên')
     else:  
+        ncc_index=list_ncc.index(ncc[0])
+        ini=list_int[ncc_index]
+
         dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
     
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
-        df['Dày']=float(a1)
-        df['SỐ KHỐI']=round((df['Dày']*df['Rộng']*df['Dài']*df['Số thanh'])/10**9,4)
+        df['Dày']= float(a1)
+
+        khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
+
+        df['SỐ KHỐI']=round(khoi/10**9,4)
         td=pd.to_datetime('today')
         df['NGÀY KIỂM']=td
         # df['THẺ KIỆN']=tk
@@ -139,7 +189,7 @@ else:
 
         cls1,cls2,cls3=st.columns(3)
         with cls1:
-            tk=st.text_input('Thẻ Kiện:',)
+            tk=st.number_input('Thẻ Kiện:',step=1)
         with cls2:
             ml=st.text_input('Mã lô:',)
         with cls3:
@@ -149,6 +199,7 @@ else:
 
         c1,c2=st.columns(2)
         with c1:
+            tk="K."+in_list[go_list.index(go[0])]+"."+str(tk)
             st.write('**Thẻ kiện:** ',tk)
             st.write('**Mã lô:** ',ml)
             NCC=ncc[0]+" "+"("+clg+")"
@@ -162,28 +213,36 @@ else:
 
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
         df2
+        df2['Số thanh']=df2['Số thanh'].astype(int)
+        df2['SỐ KHỐI']=df2['SỐ KHỐI'].astype(str)
+
+        df2=df2.astype(str)
+        df2=df2.replace("0"," ")
+        df2=df2.replace("0.0"," ")
         st.write('**Tổng số khối:** ',total)
    
-    len=len(df.index.tolist())
+    len_=len(df.index.tolist())
 
-    if len >20:
+    if len_ >20:
         df_20=df2.iloc[:19]
-        # df_20
+        df_20
         df_o=df_20.copy()
         df_o=df_o.notnull()
         df_o=df_o.replace(True,0)
         # df_o
         df_ov=df2.iloc[20:].reset_index(drop=True)
         df_o.loc[df_ov.index, :] = df_ov[:]
+        df_o=df_o.astype(str)
+        df_o=df_o.replace("0","-")
         df_over=df_o.copy()
         # df_over
         # df_over=df_0.loc[df1.index, :] = df1[:]
         html = """ DANH SÁCH THẺ KIỆN\n
                 <body> 
-                <table  margin-bottom= "2000">     
+                <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">     
                 <tr>         
                 <td>             
-                <table  margin-bottom= "2000">                  
+                <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">                  
                 <tr>                     
                 <td>{0}<td> 
                 <td>{1}</td>                 
@@ -235,16 +294,12 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
     msgImage.add_header('Content-ID', 'barcode')
     email.attach(msgImage)
 
-    html4="""
-    <html>
-    Tổng số khối: <b>{}</b><br>
-    </html>
-    """.format(total)
+
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
-    part3=MIMEText(html4,'html')
+    # part3=MIMEText(html4,'html')
     email.attach(part2)
-    email.attach(part3)
+    # email.attach(part3)
     email.attach(part1)
     try:
         session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
@@ -261,7 +316,34 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
         print("Could not send mail to {}".format(receiver_email))
         return(0)
 
-def push(df):
+
+# new_dict = df.groupby('THẺ KIỆN').apply(lambda x: x.values.tolist()).to_dict()
+
+def eccount():
+    df4=df.copy()
+    uni_tk=df4['THẺ KIỆN'].unique().tolist()
+    uni_dai=df4['Dài'].unique().tolist()
+    uni_dai.sort()
+    if len(uni_dai)==2:
+
+        string_dai=str(int(uni_dai[0]))+"/"+str(int(uni_dai[-1]))
+    elif len(uni_dai)==1:
+        string_dai=str(int(uni_dai[0]))
+    else:
+
+        string_dai=str(int(uni_dai[0]))+"-"+str(int(uni_dai[-1]))
+    df4['DÀI 2']=string_dai
+    df4['THẺ KIỆN2']=tk
+    df4['THẺ KIỆN 3']=tk
+    df4['Dày2']=df['Dày']
+    df4["ncc"]=ini
+    df4['Loại Gỗ']=in_list[go_list.index(go[0])]
+    eccount=df4[['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc','SỐ KHỐI']]
+
+    eccount_gr=eccount.groupby(['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc'])['SỐ KHỐI'].sum().reset_index()
+    return eccount_gr
+
+def push(df,str):
     import streamlit as st
     import pandas as pd
     from google.oauth2 import service_account
@@ -276,21 +358,23 @@ def push(df):
     gc = gspread.authorize(credentials)
     spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
-    sheet_index_no1=1
-
-    sh = gc.open_by_key(spreadsheet_key)
-    worksheet1 = sh.get_worksheet(sheet_index_no1)#-> 0 - first sheet, 1 - second sheet etc. 
-
     import gspread_dataframe as gd
     import gspread as gs
 
-    ws = gc.open("Kho NVL - NCC").worksheet('Sheet2')
+    ws = gc.open("Kho NVL - NCC").worksheet(str)
     existing = gd.get_as_dataframe(ws)
+
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
-# from cv import push
-list_email=['hieulam1312@gmail.com','hieulam@tanthanhgroup.com']
+
+
+
+list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
 if st.button('Hoàn tất'):
     send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
-    push(df)
+    sheet='Ecount'
+    # from cv import push
+    ECC=eccount()
+    push(ECC,sheet)
+    push(df,'Sheet2')
