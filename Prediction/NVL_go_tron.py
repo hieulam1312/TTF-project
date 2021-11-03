@@ -239,7 +239,7 @@ else:
         dict2={'MÃ THẺ KIỆN':tk2,'QC Dày':a2,'QC Rộng':b2,'QC Dài':c2,'Số thanh':d2}
         dict3={'MÃ THẺ KIỆN':tk3,'QC Dày':a3,'QC Rộng':b3,'QC Dài':c3,'Số thanh':d3}
         dict4={'MÃ THẺ KIỆN':tk4,'QC Dày':a4,'QC Rộng':b4,'QC Dài':c4,'Số thanh':d4}
-
+        dict1
 
     
         import pandas as pd
