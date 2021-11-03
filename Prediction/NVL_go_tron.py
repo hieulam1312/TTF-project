@@ -235,7 +235,7 @@ else:
 
     if a1=="0":
         st.info('Nhập đầy đủ thông tin vào form phía trên')
-    if st.button('Xác nhận'):
+    else:  
         ncc_index=list_ncc.index(ncc[0])
         ini=list_int[ncc_index]
 
@@ -359,6 +359,7 @@ def push(df,str):
 
 
 
+list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
 if st.button('Xuất danh sách'):
     # send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
     sheet='3. DS NHẬP ECOUNT'
