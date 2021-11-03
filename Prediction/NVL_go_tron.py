@@ -243,7 +243,7 @@ else:
         dict2={'MÃ THẺ KIỆN':tk2,'QC Dày':a2,'QC Rộng':b2,'QC Dài':c2,'Số thanh':d2}
         dict3={'MÃ THẺ KIỆN':tk3,'QC Dày':a3,'QC Rộng':b3,'QC Dài':c3,'Số thanh':d3}
         dict4={'MÃ THẺ KIỆN':tk4,'QC Dày':a4,'QC Rộng':b4,'QC Dài':c4,'Số thanh':d4}
-        dict1
+
 
     
         import pandas as pd
@@ -251,11 +251,9 @@ else:
         df2=pd.DataFrame.from_dict(dict2)
         df3=pd.DataFrame.from_dict(dict3)
         df4=pd.DataFrame.from_dict(dict4)
-        df4
-  
         # df['QC Dày']= float(a1)
         df=pd.concat([df1,df2,df3,df4]).reset_index(drop=True)
-        df
+        
         df=df.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
         khoi=df['QC Dày']*df['QC Rộng']*df['QC Dài']*df['Số thanh']
         df['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df['MÃ THẺ KIỆN'].astype(str)
