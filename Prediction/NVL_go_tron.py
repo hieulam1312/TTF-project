@@ -135,9 +135,9 @@ else:
             for ng in range(st.session_state.count):
                 c1.append(st.text_input(label='', key=f'dfuestion {ng}'))
     with r3:
-            d1= [st.number_input('Số thanh',step=1)]
+            d1= [st.text_input('Số thanh')]
             for ngg in range(st.session_state.count):
-                d1.append(st.number_input(label='', key=f'Quđsesdfgtion {ngg}',step=  1))
+                d1.append(st.text_input(label='', key=f'Quđsesdfgtion {ngg}'))
     with r4:
             b2=[st.text_input('Rộng2',)]
             for nr in range(st.session_state.count):
@@ -147,9 +147,9 @@ else:
             for ng in range(st.session_state.count):
                 c2.append(st.text_input(label='', key=f'dfuestsdion {ng}'))
     with r6:
-            d2= [st.number_input('Số thanh1',step=1)]
+            d2= [st.text_input('Số thanh1',)]
             for ngg in range(st.session_state.count):
-                d2.append(st.number_input(label='', key=f'Quesdfgsdtion {ngg}',step=  1))
+                d2.append(st.text_input(label='', key=f'Quesdfgsdtion {ngg}'))
 
     mol3,mol4=st.columns(2)
     with mol3:
@@ -186,9 +186,9 @@ else:
             for ng in range(st.session_state.count):
                 c3.append(st.text_input(label='', key=f'dfuesdftion {ng}'))
     with k3:
-            d3= [st.number_input('Số thanh2',step=1)]
+            d3= [st.text_input('Số thanh2',)]
             for ngg in range(st.session_state.count):
-                d3.append(st.number_input(label='', key=f'Quđsesdfdfgtion {ngg}',step=  1))
+                d3.append(st.text_input(label='', key=f'Quđsesdfdfgtion {ngg}'))
     with k4:
             b4=[st.text_input('Rộng4',)]
             for nr in range(st.session_state.count):
@@ -198,9 +198,9 @@ else:
             for ng in range(st.session_state.count):
                 c4.append(st.text_input(label='', key=f'dfuestsdddsfsdffion {ng}'))
     with k6:
-            d4= [st.number_input('Số thanh3',step=1)]
+            d4= [st.text_input('Số thanh3')]
             for ngg in range(st.session_state.count):
-                d4.append(st.number_input(label='', key=f'Quesdfgsddfsdftion {ngg}',step=  1))
+                d4.append(st.text_input(label='', key=f'Quesdfgsddfsdftion {ngg}'))
     b1=["0" if v =="" else v for v in b1]
     c1=["0" if v =="" else v for v in c1]
     d1=["0 "if v =="" else v for v in d1]
