@@ -212,7 +212,12 @@ else:
     d3=[0 if v =="" else v for v in d3]
     b4=[0 if v =="" else v for v in b4]
     c4=[0 if v =="" else v for v in c4]
-    d4=[0 if v =="" else v for v in d4]  
+    d4=[0 if v =="" else v for v in d4] 
+    tk1=[0 if v =="" else v for v in tk1] 
+    tk2=[0 if v =="" else v for v in tk2] 
+    tk3=[0 if v =="" else v for v in tk3]
+    tk4=[0 if v =="" else v for v in tk4] 
+    # b1=[]
     # b1=[]
     # c1=[]
     # a1=a1.replace(',','.')
