@@ -217,10 +217,10 @@ else:
     a2=0 if a2 =="" else a2
     a3=0 if a3 =="" else a3
     a4=0 if a4 =="" else a4
-    tk1=0 if tk1 =="" else tk1
-    tk2=0 if tk2 =="" else tk2
-    tk3=0 if tk3 =="" else tk3
-    tk4=0 if tk4 =="" else tk4
+    tk1="-" if tk1 =="" else tk1
+    tk2="-" if tk2 =="" else tk2
+    tk3="-" if tk3 =="" else tk3
+    tk4="-" if tk4 =="" else tk4
     # b1=[]
     # b1=[]
     # c1=[]
