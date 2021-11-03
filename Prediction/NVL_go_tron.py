@@ -213,10 +213,11 @@ else:
     b4=[0 if v =="" else v for v in b4]
     c4=[0 if v =="" else v for v in c4]
     d4=[0 if v =="" else v for v in d4] 
-    tk1=[0 if v =="" else v for v in tk1] 
-    tk2=[0 if v =="" else v for v in tk2] 
-    tk3=[0 if v =="" else v for v in tk3]
-    tk4=[0 if v =="" else v for v in tk4] 
+    tk1=0 if tk2 =="" else tk1
+    tk2=0 if tk2 =="" else tk2
+    tk3=0 if tk3 =="" else tk3
+    tk4=0 if tk4 =="" else tk4
+    
     # b1=[]
     # b1=[]
     # c1=[]
