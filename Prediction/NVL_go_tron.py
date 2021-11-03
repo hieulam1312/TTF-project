@@ -213,10 +213,10 @@ else:
     b4=["0" if v =="" else v for v in b4]
     c4=["0" if v =="" else v for v in c4]
     d4=["0" if v =="" else v for v in d4] 
-    a1=0 if a1 =="" else a1
-    a2=0 if a2 =="" else a2
-    a3=0 if a3 =="" else a3
-    a4=0 if a4 =="" else a4
+    a1="0" if a1 =="" else a1
+    a2="0" if a2 =="" else a2
+    a3="0" if a3 =="" else a3
+    a4="0" if a4 =="" else a4
     tk1="-" if tk1 =="" else tk1
     tk2="-" if tk2 =="" else tk2
     tk3="-" if tk3 =="" else tk3
