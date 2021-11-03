@@ -246,6 +246,7 @@ else:
   
         # df['QC Dày']= float(a1)
         df=pd.concat([df1,df2,df3,df4]).reset_index(drop=True)
+        df
         df=df.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
         khoi=df['QC Dày']*df['QC Rộng']*df['QC Dài']*df['Số thanh']
         df['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df['MÃ THẺ KIỆN'].astype(str)
