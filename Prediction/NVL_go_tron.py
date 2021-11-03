@@ -242,7 +242,7 @@ else:
         df2=pd.DataFrame.from_dict(dict2)
         df3=pd.DataFrame.from_dict(dict3)
         df4=pd.DataFrame.from_dict(dict4)
-
+        df4
   
         # df['QC Dày']= float(a1)
         df=pd.concat([df1,df2,df3,df4]).reset_index(drop=True)
