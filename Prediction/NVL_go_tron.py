@@ -201,18 +201,18 @@ else:
             d4= [st.text_input('Số thanh3')]
             for ngg in range(st.session_state.count):
                 d4.append(st.text_input(label='', key=f'Quesdfgsddfsdftion {ngg}'))
-    b1=[0 if v =="" else v for v in b1]
-    c1=[0 if v =="" else v for v in c1]
-    d1=[0 if v =="" else v for v in d1]
-    b2=[0 if v =="" else v for v in b1]
-    c2=[0 if v =="" else v for v in c2]
-    d2=[0 if v =="" else v for v in d2]    
-    b3=[0 if v =="" else v for v in b3]
-    c3=[0 if v =="" else v for v in c3]
-    d3=[0 if v =="" else v for v in d3]
-    b4=[0 if v =="" else v for v in b4]
-    c4=[0 if v =="" else v for v in c4]
-    d4=[0 if v =="" else v for v in d4] 
+    b1=["0" if v =="" else v for v in b1]
+    c1=["0" if v =="" else v for v in c1]
+    d1=["0" if v =="" else v for v in d1]
+    b2=["0" if v =="" else v for v in b1]
+    c2=["0" if v =="" else v for v in c2]
+    d2=["0" if v =="" else v for v in d2]    
+    b3=["0" if v =="" else v for v in b3]
+    c3=["0" if v =="" else v for v in c3]
+    d3=["0" if v =="" else v for v in d3]
+    b4=["0" if v =="" else v for v in b4]
+    c4=["0" if v =="" else v for v in c4]
+    d4=["0" if v =="" else v for v in d4] 
     a1=0 if a1 =="" else a1
     a2=0 if a2 =="" else a2
     a3=0 if a3 =="" else a3
