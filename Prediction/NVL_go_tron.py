@@ -94,7 +94,7 @@ with cls3:
 with cls4:
     ngaykiem=st.text_input('Ngày kiểm',)
 
-df=""
+
 def form(ncc):
     with st.form(key='columns_in_form'):
         rowss=30
@@ -228,7 +228,7 @@ def form(ncc):
 #     # for c_ in c:
 #     #     new_string = c_.replace(',','.')
 #     #     c1.append(new_string)
-
+        df=""
         if a1=="0":
             st.info('Nhập đầy đủ thông tin vào form phía trên')
         else:  
