@@ -22,8 +22,9 @@ import PIL
 st.set_page_config(layout='wide')
 
 # from cvcv import ncc_f
-abv=ncc_f()
+
 from ncc import ncc_f
+abv=ncc_f()
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
