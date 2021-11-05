@@ -304,7 +304,7 @@ def form(ncc):
             df_2=df_2.replace("0"," ")
             df_2=df_2.replace("0.0"," ")
     return df
-df=form(ncc)
+data=form(ncc)
 ncc_index=list_ncc.index(ncc[0])
 
 ini=list_int[ncc_index]
@@ -365,8 +365,8 @@ if st.button('Xuất danh sách'):
     # send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
     sheet='3. DS NHẬP ECOUNT'
     # from cv import push
-    ECC=eccount(df,ini)
+    ECC=eccount(data,ini)
     push(ECC,sheet)
-    df=df[["MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
-    df=df[df["QC Dài"]>0]
-    push(df,'1. NHẬP LIỆU')
+    data=data[["MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
+    data=data[data["QC Dài"]>0]
+    push(data,'1. NHẬP LIỆU')
