@@ -41,7 +41,7 @@ def push_lsx(df,gc):
     spreadsheet_key='1JCyNuairaKmF0KL6Sj-7IegwrrGJ366TUnkUqNxBRAE'
     import gspread_dataframe as gd
     import gspread as gs
-    ws1 = gc.open("Copy of DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+    ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
     existing1 = gd.get_as_dataframe(ws1)
     # updated1 = existing1.append(df)
     gd.set_with_dataframe(ws1, df)
