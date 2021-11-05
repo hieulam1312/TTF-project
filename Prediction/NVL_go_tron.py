@@ -94,7 +94,7 @@ with cls3:
 with cls4:
     ngaykiem=st.text_input('Ngày kiểm',)
 
-
+df=""
 def form(ncc):
     with st.form(key='columns_in_form'):
         rowss=30
