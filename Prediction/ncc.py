@@ -51,6 +51,7 @@ def push(df):
     import gspread as gs
 
     ws = gc.open("Kho NVL - NCC").worksheet('Sheet2')
+
     existing = gd.get_as_dataframe(ws)
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
