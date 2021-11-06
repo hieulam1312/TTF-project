@@ -61,9 +61,12 @@ go_list=["ALDER",
 "XOÀI"
 ]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
-# list_ncc
-list_ncc = ncc_list['TÊN NCC'].unique().tolist()
-list_int= ncc_list['MÃ'].unique().tolist()
+abv=ncc_f()
+ncc_list=abv[0]
+ncc_list
+initial_ncc=abv[1]
+# list_ncc = ncc_list['TÊN NCC'].unique().tolist()
+# list_int= ncc_list['MÃ'].unique().tolist()
 # cv.ncc_f()
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
