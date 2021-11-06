@@ -201,6 +201,7 @@ else:
             df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
 
             total=round(sum(df['SỐ KHỐI']),4)
+            df=df[df['SỐ KHỐI']>0]
             d1=df.sort_index(ascending=False).reset_index(drop=True)      
             #Cân đối số liệu
             # _du=0
