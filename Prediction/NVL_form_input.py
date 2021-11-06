@@ -21,8 +21,10 @@ import PIL
 # import cv
 st.set_page_config(layout='wide')
 
-# from cvcv import ncc_f
-from ncc import abv
+from ncc import ncc_f
+abv=ncc_f()
+list_ncc=abv[0]
+list_int=abv[1]
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
@@ -64,9 +66,7 @@ go_list=["ALDER",
 ]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 # abv
-list_ncc = abv[0]
 
-list_int= abv[1]
 import barcode
 from barcode.writer import ImageWriter
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
