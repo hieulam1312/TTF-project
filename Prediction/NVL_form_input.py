@@ -339,6 +339,13 @@ def eccount():
     eccount=df4[['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc','SỐ KHỐI']]
 
     eccount_gr=eccount.groupby(['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc'])['SỐ KHỐI'].sum().reset_index()
+    eccount_gr['Tỉ lệ']=1
+    eccount_gr['Đơn vị']="m3"
+    eccount_gr['Giá mua']=round(eccount_gr['Tỉ lệ']/eccount_gr["KHỐI LƯỢNG"],6)
+    eccount_gr['Giá mua2']=""
+    eccount_gr['Giá bán']=eccount_gr['Giá mua']
+    eccount_gr['Giá bán2']=""
+    eccount_gr['Ecount']="Ecount"
     return eccount_gr
 
 def push(df,str):
