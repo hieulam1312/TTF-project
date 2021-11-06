@@ -20,7 +20,7 @@ import barcode
 from barcode.writer import ImageWriter
 # import cv
 # from cvcv import ncc_f
-from ncc import ncc_list
+from ncc import ncc_f
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
@@ -63,7 +63,7 @@ go_list=["ALDER",
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 abv=ncc_f()
 ncc_list=abv[0]
-ncc_list
+# ncc_list
 initial_ncc=abv[1]
 # list_ncc = ncc_list['TÊN NCC'].unique().tolist()
 # list_int= ncc_list['MÃ'].unique().tolist()
