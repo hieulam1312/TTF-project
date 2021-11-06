@@ -16,11 +16,15 @@ import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
 from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
-import barcode
-from barcode.writer import ImageWriter
+# import barcode
+# from barcode.writer import ImageWriter
 # import cv
+st.set_page_config(layout='wide')
+
 # from cvcv import ncc_f
-from ncc import ncc_list
+
+from ncc import ncc_f
+abv=ncc_f()
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
@@ -61,9 +65,14 @@ go_list=["ALDER",
 "XOÀI"
 ]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
-# list_ncc
-list_ncc = ncc_list['TÊN NCC'].unique().tolist()
-list_int= ncc_list['MÃ'].unique().tolist()
+# abv
+list_ncc = abv[0]
+
+list_int= abv[1]
+# cv.ncc_f()
+import PIL
+import barcode
+from barcode.writer import ImageWriter
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
         filename = ean.save('code128',{"module_width":0.2, "module_height":6, "font_size":11, "text_distance": 1, "quiet_zone": 1})
