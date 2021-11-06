@@ -1,4 +1,4 @@
- from typing_extensions import Concatenate
+from typing_extensions import Concatenate
 import numpy as np
 from logging import error
 from mimetypes import MimeTypes
