@@ -22,9 +22,7 @@ import PIL
 st.set_page_config(layout='wide')
 
 # from cvcv import ncc_f
-
-from ncc import ncc_f
-abv=ncc_f()
+from ncc import abv
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
@@ -329,9 +327,17 @@ def eccount(df,ini):
     df4['QC Dày2']=df['QC Dày']
     df4["ncc"]=ini
     df4['Loại Gỗ']=in_list[go_list.index(go[0])]
+
     eccount=df4[["MÃ THẺ KIỆN","MÃ THẺ KIỆN2","MÃ THẺ KIỆN3",'QC Dày','QC Dài 2','MÃ LÔ','Loại Gỗ','QC Dày2','ncc','KHỐI LƯỢNG']]
 
     eccount_gr=eccount.groupby(["MÃ THẺ KIỆN","MÃ THẺ KIỆN2","MÃ THẺ KIỆN3",'QC Dày','QC Dài 2','MÃ LÔ','Loại Gỗ','QC Dày2','ncc'])['KHỐI LƯỢNG'].sum().reset_index()
+    eccount_gr['Tỉ lệ']=1
+    eccount_gr['Đơn vị']="m3"
+    eccount_gr['Giá mua']=round(eccount_gr['Tỉ lệ']/eccount_gr["KHỐI LƯỢNG"],6)
+    eccount_gr['Giá mua2']=""
+    eccount_gr['Giá bán']=eccount_gr['Giá mua']
+    eccount_gr['Giá bán2']=""
+    eccount_gr['Ecount']="Ecount"
     return eccount_gr
 
 def push(df,str):
