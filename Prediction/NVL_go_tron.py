@@ -22,7 +22,9 @@ import PIL
 st.set_page_config(layout='wide')
 
 # from cvcv import ncc_f
-from ncc import abv
+
+from ncc import ncc_f
+abv=ncc_f()
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
@@ -339,7 +341,6 @@ def eccount(df,ini):
     eccount_gr['Giá bán2']=""
     eccount_gr['Ecount']="Ecount"
     return eccount_gr
-
 def push(df,str):
     import streamlit as st
     import pandas as pd
