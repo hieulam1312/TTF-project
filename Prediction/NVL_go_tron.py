@@ -251,7 +251,7 @@ def form(ncc):
             df4=pd.DataFrame.from_dict(dict4)
             # df['QC Dày']= float(a1)
             df=pd.concat([df1,df2,df3,df4]).reset_index(drop=True)
-            df
+#             df
 
             df=df.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
             khoi=df['QC Dày']*df['QC Rộng']*df['QC Dài']*df['Số thanh']
