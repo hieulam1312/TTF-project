@@ -157,7 +157,6 @@ else:
                 d= []
                 for ngg in range(st.session_state.count):
                     d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {ngg}',step=  1))
-        st.form_submit_button('Submit')
     # st.button('add')
     
         b=["0" if v =="" else v for v in b]
@@ -231,6 +230,7 @@ else:
                 tk1=st.number_input('Thẻ Kiện:',step=1)
             with cls2:
                 ml=st.text_input('Mã lô:',)
+            st.form_submit_button('Submit')
             
 
             st.subheader('KẾT QUẢ:')
