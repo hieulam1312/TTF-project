@@ -80,9 +80,11 @@ if 'count' not in st.session_state:
 
 df=pull_lsx(gc)
 with st.form(key='columns_in_form'):
-    c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
+    c0,c1,c2,c3,c4,c5,c6,c7,c8= st.columns((1.8,2,3,1,.9,.9,.9,.9,.9))
 
     list_r=df["LỆNH SX"].tolist()
+    kh_r=df["TÊN KHÁCH HÀNG"].tolist()  
+    sp=df["TÊN SẢN PHẨM TTF"].tolist()
     # cols = st.beta_columns(5)
     # for i, col in enumerate(cols):
     rows = 10
@@ -93,41 +95,49 @@ with st.form(key='columns_in_form'):
     with c0:
         lsx=[]
         for nr in range(rows):
-            lsx.append(c0.selectbox('',list_r[nr:], key=f'dfuestidn {nr}'))
+            lsx.append(c0.selectbox('',[list_r[nr]], key=f'dfuestidn {nr}'))
         # st.selectbox('Lệnh sản xuất',['a','b','c'])
-    with c1:
+    with c3:
 
         nm=[]
         for nr in range(rows):
-            nm.append(c1.selectbox('Nhà máy',["",'NM1','NM3','NM5'], key=f'dfquestidn {nr}'))
+            nm.append(c3.selectbox('Nhà máy',["",'NM1','NM3','NM5'], key=f'dfquestidn {nr}'))
         # st.selectbox('Lệnh sản xuất',['a','b','c'])
-    with c2:
+    with c4:
         ldh=[]
         for nr in range(rows):
-            ldh.append(c2.selectbox('Loại đơn hàng',["",'C',"M"], key=f'dfquesatdidn {nr}'))  
-    with c3:
+            ldh.append(c4.selectbox('Loại đơn hàng',["",'C',"M"], key=f'dfquesatdidn {nr}'))  
+    with c5:
         gc1=[]
         for nr in range(rows):
-            gc1.append(c3.selectbox('Gia công ',["",'N',"Y"], key=f'dfqudesưtdidn {nr}')) 
-    with c4:
+            gc1.append(c5.selectbox('Gia công ',["",'N',"Y"], key=f'dfqudesưtdidn {nr}')) 
+    with c6:
         uc=[]
         for nr in range(rows):
-            uc.append(c4.selectbox('V/e uốn cong ',["",'N',"Y"], key=f'dfqudesưtdidn{nr}')) 
-    with c5:
+            uc.append(c6.selectbox('V/e uốn cong ',["",'N',"Y"], key=f'dfqudesưtdidn{nr}')) 
+    with c7:
         vn=[]
         for nr in range(rows):
-            vn.append(c5.selectbox('Verneer ',["",'N',"Y"], key=f'dfqudestưdidn {nr}')) 
-    with c6:
+            vn.append(c7.selectbox('Verneer ',["",'N',"Y"], key=f'dfqudestưdidn {nr}')) 
+    with c8:
         kl=[]
         for nr in range(rows):
-            kl.append(c6.selectbox('Kim loại ',["",'N',"Y"], key=f'dfqudestdidn1 {nr}')) 
+            kl.append(c8.selectbox('Kim loại ',["",'N',"Y"], key=f'dfqudestdidn1 {nr}')) 
+    with  c1:
+        ks=[]
+        for nr in range(rows):
+            ks.append(c1.selectbox('',[kh_r[nr]], key=f'dfuesstidn {nr}'))
+    with c2:
+        sap=[]
+        for nr in range(rows):
+            sap.append(c2.selectbox('',[sp[nr]], key=f'dfuestissdn {nr}'))
     st.form_submit_button('Submit')
-    with c7:
-        dict={"LỆNH SX":lsx,"NMSX":nm,"SẢN PHẨM (C/M)":ldh,"GIA CÔNG (Y/N)":gc1,"V/E U/CONG (Y/N)":uc,"DÁN VNR (Y/N)":vn,"K/L ĐB (Y/N)":kl}
-        dff=pd.DataFrame.from_dict(dict)
-        lsx_info=dff.merge(df,how='left',on="LỆNH SX")
-        a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
-        a
+    
+    dict={"LỆNH SX":lsx,"NMSX":nm,"SẢN PHẨM (C/M)":ldh,"GIA CÔNG (Y/N)":gc1,"V/E U/CONG (Y/N)":uc,"DÁN VNR (Y/N)":vn,"K/L ĐB (Y/N)":kl}
+    dff=pd.DataFrame.from_dict(dict)
+    lsx_info=dff.merge(df,how='left',on="LỆNH SX")
+    a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
+        # a
 
 # t1,t2,t3,t4,t5,t6=st.columns((1,1,1,1,1,1))
 
@@ -240,3 +250,7 @@ if st.button('Push'):
 #             ml=st.text_input('Mã lô:',)
 #         with cls3:
 #             clg=st.text_input('Chất lượng gỗ',)
+  
+
+
+                
