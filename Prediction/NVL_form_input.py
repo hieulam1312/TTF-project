@@ -167,6 +167,7 @@ else:
         b1=[]
         c1=[]
         # a1=a.replace(',','.')
+        st.form_submit_button('Submit')
 
         for b_ in b:
             new_string = b_.replace(',','.')
@@ -175,63 +176,60 @@ else:
             new_string = c_.replace(',','.')
             c1.append(new_string)
 
-        if a=="0":
-            st.info('Nhập đầy đủ thông tin vào form phía trên')
-        else:  
-            ncc_index=list_ncc.index(ncc[0])
-            ini=list_int[ncc_index]
 
-            dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
-        
-            import pandas as pd
-            df=pd.DataFrame.from_dict(dict)    
-            df=df.astype(float)
-            df['Dày']= int(a)
+        ncc_index=list_ncc.index(ncc[0])
+        ini=list_int[ncc_index]
 
-            khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
+        dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
+    
+        import pandas as pd
+        df=pd.DataFrame.from_dict(dict)    
+        df=df.astype(float)
+        df['Dày']= int(a)
 
-            df['SỐ KHỐI']=round(khoi/10**9,4)
-            td=pd.to_datetime('today')
-            df['NGÀY KIỂM']=td
-            # df['THẺ KIỆN']=tk
-            df['NCC']=ncc[0]
-            df['LOẠI GỖ']=go[0]
-            df['QC KIỂM']=qc[0]
-            df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
+        khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
 
-            total=round(sum(df['SỐ KHỐI']),4)
-            df=df[df['SỐ KHỐI']>0]
-            d1=df.sort_index(ascending=False).reset_index(drop=True)      
-            #Cân đối số liệu
-            # _du=0
-            st.subheader('Cân đối số liệu')
-            cl1,cl2=st.columns(2)
-            with cl1:
-                ncc_num=st.number_input('Số khối NCC:',format="%.4f")
-            with cl2: 
-                st.write('**Tổng số khối thực kiểm:** ',total)
-                
-                _du=total-ncc_num
+        df['SỐ KHỐI']=round(khoi/10**9,4)
+        td=pd.to_datetime('today')
+        df['NGÀY KIỂM']=td
+        # df['THẺ KIỆN']=tk
+        df['NCC']=ncc[0]
+        df['LOẠI GỖ']=go[0]
+        df['QC KIỂM']=qc[0]
+        df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
 
-                if _du>0.001:
-
-                    _row0=d1.head(1)
-                    stt=_row0['Số thanh'].tolist()
-                    sk=(_row0['Dày']*_row0['Rộng']*_row0['Dài']*_row0['Số thanh'])/10**9
-     
-                    test=((_du)*(10**9))/(_row0['Dày']*_row0['Rộng']*_row0['Dài'])
-                    # _row0['Số thanh']
-                    # 
-                    st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',stt[0]-round(test[0],0))
-
-
-            cls1,cls2,cls3=st.columns(3)
-            with cls1:
-                tk1=st.number_input('Thẻ Kiện:',step=1)
-            with cls2:
-                ml=st.text_input('Mã lô:',)
+        total=round(sum(df['SỐ KHỐI']),4)
+        df=df[df['SỐ KHỐI']>0]
+        d1=df.sort_index(ascending=False).reset_index(drop=True)      
+        #Cân đối số liệu
+        # _du=0
+        st.subheader('Cân đối số liệu')
+        cl1,cl2=st.columns(2)
+        with cl1:
+            ncc_num=st.number_input('Số khối NCC:',format="%.4f")
+        with cl2: 
+            st.write('**Tổng số khối thực kiểm:** ',total)
             
-            st.form_submit_button('Submit')
+            _du=total-ncc_num
+
+            if _du>0.001:
+
+                _row0=d1.head(1)
+                stt=_row0['Số thanh'].tolist()
+                sk=(_row0['Dày']*_row0['Rộng']*_row0['Dài']*_row0['Số thanh'])/10**9
+    
+                test=((_du)*(10**9))/(_row0['Dày']*_row0['Rộng']*_row0['Dài'])
+                # _row0['Số thanh']
+                # 
+                st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',stt[0]-round(test[0],0))
+
+
+        cls1,cls2,cls3=st.columns(3)
+        with cls1:
+            tk1=st.number_input('Thẻ Kiện:',step=1)
+        with cls2:
+            ml=st.text_input('Mã lô:',)
+        
 
     st.subheader('KẾT QUẢ:')
 
