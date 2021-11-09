@@ -157,7 +157,7 @@ else:
                 d= []
                 for ngg in range(st.session_state.count):
                     d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {ngg}',step=  1))
-    # st.button('add')
+
     
         b=["0" if v =="" else v for v in b]
         c=["0" if v =="" else v for v in c]
@@ -230,78 +230,78 @@ else:
                 tk1=st.number_input('Thẻ Kiện:',step=1)
             with cls2:
                 ml=st.text_input('Mã lô:',)
-            st.form_submit_button('Submit')
             
+            st.form_submit_button('Submit')
 
-            st.subheader('KẾT QUẢ:')
+    st.subheader('KẾT QUẢ:')
 
-            c1,c2=st.columns(2)
-            with c1:
-                tk="K."+in_list[go_list.index(go[0])]+"."+str(tk1)
-                st.write('**Thẻ kiện:** ',tk)
-                st.write('**Mã lô:** ',ml)
-                NCC=ncc[0]+" "+"("+clg+")"
-                st.write('**NCC:** ',NCC)
-            df['THẺ KIỆN']=tk
-            df['Mã lô']=ml
-            # df['NCC']=NCC
-            df['ĐỘ ẨM']=da
-            # with c2:
-            #    image= image=st.image(qr_code(link=tk))
+    c1,c2=st.columns(2)
+    with c1:
+        tk="K."+in_list[go_list.index(go[0])]+"."+str(tk1)
+        st.write('**Thẻ kiện:** ',tk)
+        st.write('**Mã lô:** ',ml)
+        NCC=ncc[0]+" "+"("+clg+")"
+        st.write('**NCC:** ',NCC)
+    df['THẺ KIỆN']=tk
+    df['Mã lô']=ml
+    # df['NCC']=NCC
+    df['ĐỘ ẨM']=da
+    # with c2:
+    #    image= image=st.image(qr_code(link=tk))
 
-            df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
-            df2
-            df2['Số thanh']=df2['Số thanh'].astype(int)
-            df2['SỐ KHỐI']=df2['SỐ KHỐI'].astype(str)
+    df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
+    df2
+    df2['Số thanh']=df2['Số thanh'].astype(int)
+    df2['SỐ KHỐI']=df2['SỐ KHỐI'].astype(str)
 
-            df2=df2.astype(str)
-            df2=df2.replace("0"," ")
-            df2=df2.replace("0.0"," ")
-            st.write('**Tổng số khối:** ',total)
-   
-    len_=len(df.index.tolist())
+    df2=df2.astype(str)
+    df2=df2.replace("0"," ")
+    df2=df2.replace("0.0"," ")
+    st.write('**Tổng số khối:** ',total)
 
-    if len_ >20:
-        df_20=df2.iloc[:19]
-        df_20
-        df_o=df_20.copy()
-        df_o=df_o.notnull()
-        df_o=df_o.replace(True,0)
-        # df_o
-        df_ov=df2.iloc[20:].reset_index(drop=True)
-        df_o.loc[df_ov.index, :] = df_ov[:]
-        df_o=df_o.astype(str)
-        df_o=df_o.replace("0","-")
-        df_over=df_o.copy()
-        # df_over
-        # df_over=df_0.loc[df1.index, :] = df1[:]
-        html = """ DANH SÁCH THẺ KIỆN\n
-                <body> 
-                <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">     
-                <tr>         
-                <td>             
-                <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">                  
-                <tr>                     
-                <td>{0}<td> 
-                <td>{1}</td>                 
-                </tr>             
-                </table>         
-                </td>     
-                </tr> 
-                </table> 
-                </body>
-                    """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
-    else:
-        html = """ DANH SÁCH THẺ KIỆN\n
-                <html>
+len_=len(df.index.tolist())
+
+if len_ >20:
+    df_20=df2.iloc[:19]
+    df_20
+    df_o=df_20.copy()
+    df_o=df_o.notnull()
+    df_o=df_o.replace(True,0)
+    # df_o
+    df_ov=df2.iloc[20:].reset_index(drop=True)
+    df_o.loc[df_ov.index, :] = df_ov[:]
+    df_o=df_o.astype(str)
+    df_o=df_o.replace("0","-")
+    df_over=df_o.copy()
+    # df_over
+    # df_over=df_0.loc[df1.index, :] = df1[:]
+    html = """ DANH SÁCH THẺ KIỆN\n
+            <body> 
+            <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">     
+            <tr>         
+            <td>             
+            <table  margin-bottom= "2000" cellpadding="2" cellspacing="2" padding="10">                  
+            <tr>                     
+            <td>{0}<td> 
+            <td>{1}</td>                 
+            </tr>             
+            </table>         
+            </td>     
+            </tr> 
+            </table> 
+            </body>
+                """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
+else:
+    html = """ DANH SÁCH THẺ KIỆN\n
+            <html>
+            <br>
+            <head></head>
+            <body>
+                {0}
                 <br>
-                <head></head>
-                <body>
-                    {0}
-                    <br>
-                </body>
-                </html>
-                """.format(df2.to_html(index=False,col_space=100,justify='center'))
+            </body>
+            </html>
+            """.format(df2.to_html(index=False,col_space=100,justify='center'))
 def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
