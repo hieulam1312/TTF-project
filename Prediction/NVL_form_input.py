@@ -203,32 +203,32 @@ else:
         d1=df.sort_index(ascending=False).reset_index(drop=True)      
         #Cân đối số liệu
         # _du=0
-        st.subheader('Cân đối số liệu')
-        cl1,cl2=st.columns(2)
-        with cl1:
-            ncc_num=st.number_input('Số khối NCC:',format="%.4f")
-        with cl2: 
-            st.write('**Tổng số khối thực kiểm:** ',total)
-            
-            _du=total-ncc_num
+    st.subheader('Cân đối số liệu')
+    cl1,cl2=st.columns(2)
+    with cl1:
+        ncc_num=st.number_input('Số khối NCC:',format="%.4f")
+    with cl2: 
+        st.write('**Tổng số khối thực kiểm:** ',total)
+        
+        _du=total-ncc_num
 
-            if _du>0.001:
+        if _du>0.001:
 
-                _row0=d1.head(1)
-                stt=_row0['Số thanh'].tolist()
-                sk=(_row0['Dày']*_row0['Rộng']*_row0['Dài']*_row0['Số thanh'])/10**9
-    
-                test=((_du)*(10**9))/(_row0['Dày']*_row0['Rộng']*_row0['Dài'])
-                # _row0['Số thanh']
-                # 
-                st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',stt[0]-round(test[0],0))
+            _row0=d1.head(1)
+            stt=_row0['Số thanh'].tolist()
+            sk=(_row0['Dày']*_row0['Rộng']*_row0['Dài']*_row0['Số thanh'])/10**9
+
+            test=((_du)*(10**9))/(_row0['Dày']*_row0['Rộng']*_row0['Dài'])
+            # _row0['Số thanh']
+            # 
+            st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',stt[0]-round(test[0],0))
 
 
-        cls1,cls2,cls3=st.columns(3)
-        with cls1:
-            tk1=st.number_input('Thẻ Kiện:',step=1)
-        with cls2:
-            ml=st.text_input('Mã lô:',)
+    cls1,cls2,cls3=st.columns(3)
+    with cls1:
+        tk1=st.number_input('Thẻ Kiện:',step=1)
+    with cls2:
+        ml=st.text_input('Mã lô:',)
         
 
     st.subheader('KẾT QUẢ:')
