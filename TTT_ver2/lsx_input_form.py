@@ -17,6 +17,7 @@ from oauth2client.service_account import ServiceAccountCredentials #-> Để nh�
 import gspread_dataframe as gd
 import gspread as gs
 from gspread.utils import A1_ADDR_ROW_COL_RE
+st.set_page_config(layout='wide')
 def pull_lsx(gc):
     spreadsheet_key='1dUUWEBwnD4kSJAwI3Oi4_fXN1Yji8cdth4Rs2RewCuw'
     sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('MASTER DH')
@@ -43,9 +44,9 @@ def push_lsx(df,gc):
     import gspread as gs
     ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
     existing1 = gd.get_as_dataframe(ws1)
-    existing1=existing1[existing1['LỆNH SX'].isnull()!=True]
+    existing1=existing1.dropna()
     updated1 = existing1.append(df)
-    gd.set_with_dataframe(ws1, updated1)
+    gd.set_with_dataframe(ws1,updated1)
     # sheet_index_no1 = 0
     # sh = gc.open_by_key(spreadsheet_key)
     # worksheet1 = sh.get_worksheet(sheet_index_no1)
@@ -71,82 +72,78 @@ scopes=['https://spreadsheets.google.com/feeds',
 )
 gc = gspread.authorize(credentials)
 
+c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
 
 st.cache()
-def form(df):
-    with st.form(key='columns_in_form'):
-
-        list_r=df["LỆNH SX"].tolist()
-        # cols = st.beta_columns(5)
-        # for i, col in enumerate(cols):
-        c0,c1,c2,c3,c4,c5,c6= st.columns((1.8,1,.9,.9,.9,.9,.9))
-        rows = 10
-
-
-
-        # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
-        with c0:
-            lsx=[]
-            for nr in range(rows):
-                lsx.append(c0.selectbox('',list_r[nr:], key=f'dfuestidn {nr}'))
-            # st.selectbox('Lệnh sản xuất',['a','b','c'])
-        with c1:
-
-            nm=[]
-            for nr in range(rows):
-                nm.append(c1.selectbox('Nhà máy',["",'NM1','NM3','NM5'], key=f'dfquestidn {nr}'))
-            # st.selectbox('Lệnh sản xuất',['a','b','c'])
-        with c2:
-            ldh=[]
-            for nr in range(rows):
-                ldh.append(c2.selectbox('Loại đơn hàng',["",'C',"M"], key=f'dfquesatdidn {nr}'))  
-        with c3:
-            gc1=[]
-            for nr in range(rows):
-                gc1.append(c3.selectbox('Gia công ',["",'N',"Y"], key=f'dfqudesưtdidn {nr}')) 
-        with c4:
-            uc=[]
-            for nr in range(rows):
-                uc.append(c4.selectbox('V/e uốn cong ',["",'N',"Y"], key=f'dfqudesưtdidn{nr}')) 
-        with c5:
-            vn=[]
-            for nr in range(rows):
-                vn.append(c5.selectbox('Verneer ',["",'N',"Y"], key=f'dfqudestưdidn {nr}')) 
-        with c6:
-            kl=[]
-            for nr in range(rows):
-                kl.append(c6.selectbox('Kim loại ',["",'N',"Y"], key=f'dfqudestdidn1 {nr}')) 
-        st.form_submit_button('Submit')
-    dict={"LỆNH SX":lsx,"NMSX":nm,"SẢN PHẨM (C/M)":ldh,"GIA CÔNG (Y/N)":gc1,"V/E U/CONG (Y/N)":uc,"DÁN VNR (Y/N)":vn,"K/L ĐB (Y/N)":kl}
-    return dict
 if 'count' not in st.session_state:
     rows = 50
-t1,t2,t3,t4,t5,t6=st.columns((1,1,1,1,1,1))
-# with t1:
-#     st.button('Thêm dòng', on_click=increment_counter,
-#         kwargs=dict(increment_value=1))
-
 
 df=pull_lsx(gc)
-fi=st.selectbox('Chọn loại thao tác',['LSX mới','In lại LSX cũ'])
-if fi=='LSX mới':
+with st.form(key='columns_in_form'):
+    c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
 
-    dict=form(df)
-    dff=pd.DataFrame.from_dict(dict)
-    # dff
-    lsx_info=dff.merge(df,how='left',on="LỆNH SX")
-    lsx_info
-    if st.button('Push'):
+    list_r=df["LỆNH SX"].tolist()
+    # cols = st.beta_columns(5)
+    # for i, col in enumerate(cols):
+    rows = 10
 
-        # Pull order_info
-        # lsx_info=pull_lsx(gc)
-        # lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
-        lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"LOẠI GỖ"	,"MÀU SƠN"	,"NỆM"	,"SỐ LƯỢNG",	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
 
-        #push lsx_info
-        push_lsx(lsx_info,gc)
-else:
-    st.info('Comming soon')
+
+    # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
+    with c0:
+        lsx=[]
+        for nr in range(rows):
+            lsx.append(c0.selectbox('',list_r[nr:], key=f'dfuestidn {nr}'))
+        # st.selectbox('Lệnh sản xuất',['a','b','c'])
+    with c1:
+
+        nm=[]
+        for nr in range(rows):
+            nm.append(c1.selectbox('Nhà máy',["",'NM1','NM3','NM5'], key=f'dfquestidn {nr}'))
+        # st.selectbox('Lệnh sản xuất',['a','b','c'])
+    with c2:
+        ldh=[]
+        for nr in range(rows):
+            ldh.append(c2.selectbox('Loại đơn hàng',["",'C',"M"], key=f'dfquesatdidn {nr}'))  
+    with c3:
+        gc1=[]
+        for nr in range(rows):
+            gc1.append(c3.selectbox('Gia công ',["",'N',"Y"], key=f'dfqudesưtdidn {nr}')) 
+    with c4:
+        uc=[]
+        for nr in range(rows):
+            uc.append(c4.selectbox('V/e uốn cong ',["",'N',"Y"], key=f'dfqudesưtdidn{nr}')) 
+    with c5:
+        vn=[]
+        for nr in range(rows):
+            vn.append(c5.selectbox('Verneer ',["",'N',"Y"], key=f'dfqudestưdidn {nr}')) 
+    with c6:
+        kl=[]
+        for nr in range(rows):
+            kl.append(c6.selectbox('Kim loại ',["",'N',"Y"], key=f'dfqudestdidn1 {nr}')) 
+    st.form_submit_button('Submit')
+    with c7:
+        dict={"LỆNH SX":lsx,"NMSX":nm,"SẢN PHẨM (C/M)":ldh,"GIA CÔNG (Y/N)":gc1,"V/E U/CONG (Y/N)":uc,"DÁN VNR (Y/N)":vn,"K/L ĐB (Y/N)":kl}
+        dff=pd.DataFrame.from_dict(dict)
+        lsx_info=dff.merge(df,how='left',on="LỆNH SX")
+        a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
+        a
+
+# t1,t2,t3,t4,t5,t6=st.columns((1,1,1,1,1,1))
+
+
+# dff
+
+if st.button('Push'):
+
+    # Pull order_info
+    # lsx_info=pull_lsx(gc)
+    # lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
+    lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"LOẠI GỖ"	,"MÀU SƠN"	,"NỆM"	,"SỐ LƯỢNG",	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
+
+    #push lsx_info
+    push_lsx(lsx_info,gc)
+
 
 
 
@@ -243,7 +240,3 @@ else:
 #             ml=st.text_input('Mã lô:',)
 #         with cls3:
 #             clg=st.text_input('Chất lượng gỗ',)
-  
-
-
-                
