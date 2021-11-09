@@ -16,24 +16,25 @@ import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
 from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
+import streamlit as st
+import pandas as pd
+from google.oauth2 import service_account
+import gspread #-> Để update data lên Google Spreadsheet
+from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
+from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
+credentials = service_account.Credentials.from_service_account_info(
+st.secrets["gcp_service_account"],
+scopes=['https://spreadsheets.google.com/feeds',
+     'https://www.googleapis.com/auth/drive'],
+)
+gc = gspread.authorize(credentials)
 # import barcode
 # from barcode.writer import ImageWriter
 # import cv
 st.set_page_config(layout='wide')
 
-def ncc_f():
-    import streamlit as st
-    import pandas as pd
-    from google.oauth2 import service_account
-    import gspread #-> Để update data lên Google Spreadsheet
-    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
-    from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
-    credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive'],
-    )
-    gc = gspread.authorize(credentials)
+def ncc_f(gc):
+
     spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
     sh=gc.open('Kho NVL - NCC').worksheet('Sheet1')
@@ -45,7 +46,7 @@ def ncc_f():
     A = ncc['TÊN NCC'].unique().tolist()
     B= ncc['MÃ'].unique().tolist()
     return A,B
-abv=ncc_f()
+abv=ncc_f(gc)
 list_ncc=abv[0]
 list_int=abv[1]
 from list_info import qc_list
