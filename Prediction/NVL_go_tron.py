@@ -149,37 +149,37 @@ def form(ncc):
                     for ngg in range(st.session_state.count):
                         d1.append(r3.text_input(label='Số thanh', key=f'Quđsesdf1gtion {ngg}'))
             
-        tk1="-" if tk1 =="" else tk1
-        a1="0" if a1 =="" else a1
-        b1=["0" if v =="" else v for v in b1]
-        c1=["0" if v =="" else v for v in c1]
-        d1=["0" if v =="" else v for v in d1]
-        dict1={'MÃ THẺ KIỆN':tk1,'QC Dày':a1,'QC Rộng':b1,'QC Dài':c1,'Số thanh':d1}
-        df1=pd.DataFrame.from_dict(dict1)    
-        df1=df1.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
-        khoi=df1['QC Dày']*df1['QC Rộng']*df1['QC Dài']*df1['Số thanh']
-        df1['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df1['MÃ THẺ KIỆN'].astype(str)
-        df1=df1[df1['Số thanh']>0]
-        df1['KHỐI LƯỢNG']=round(khoi/10**9,4)
-        td=pd.to_datetime('today')
-        df1['NGÀY NHẬP LIỆU']=td
-        # df1['THẺ KIỆN']=tk
-        df1['NCC']=ncc[0]
-        df1['LOẠI GỖ']=go[0]
-        df1['NGƯỜI KIỂM']=qc[0]
-        df1['NGÀY NHẬP LIỆU']=df1['NGÀY NHẬP LIỆU'].dt.date 
-        NCC=ncc[0]+" "+"("+clg+")"
-        df1['NCC']=  NCC
-        df1['MÃ LÔ']=ml
-        # df['NCC']=NCC
-        df1['ĐỘ ẨM']=da
-        df1["NGÀY KIỂM"]=ngaykiem
-        total=round(sum(df1['KHỐI LƯỢNG']),4)
-        d1=df1.sort_index(ascending=False).reset_index(drop=True) 
-        with r4:
-            df2=df1.groupby(['MÃ THẺ KIỆN','QC Dài']).agg({'KHỐI LƯỢNG':'sum'}).reset_index()
-            df2
-        return df1
+            tk1="-" if tk1 =="" else tk1
+            a1="0" if a1 =="" else a1
+            b1=["0" if v =="" else v for v in b1]
+            c1=["0" if v =="" else v for v in c1]
+            d1=["0" if v =="" else v for v in d1]
+            dict1={'MÃ THẺ KIỆN':tk1,'QC Dày':a1,'QC Rộng':b1,'QC Dài':c1,'Số thanh':d1}
+            df1=pd.DataFrame.from_dict(dict1)    
+            df1=df1.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
+            khoi=df1['QC Dày']*df1['QC Rộng']*df1['QC Dài']*df1['Số thanh']
+            df1['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df1['MÃ THẺ KIỆN'].astype(str)
+            df1=df1[df1['Số thanh']>0]
+            df1['KHỐI LƯỢNG']=round(khoi/10**9,4)
+            td=pd.to_datetime('today')
+            df1['NGÀY NHẬP LIỆU']=td
+            # df1['THẺ KIỆN']=tk
+            df1['NCC']=ncc[0]
+            df1['LOẠI GỖ']=go[0]
+            df1['NGƯỜI KIỂM']=qc[0]
+            df1['NGÀY NHẬP LIỆU']=df1['NGÀY NHẬP LIỆU'].dt.date 
+            NCC=ncc[0]+" "+"("+clg+")"
+            df1['NCC']=  NCC
+            df1['MÃ LÔ']=ml
+            # df['NCC']=NCC
+            df1['ĐỘ ẨM']=da
+            df1["NGÀY KIỂM"]=ngaykiem
+            total=round(sum(df1['KHỐI LƯỢNG']),4)
+            d1=df1.sort_index(ascending=False).reset_index(drop=True) 
+            with r4:
+                df2=df1.groupby(['MÃ THẺ KIỆN','QC Dài']).agg({'KHỐI LƯỢNG':'sum'}).reset_index()
+                df2
+            return df1
 data=form(ncc)
 # data
 ncc_index=list_ncc.index(ncc[0])
