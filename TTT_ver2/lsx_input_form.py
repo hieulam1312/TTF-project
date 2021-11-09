@@ -137,7 +137,7 @@ with st.form(key='columns_in_form'):
     dff=pd.DataFrame.from_dict(dict)
     lsx_info=dff.merge(df,how='left',on="LỆNH SX")
     a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
-        # a
+    a
 
 # t1,t2,t3,t4,t5,t6=st.columns((1,1,1,1,1,1))
 
