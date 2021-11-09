@@ -16,25 +16,24 @@ import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
 from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
-import streamlit as st
-import pandas as pd
-from google.oauth2 import service_account
-import gspread #-> Để update data lên Google Spreadsheet
-from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
-from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
-credentials = service_account.Credentials.from_service_account_info(
-st.secrets["gcp_service_account"],
-scopes=['https://spreadsheets.google.com/feeds',
-     'https://www.googleapis.com/auth/drive'],
-)
-gc = gspread.authorize(credentials)
 # import barcode
 # from barcode.writer import ImageWriter
 # import cv
 st.set_page_config(layout='wide')
 
-def ncc_f(gc):
-
+def ncc_f():
+    import streamlit as st
+    import pandas as pd
+    from google.oauth2 import service_account
+    import gspread #-> Để update data lên Google Spreadsheet
+    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
+    from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
+    credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive'],
+    )
+    gc = gspread.authorize(credentials)
     spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
     sh=gc.open('Kho NVL - NCC').worksheet('Sheet1')
@@ -46,7 +45,7 @@ def ncc_f(gc):
     A = ncc['TÊN NCC'].unique().tolist()
     B= ncc['MÃ'].unique().tolist()
     return A,B
-abv=ncc_f(gc)
+abv=ncc_f()
 list_ncc=abv[0]
 list_int=abv[1]
 from list_info import qc_list
@@ -125,7 +124,7 @@ def decrement_counter(decrement_value=0):
 c1,c2,c3,c4,c5=st.columns((1,1,1,2,2))
 with c1:
     st.button('Thêm dòng', on_click=increment_counter,
-        kwargs=dict(increment_value=2))
+        kwargs=dict(increment_value=1))
 with c2:
     st.button('Giảm dòng', on_click=decrement_counter,
         kwargs=dict(decrement_value=1))
@@ -229,7 +228,7 @@ else:
 
             cls1,cls2,cls3=st.columns(3)
             with cls1:
-                tk=st.number_input('Thẻ Kiện:',step=1)
+                tk1=st.number_input('Thẻ Kiện:',step=1)
             with cls2:
                 ml=st.text_input('Mã lô:',)
             
@@ -238,7 +237,7 @@ else:
 
             c1,c2=st.columns(2)
             with c1:
-                tk="K."+in_list[go_list.index(go[0])]+"."+str(tk)
+                tk="K."+in_list[go_list.index(go[0])]+"."+str(tk1)
                 st.write('**Thẻ kiện:** ',tk)
                 st.write('**Mã lô:** ',ml)
                 NCC=ncc[0]+" "+"("+clg+")"
