@@ -116,7 +116,7 @@ h=st.session_state.count
 
 def form(ncc):
     with st.form(key='columns_in_form'):
-        rowss=30
+        rowss=60
         if not ncc:
             st.info('Nhập đầy đủ thông tin ở phía trên')
         else:
@@ -138,15 +138,15 @@ def form(ncc):
 
             with r1:
                 b1=[]
-                for nr in range(st.session_state.count):
+                for nr in range(rowss):
                     b1.append(r1.text_input('Rộng', key=f'df1uestidn {nr}'))
             with r2:
                     c1=[]
-                    for ng in range(st.session_state.count):
+                    for ng in range(rowss):
                         c1.append(r2.text_input(label='Dài', key=f'df1uestion {ng}'))
             with r3:
                     d1= []
-                    for ngg in range(st.session_state.count):
+                    for ngg in range(rowss):
                         d1.append(r3.text_input(label='Số thanh', key=f'Quđsesdf1gtion {ngg}'))
             
             tk1="-" if tk1 =="" else tk1
@@ -183,7 +183,6 @@ def form(ncc):
 data=form(ncc)
 # data
 ncc_index=list_ncc.index(ncc[0])
-
 ini=list_int[ncc_index]
 def eccount(df,ini):
     df4=df.copy()
@@ -216,6 +215,7 @@ def eccount(df,ini):
     eccount_gr['Giá bán']=eccount_gr['Giá mua']
     eccount_gr['Giá bán2']=""
     eccount_gr['Ecount']="Ecount"
+    # eccount_gr
     return eccount_gr
 
 def push(df,str):
@@ -238,7 +238,7 @@ def push(df,str):
 
     ws = gc.open("TTF - Nhập liệu gỗ tròn").worksheet(str)
     existing = gd.get_as_dataframe(ws)
-
+    # existing
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
@@ -246,14 +246,17 @@ def push(df,str):
 
 
 list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
-
-if st.button('Xuất danh sách'):
-    # send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
-    sheet='3. DS NHẬP ECOUNT'
-    # from cv import push
-    ECC=eccount(data,ini)
-    push(ECC,sheet)
-    data=data[["MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
-    data=data[data["QC Dài"]>0]
-    push(data,'1. NHẬP LIỆU')
+with c5:
+    if st.button('Xuất danh sách'):
+        # send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
+        sheet='3. DS NHẬP ECOUNT'
+        # from cv import push
+        ECC=eccount(data,ini)
+        push(ECC,sheet)
+        data['MÃ THẺ KIỆN_2']=data['MÃ THẺ KIỆN'].str.replace('K','T')
+        # data
+        data=data[['MÃ THẺ KIỆN_2',"MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
+        data=data[data["QC Dài"]>0]
+        # data
+        push(data,'1. NHẬP LIỆU')
 
