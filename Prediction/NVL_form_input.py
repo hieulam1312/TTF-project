@@ -112,6 +112,11 @@ with a6:
     da=st.text_input('Độ ẩm:',)
 with a5:
     clg=st.text_input('Chất lượng gỗ',)
+cls1,cls2,cls3=st.columns(3)
+with cls1:
+    tk1=st.number_input('Thẻ Kiện:',step=1)
+with cls2:
+    ml=st.text_input('Mã lô:',)
 if 'count' not in st.session_state:
     st.session_state.count = 0
 
@@ -147,15 +152,15 @@ else:
 
         with r2:
                 b=[]
-                for nr in range(st.session_state.count):
+                for nr in range(5+st.session_state.count):
                     b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
         with r3:
                 c=[]
-                for ng in range(st.session_state.count):
+                for ng in range(5+st.session_state.count):
                     c.append(r3.text_input(label='Dài', key=f'dfuestion {ng}'))
         with r4:
                 d= []
-                for ngg in range(st.session_state.count):
+                for ngg in range(5+st.session_state.count):
                     d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {ngg}',step=  1))
 
     
@@ -224,11 +229,7 @@ else:
             st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',stt[0]-round(test[0],0))
 
 
-    cls1,cls2,cls3=st.columns(3)
-    with cls1:
-        tk1=st.number_input('Thẻ Kiện:',step=1)
-    with cls2:
-        ml=st.text_input('Mã lô:',)
+
         
 
     st.subheader('KẾT QUẢ:')
