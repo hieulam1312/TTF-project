@@ -68,15 +68,13 @@ list_ncc = abv[0]
 
 list_int= abv[1]
 # cv.ncc_f()
-def increment_counter(increment_value=0):
-    st.session_state.count += increment_value
+# def increment_counter(increment_value=0):
+#     rowss += increment_value
 
-def decrement_counter(decrement_value=0):
-    st.session_state.count -= decrement_value
+# def decrement_counter(decrement_value=0):
+#     rowss -= decrement_value
 
 st.subheader('Nhập thông tin:')
-
-
 a2,a3,a4,a5=st.columns((1.5,1.5,1,1))
 with a2:
     ncc=st.multiselect('NCC:',list_ncc)
@@ -95,221 +93,100 @@ with cls3:
     clg=st.text_input('Chất lượng gỗ',)
 with cls4:
     ngaykiem=st.text_input('Ngày kiểm',)
-if not ncc:
-    st.info('Nhập đầy đủ thông tin ở phía trên')
-else:
-    st.subheader('Danh sách kiểm chi tiết:')
-    mol1,mol2=st.columns(2)
-    with mol1:
-        st.subheader('KIỆN 1')
-    with mol2:
-        st.subheader('Kiện 2')
+if 'count' not in st.session_state:
+    st.session_state.count = 0
 
-    r_1,r_2,r_3,t1_,r_4,r_5,r_6=st.columns((1,1,1,1,1,1,1))
-    r1,r2,r3,t2_,r4,r5,r6=st.columns((1,1,2,1,1,1,2))
-    if 'count' not in st.session_state:
-        st.session_state.count = 0
-    c1,c2,c3,t_2_m,c4,c5,c6=st.columns((1,1,1,1,1,1,1))
-    with c1:
-        st.button('Thêm dòng', on_click=increment_counter,
-            kwargs=dict(increment_value=5))
+def increment_counter(increment_value=0):
+    st.session_state.count += increment_value
 
-    with c3:
-        st.write('Tổng số dòng = ', st.session_state.count+1)
-    h=st.session_state.count
-        
-    with r_1:
-        a1=st.text_input('Dày',)
-    with r_2:
-        tk1=st.text_input('Thẻ kiện',)
-    with r_4:
-        a2=st.text_input('Dày2',)
-    with r_5:
-        tk2=st.text_input('Thẻ kiện2',)
-    with r1:
-            b1=[st.text_input('Rộng',)]
-            for nr in range(st.session_state.count):
-                b1.append(st.text_input('', key=f'dfuestidn {nr}'))
-    with r2:
-            c1=[st.text_input('Dài',)]
-            for ng in range(st.session_state.count):
-                c1.append(st.text_input(label='', key=f'dfuestion {ng}'))
-    with r3:
-            d1= [st.text_input('Số thanh')]
-            for ngg in range(st.session_state.count):
-                d1.append(st.text_input(label='', key=f'Quđsesdfgtion {ngg}'))
-    with r4:
-            b2=[st.text_input('Rộng2',)]
-            for nr in range(st.session_state.count):
-                b2.append(st.text_input('', key=f'dfuestdidn {nr}'))
-    with r5:
-            c2=[st.text_input('Dài1',)]
-            for ng in range(st.session_state.count):
-                c2.append(st.text_input(label='', key=f'dfuestsdion {ng}'))
-    with r6:
-            d2= [st.text_input('Số thanh1',)]
-            for ngg in range(st.session_state.count):
-                d2.append(st.text_input(label='', key=f'Quesdfgsdtion {ngg}'))
+def decrement_counter(decrement_value=0):
+    st.session_state.count -= decrement_value
 
-    mol3,mol4=st.columns(2)
-    with mol3:
-        st.subheader('KIỆN 3')
-    with mol4:
-        st.subheader('Kiện 4')
-    r__1,r__2,r__3,tt,r__4,r__5,r__6=st.columns((1,1,1,1,1,1,1))
-    k1,k2,k3,tt_,k4,k5,k6=st.columns((1,1,2,1,1,1,2))
-    if 'count' not in st.session_state:
-        st.session_state.count = 0
-    c_1,c_2,c_3,c_4,c_5,c_6=st.columns((1,1,1,1,1,1))
-    with c_1:
-        st.button('Thêm dòng2', on_click=increment_counter,
-            kwargs=dict(increment_value=1))
-
-    with c_3:
-        st.write('Tổng số dòng2 = ', st.session_state.count+1)
-    h=st.session_state.count
-        
-    with r__1:
-        a3=st.text_input('Dày3',)
-    with r__2:
-        tk3=st.text_input('Thẻ kiện3',)
-    with r__4:
-        a4=st.text_input('Dày4',)
-    with r__5:
-        tk4=st.text_input('Thẻ kiện4',)     
-    with k1:
-            b3=[st.text_input('Rộng3',)]
-            for nr in range(st.session_state.count):
-                b3.append(st.text_input('', key=f'dfuestsdidn {nr}'))
-    with k2:
-            c3=[st.text_input('Dài2',)]
-            for ng in range(st.session_state.count):
-                c3.append(st.text_input(label='', key=f'dfuesdftion {ng}'))
-    with k3:
-            d3= [st.text_input('Số thanh2',)]
-            for ngg in range(st.session_state.count):
-                d3.append(st.text_input(label='', key=f'Quđsesdfdfgtion {ngg}'))
-    with k4:
-            b4=[st.text_input('Rộng4',)]
-            for nr in range(st.session_state.count):
-                b4.append(st.text_input('', key=f'dfuesdsteidn {nr}'))
-    with k5:
-            c4=[st.text_input('Dài3',)]
-            for ng in range(st.session_state.count):
-                c4.append(st.text_input(label='', key=f'dfuestsdddsfsdffion {ng}'))
-    with k6:
-            d4= [st.text_input('Số thanh3')]
-            for ngg in range(st.session_state.count):
-                d4.append(st.text_input(label='', key=f'Quesdfgsddfsdftion {ngg}'))
-    b1=["0" if v =="" else v for v in b1]
-    c1=["0" if v =="" else v for v in c1]
-    d1=["0" if v =="" else v for v in d1]
-    b2=["0" if v =="" else v for v in b1]
-    c2=["0" if v =="" else v for v in c2]
-    d2=["0" if v =="" else v for v in d2]    
-    b3=["0" if v =="" else v for v in b3]
-    c3=["0" if v =="" else v for v in c3]
-    d3=["0" if v =="" else v for v in d3]
-    b4=["0" if v =="" else v for v in b4]
-    c4=["0" if v =="" else v for v in c4]
-    d4=["0" if v =="" else v for v in d4] 
-    a1="0" if a1 =="" else a1
-    a2="0" if a2 =="" else a2
-    a3="0" if a3 =="" else a3
-    a4="0" if a4 =="" else a4
-    tk1="-" if tk1 =="" else tk1
-    tk2="-" if tk2 =="" else tk2
-    tk3="-" if tk3 =="" else tk3
-    tk4="-" if tk4 =="" else tk4
-    # b1=[]
-    # b1=[]
-    # c1=[]
-    # a1=a1.replace(',','.')
-
-    # for b_ in b:
-    #     new_string = b_.replace(',','.')
-    #     b1.append(new_string)
-    # for c_ in c:
-    #     new_string = c_.replace(',','.')
-    #     c1.append(new_string)
-
-    if a1=="0":
-        st.info('Nhập đầy đủ thông tin vào form phía trên')
-    else:  
-        ncc_index=list_ncc.index(ncc[0])
-        ini=list_int[ncc_index]
-
-        dict1={'MÃ THẺ KIỆN':tk1,'QC Dày':a1,'QC Rộng':b1,'QC Dài':c1,'Số thanh':d1}
-        dict2={'MÃ THẺ KIỆN':tk2,'QC Dày':a2,'QC Rộng':b2,'QC Dài':c2,'Số thanh':d2}
-        dict3={'MÃ THẺ KIỆN':tk3,'QC Dày':a3,'QC Rộng':b3,'QC Dài':c3,'Số thanh':d3}
-        dict4={'MÃ THẺ KIỆN':tk4,'QC Dày':a4,'QC Rộng':b4,'QC Dài':c4,'Số thanh':d4}
+c1,c2,c3,c4,c5=st.columns((1,1,1,2,2))
+with c1:
+    st.button('Thêm dòng', on_click=increment_counter,
+        kwargs=dict(increment_value=1))
+with c2:
+    st.button('Giảm dòng', on_click=decrement_counter,
+        kwargs=dict(decrement_value=1))
+with c4:
+    st.write('Tổng số dòng = ', st.session_state.count+1)
+h=st.session_state.count
 
 
-    
-        import pandas as pd
-        df1=pd.DataFrame.from_dict(dict1)    
-        df2=pd.DataFrame.from_dict(dict2)
-        df3=pd.DataFrame.from_dict(dict3)
-        df4=pd.DataFrame.from_dict(dict4)
-        # df['QC Dày']= float(a1)
-        df=pd.concat([df1,df2,df3,df4]).reset_index(drop=True)
-        
-        df=df.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
-        khoi=df['QC Dày']*df['QC Rộng']*df['QC Dài']*df['Số thanh']
-        df['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df['MÃ THẺ KIỆN'].astype(str)
-        df=df[df['QC Dài']>0]
-        df['KHỐI LƯỢNG']=round(khoi/10**9,4)
-        td=pd.to_datetime('today')
-        df['NGÀY NHẬP LIỆU']=td
-        # df['THẺ KIỆN']=tk
-        df['NCC']=ncc[0]
-        df['LOẠI GỖ']=go[0]
-        df['NGƯỜI KIỂM']=qc[0]
-        df['NGÀY NHẬP LIỆU']=df['NGÀY NHẬP LIỆU'].dt.date 
-
-        total=round(sum(df['KHỐI LƯỢNG']),4)
-        d1=df.sort_index(ascending=False).reset_index(drop=True)      
-        st.subheader('KẾT QUẢ:\n\n')
-
-        c1,c2=st.columns(2)
-        with c1:
-            df1=df[df['MÃ THẺ KIỆN'].str.contains(tk1)].reset_index(drop=True)
-            df1
-            st.write('TỔNG SỐ KHỐI: ',round(sum(df1['KHỐI LƯỢNG']),4))
-        with c2:
-            df2=df[df['MÃ THẺ KIỆN'].str.contains(tk2)].reset_index(drop=True)
-            df2
-            st.write('TỔNG SỐ KHỐI: ',round(sum(df2['KHỐI LƯỢNG']),4))
-        l1,l2=st.columns(2)
-        with l1:
-            df3=df[df['MÃ THẺ KIỆN'].str.contains(tk3)].reset_index(drop=True)
-            df3
-            st.write('TỔNG SỐ KHỐI: ',round(sum(df3['KHỐI LƯỢNG']),4))
-        with l2:
-            df4=df[df['MÃ THẺ KIỆN'].str.contains(tk4)].reset_index(drop=True)
-            df4
-            st.write('TỔNG SỐ KHỐI: ',round(sum(df4['KHỐI LƯỢNG']),4))
-        NCC=ncc[0]+" "+"("+clg+")"
-        df['NCC']=  NCC
-        df['MÃ LÔ']=ml
-        # df['NCC']=NCC
-        df['ĐỘ ẨM']=da
-        df["NGÀY KIỂM"]=ngaykiem
-        # with c2:
-        #    image= image=st.image(qr_code(link=tk))
-
-        df_2=df[['QC Dày','QC Rộng','QC Dài','Số thanh','KHỐI LƯỢNG']]
-
-        df_2['Số thanh']=df_2['Số thanh'].astype(int)
-        df_2['KHỐI LƯỢNG']=df_2['KHỐI LƯỢNG'].astype(str)
-
-        df_2=df_2.astype(str)
-        df_2=df_2.replace("0"," ")
-        df_2=df_2.replace("0.0"," ")
+def form(ncc):
+    with st.form(key='columns_in_form'):
+        rowss=60
+        if not ncc:
+            st.info('Nhập đầy đủ thông tin ở phía trên')
+        else:
+            st.subheader('Danh sách kiểm chi tiết:')
+            mol1,mol2=st.columns(2)
+            with mol1:
+                mol1.subheader('KIỆN 1')
 
 
-def eccount():
+            r_1,r_2,r_3,t1_,r_4=st.columns((1,1,1,1,3))
+            r1,r2,r3,r4=st.columns((1,1,2,3))
+              
+            with r_1:
+                a1=r_1.text_input('Dày',)
+            with r_2:
+                tk1=r_2.text_input('Thẻ kiện',)
+            with r_3:
+                st.form_submit_button('Kiểm tra số khối')
+
+            with r1:
+                b1=[]
+                for nr in range(rowss):
+                    b1.append(r1.text_input('Rộng', key=f'df1uestidn {nr}'))
+            with r2:
+                    c1=[]
+                    for ng in range(rowss):
+                        c1.append(r2.text_input(label='Dài', key=f'df1uestion {ng}'))
+            with r3:
+                    d1= []
+                    for ngg in range(rowss):
+                        d1.append(r3.text_input(label='Số thanh', key=f'Quđsesdf1gtion {ngg}'))
+            
+            tk1="-" if tk1 =="" else tk1
+            a1="0" if a1 =="" else a1
+            b1=["0" if v =="" else v for v in b1]
+            c1=["0" if v =="" else v for v in c1]
+            d1=["0" if v =="" else v for v in d1]
+            dict1={'MÃ THẺ KIỆN':tk1,'QC Dày':a1,'QC Rộng':b1,'QC Dài':c1,'Số thanh':d1}
+            df1=pd.DataFrame.from_dict(dict1)    
+            df1=df1.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
+            khoi=df1['QC Dày']*df1['QC Rộng']*df1['QC Dài']*df1['Số thanh']
+            df1['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df1['MÃ THẺ KIỆN'].astype(str)
+            df1=df1[df1['Số thanh']>0]
+            df1['KHỐI LƯỢNG']=round(khoi/10**9,4)
+            td=pd.to_datetime('today')
+            df1['NGÀY NHẬP LIỆU']=td
+            # df1['THẺ KIỆN']=tk
+            df1['NCC']=ncc[0]
+            df1['LOẠI GỖ']=go[0]
+            df1['NGƯỜI KIỂM']=qc[0]
+            df1['NGÀY NHẬP LIỆU']=df1['NGÀY NHẬP LIỆU'].dt.date 
+            NCC=ncc[0]+" "+"("+clg+")"
+            df1['NCC']=  NCC
+            df1['MÃ LÔ']=ml
+            # df['NCC']=NCC
+            df1['ĐỘ ẨM']=da
+            df1["NGÀY KIỂM"]=ngaykiem
+            total=round(sum(df1['KHỐI LƯỢNG']),4)
+            d1=df1.sort_index(ascending=False).reset_index(drop=True) 
+            with r4:
+                df2=df1.groupby(['MÃ THẺ KIỆN','QC Dài']).agg({'KHỐI LƯỢNG':'sum'}).reset_index()
+                df2
+            return df1
+data=form(ncc)
+# data
+ncc_index=list_ncc.index(ncc[0])
+ini=list_int[ncc_index]
+def eccount(df,ini):
     df4=df.copy()
+    # df4
     uni_tk=df4["MÃ THẺ KIỆN"].unique().tolist()
     uni_dai=df4['QC Dài'].unique().tolist()
     uni_dai.sort()
@@ -327,9 +204,18 @@ def eccount():
     df4['QC Dày2']=df['QC Dày']
     df4["ncc"]=ini
     df4['Loại Gỗ']=in_list[go_list.index(go[0])]
+
     eccount=df4[["MÃ THẺ KIỆN","MÃ THẺ KIỆN2","MÃ THẺ KIỆN3",'QC Dày','QC Dài 2','MÃ LÔ','Loại Gỗ','QC Dày2','ncc','KHỐI LƯỢNG']]
 
     eccount_gr=eccount.groupby(["MÃ THẺ KIỆN","MÃ THẺ KIỆN2","MÃ THẺ KIỆN3",'QC Dày','QC Dài 2','MÃ LÔ','Loại Gỗ','QC Dày2','ncc'])['KHỐI LƯỢNG'].sum().reset_index()
+    eccount_gr['Tỉ lệ']=1
+    eccount_gr['Đơn vị']="m3"
+    eccount_gr['Giá mua']=round(eccount_gr['Tỉ lệ']/eccount_gr["KHỐI LƯỢNG"],6)
+    eccount_gr['Giá mua2']=""
+    eccount_gr['Giá bán']=eccount_gr['Giá mua']
+    eccount_gr['Giá bán2']=""
+    eccount_gr['Ecount']="Ecount"
+    # eccount_gr
     return eccount_gr
 
 def push(df,str):
@@ -352,7 +238,7 @@ def push(df,str):
 
     ws = gc.open("TTF - Nhập liệu gỗ tròn").worksheet(str)
     existing = gd.get_as_dataframe(ws)
-
+    # existing
     updated = existing.append(df)
     gd.set_with_dataframe(ws, updated)
     st.success('Tải lại trang để tiếp tục nhập liệu')
@@ -360,12 +246,17 @@ def push(df,str):
 
 
 list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
-if st.button('Xuất danh sách'):
-    # send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
-    sheet='3. DS NHẬP ECOUNT'
-    # from cv import push
-    ECC=eccount()
-    push(ECC,sheet)
-    df=df[["MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
-    df=df[df["QC Dài"]>0]
-    push(df,'1. NHẬP LIỆU')
+with c5:
+    if st.button('Xuất danh sách'):
+        # send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
+        sheet='3. DS NHẬP ECOUNT'
+        # from cv import push
+        ECC=eccount(data,ini)
+        push(ECC,sheet)
+        data['MÃ THẺ KIỆN_2']=data['MÃ THẺ KIỆN'].str.replace('K','T')
+        # data
+        data=data[['MÃ THẺ KIỆN_2',"MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
+        data=data[data["QC Dài"]>0]
+        # data
+        push(data,'1. NHẬP LIỆU')
+
