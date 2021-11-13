@@ -142,26 +142,50 @@ if not ncc:
     st.info('Nhập đầy đủ thông tin ở phía trên')
 else:
     st.subheader('Danh sách kiểm chi tiết:')
+
+    placeholder = st.empty()
+
+    with placeholder.container():
     # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
-    with st.form(key='columns_in_form'):
-        r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
-
-        with r1:
-            a=r1.text_input('Dày',)
+        with st.form(key='columns_in_form'):
 
 
-        with r2:
-                b=[]
-                for nr in range(5+st.session_state.count):
-                    b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
-        with r3:
-                c=[]
-                for ng in range(5+st.session_state.count):
-                    c.append(r3.text_input(label='Dài', key=f'dfuestion {ng}'))
-        with r4:
-                d= []
-                for ngg in range(5+st.session_state.count):
-                    d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {ngg}',step=  1))
+            r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
+            with r1:
+                a=r1.text_input('Dày',)
+            with r2:
+                # placeholder = r2.empty()
+                with placeholder.container():
+                    b=[]
+                    for nr in range(5+st.session_state.count):
+                        # b=r2.text_input('Dài',)
+                   
+                        b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
+            with r3:
+                # placeholder2 = r3.empty()
+                with placeholder.container():
+                    c=[]
+                    for nr in range(5+st.session_state.count):
+                                # b=r2.text_input('Dài',)
+                        
+                        c.append(r3.text_input(label='Dài', key=f'2`1 {nr}'))
+                # c.append(placeholder.text_input(label='Dài', key=f'dfuestion {ng}'))
+            with r4:            
+                # placeholder2 = r4.empty()
+                with placeholder.container():
+                    d=[]
+                    for nr in range(5+st.session_state.count):
+                        
+                        d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=  1))
+            # click_clear = st.checkbox('clear text input', key=1)
+
+                
+            st.form_submit_button('submit')
+
+        if st.button("Xóa nội dung thẻ kiện cũ"):
+            placeholder.empty()
+
+
 
     
         b=["0" if v =="" else v for v in b]
@@ -172,7 +196,7 @@ else:
         b1=[]
         c1=[]
         # a1=a.replace(',','.')
-        st.form_submit_button('Submit')
+        # st.form_submit_button('Submit')
 
         for b_ in b:
             new_string = b_.replace(',','.')
