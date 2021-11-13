@@ -189,7 +189,7 @@ def eccount(df,ini):
     
     uni_tk=df4["MÃ THẺ KIỆN"].unique().tolist()
     uni_dai=df4['QC Dài'].unique().tolist()
-    uni_dai
+    
 
     # uni_dai=uni_dai.sort()
     
