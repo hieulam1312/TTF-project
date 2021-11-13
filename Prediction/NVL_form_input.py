@@ -190,7 +190,9 @@ else:
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
-        df['Dày']= int(a)
+        df['Rộng']=round(df['Rộng'],1)
+        df['Dài']=round(df['Dài'],1)
+        df['Dày']=round(float(a),1)
 
         khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
 
@@ -249,20 +251,21 @@ else:
     #    image= image=st.image(qr_code(link=tk))
 
     df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
-    df2
+
     df2['Số thanh']=df2['Số thanh'].astype(int)
     df2['SỐ KHỐI']=df2['SỐ KHỐI'].astype(str)
-
+    
     df2=df2.astype(str)
     df2=df2.replace("0"," ")
     df2=df2.replace("0.0"," ")
+    df2
     st.write('**Tổng số khối:** ',total)
 
 len_=len(df.index.tolist())
 
 if len_ >20:
     df_20=df2.iloc[:19]
-    df_20
+    # df_20
     df_o=df_20.copy()
     df_o=df_o.notnull()
     df_o=df_o.replace(True,0)
@@ -415,3 +418,8 @@ if st.button('Hoàn tất'):
     ECC=eccount()
     push(ECC,sheet)
     push(df,'Sheet2')
+
+
+
+
+
