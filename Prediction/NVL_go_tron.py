@@ -186,20 +186,20 @@ ncc_index=list_ncc.index(ncc[0])
 ini=list_int[ncc_index]
 def eccount(df,ini):
     df4=df.copy()
-    df4
+    
     uni_tk=df4["MÃ THẺ KIỆN"].unique().tolist()
     uni_dai=df4['QC Dài'].unique().tolist()
     uni_dai
 
     # uni_dai=uni_dai.sort()
-    uni_dai
+    
     if len(uni_dai)==2:
         string_dai=str(int(uni_dai[0]))+"/"+str(int(uni_dai[-1]))
     elif len(uni_dai)==1:
         string_dai=str(int(uni_dai[0]))
     else:
         string_dai=str(int(uni_dai[0]))+"-"+str(int(uni_dai[-1]))
-    string_dai
+    
     df4['QC Dài 2']=string_dai
     df4["MÃ THẺ KIỆN2"]=df4["MÃ THẺ KIỆN"]
     df4["MÃ THẺ KIỆN3"]=df4["MÃ THẺ KIỆN"]
@@ -217,7 +217,7 @@ def eccount(df,ini):
     eccount_gr['Giá bán']=eccount_gr['Giá mua']
     eccount_gr['Giá bán2']=0
     eccount_gr['Ecount']="Ecount"
-    eccount_gr
+ 
     return eccount_gr
 
 def push(df,str):
