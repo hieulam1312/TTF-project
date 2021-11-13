@@ -143,7 +143,7 @@ if not ncc:
 else:
     st.subheader('Danh sách kiểm chi tiết:')
     # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
-    with st.form(key='columns_in_form',clear_on_submit=True):
+    with st.form(key='columns_in_form'):
         r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
 
         with r1:
