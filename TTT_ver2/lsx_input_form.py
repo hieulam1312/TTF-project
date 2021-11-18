@@ -74,17 +74,23 @@ st.title('DANH SÁCH LỆNH SẢN XUẤT')
 colu1,colu2,cll3=st.columns((1,1,3))
 with colu1:
     username = st.text_input("User Name")
+    aa=st.checkbox("Login")
+
 with colu2:
     password = st.text_input("Password",type='password')
-
-if st.checkbox("Login"):
+if aa:
     if  password==st.secrets["passwords"] and username==st.secrets['user']:
-        c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
+        # c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
 
         if 'count' not in st.session_state:
-            rows = 50
+            rows = 0
 
-        df=pull_lsx(gc)
+        df1=pull_lsx(gc)
+        dhsx=df1["SỐ ĐƠN HÀNG"].unique().tolist()
+        colum1,colum2,clll3=st.columns((1,1,3))
+        with colum1:
+            list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
+        df=df1[df1["SỐ ĐƠN HÀNG"].isin(list_sdh)]
         with st.form(key='columns_in_form'):
             c0,c1,c2,c3,c4,c5,c6,c7,c8= st.columns((1.8,2,3,1,.9,.9,.9,.9,.9))
 
@@ -93,7 +99,7 @@ if st.checkbox("Login"):
             sp=df["TÊN SẢN PHẨM TTF"].tolist()
             # cols = st.beta_columns(5)
             # for i, col in enumerate(cols):
-            rows = 10
+            rows = len(list_r)
 
 
 
