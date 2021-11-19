@@ -4,6 +4,7 @@ from logging import error
 from mimetypes import MimeTypes
 from pandas.io.pytables import Table
 import streamlit as st
+import datetime
 import datetime as dt # to work with date, time
 from bs4 import BeautifulSoup # to work with web scrapping (HTML)
 import pandas as pd # to work with tables (DataFrames) data
@@ -90,7 +91,7 @@ if aa:
         df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
         df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
         df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
-
+        df1
         year_out=df1['Năm xuất'].unique().tolist()
 
         colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
@@ -175,7 +176,7 @@ if aa:
             push_lsx(lsx_info, ws1, ws2)
     if  password==st.secrets["password"] and username==st.secrets['use']:
         st.write('Goodjob!')
-
+        form=pd.DataFrame({'Tên tài liệu':['Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX'],'Bộ phận':["PKTH","QLCL","NM1","NM3","NM5","THU MUA","T.KH","TỔ KỸ THUẬT SƠN"],"Số lượng":[1,2,5,5,5,2,1,1]})
         df2=df[1]
         data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
         list_dh=data['SỐ ĐƠN HÀNG'].unique().tolist()
@@ -189,9 +190,19 @@ if aa:
             st.form_submit_button('Xác nhận')
         table=pd.DataFrame(a,columns=['LỆNH SX'])
         table=table.merge(data,how='left',on='LỆNH SX')
-        table
+        table[1]="PKTH"
+        table[2]="QLCL"
+        table[3]="THU MUA"
+        table[4]="TỔ KỸ THUẬT SƠN"
+        table=table.rename(columns={'NMSX':5})
+        tab=table.melt(id_vars=['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ'],value_name='Bộ phận')
+        tab=tab.drop(columns={'variable'})
+        tabb=tab.merge(form,how='left',on='Bộ phận')
+        tabb['Ngày']=datetime.date.today()
+        tabb=tabb[['Ngày','LỆNH SX','Bộ phận','Số lượng']]
+        tabb
         if st.button('Xuất danh sách!'):
             ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
             ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính11")
-            push_lsx(table,ws1,ws2)
+            push_lsx(tabb,ws1,ws2)
                 
