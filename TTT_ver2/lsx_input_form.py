@@ -90,7 +90,7 @@ if aa:
         df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
         df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
         df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
-        df1
+
         year_out=df1['Năm xuất'].unique().tolist()
 
         colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
