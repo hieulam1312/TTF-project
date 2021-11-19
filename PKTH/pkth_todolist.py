@@ -93,6 +93,8 @@ with st.form(key='abc'):
     DHM=todo[todo['LOẠI CÔNG VIỆC'].str.contains('MẪU')]
     CNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('CNC')]
     BG=todo[todo['LOẠI CÔNG VIỆC'].str.contains('PHIẾU YC')]
+    SXNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('SXNC')]
+    BB=todo[todo['LOẠI CÔNG VIỆC'].str.contains('BAO BÌ')]
     todo_list=df['CÔNG VIỆC'].unique().tolist()
 
     c1,c2,c3=st.columns((1,3,2))
@@ -102,16 +104,18 @@ with st.form(key='abc'):
     plan_done=[]
     with c2:
         plan_done1=st.multiselect('Sản xuất mới',SXM)
+        plan_done11=st.multiselect('Sản xuất như cũ',SXM)
 
     with c3:
         plan_done2=st.multiselect('ĐH mẫu',DHM)
+        plan_done22=st.multiselect('Quy cách bao bì',SXM)
     with c4:
         plan_done3=st.text_area('CNC',)
     with c5:
         plan_done4=st.multiselect('Báo giá',BG)
     with c6:
         out_plan=st.text_area('CÔNG VIỆC khác:',)
-    plan_done=plan_done1+plan_done2+plan_done4
+    plan_done=plan_done1+plan_done2+plan_done4+plan_done11+plan_done22
     pl=pd.DataFrame(plan_done,columns=['CÔNG VIỆC'])
     cnc=plan_done3.split('\n')
     cnc_done=pd.DataFrame(cnc,columns=['CÔNG VIỆC'])
