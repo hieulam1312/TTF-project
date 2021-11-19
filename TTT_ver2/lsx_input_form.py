@@ -2,6 +2,7 @@
 import numpy as np
 from logging import error
 from mimetypes import MimeTypes
+from pandas.io.pytables import Table
 import streamlit as st
 import datetime as dt # to work with date, time
 from bs4 import BeautifulSoup # to work with web scrapping (HTML)
@@ -34,14 +35,14 @@ def pull_lsx(gc):
     list=lsx_cu['LỆNH SX'].unique().tolist()
     # list
     ncc=ncc[ncc["LỆNH SX"].isin(list)==False]
-    return ncc
+    return ncc,lsx_cu
 # ncc_list=ncc()
 
-def push_lsx(df,gc):
+def push_lsx(df,ws1,ws2):
     spreadsheet_key='1JCyNuairaKmF0KL6Sj-7IegwrrGJ366TUnkUqNxBRAE'
     import gspread_dataframe as gd
     import gspread as gs
-    ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+    # ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
     existing1 = gd.get_as_dataframe(ws1)
     existing1=existing1.dropna()
     updated1 = existing1.append(df)
@@ -50,7 +51,7 @@ def push_lsx(df,gc):
     # sh = gc.open_by_key(spreadsheet_key)
     # worksheet1 = sh.get_worksheet(sheet_index_no1)
     # set_with_dataframe(worksheet1, df)
-    ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+    # ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
     existing2 = gd.get_as_dataframe(ws2)
     updated2 = existing2.append(df)
     gd.set_with_dataframe(ws2, updated2)
@@ -72,6 +73,8 @@ scopes=['https://spreadsheets.google.com/feeds',
 gc = gspread.authorize(credentials)
 st.title('DANH SÁCH LỆNH SẢN XUẤT')
 colu1,colu2,cll3=st.columns((1,1,3))
+df=pull_lsx(gc)
+df1=df[0]
 with colu1:
     username = st.text_input("User Name")
     aa=st.checkbox("Login")
@@ -84,11 +87,23 @@ if aa:
 
         if 'count' not in st.session_state:
             rows = 0
+        df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
+        df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
+        df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
+        df1
+        year_out=df1['Năm xuất'].unique().tolist()
 
-        df1=pull_lsx(gc)
-        dhsx=df1["SỐ ĐƠN HÀNG"].unique().tolist()
-        colum1,colum2,clll3=st.columns((1,1,3))
+        colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
         with colum1:
+            _year=st.multiselect('Năm',year_out)
+            df11=df1[df1["Năm xuất"].isin(_year)]
+            month_out=df11['Tháng xuất'].unique().tolist()
+        with colum2:
+            _month=st.multiselect('Tháng',month_out)
+            df111=df11[df11['Tháng xuất'].isin(_month)]
+            dhsx=df111["SỐ ĐƠN HÀNG"].unique().tolist()
+
+        with clll3:
             list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
         df=df1[df1["SỐ ĐƠN HÀNG"].isin(list_sdh)]
         with st.form(key='columns_in_form'):
@@ -100,7 +115,6 @@ if aa:
             # cols = st.beta_columns(5)
             # for i, col in enumerate(cols):
             rows = len(list_r)
-
 
 
             # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
@@ -150,24 +164,34 @@ if aa:
             lsx_info=dff.merge(df,how='left',on="LỆNH SX")
             a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
             a
-
-        # t1,t2,t3,t4,t5,t6=st.columns((1,1,1,1,1,1))
-
-
-
         if st.button('Push'):
 
             # Pull order_info
             # lsx_info=pull_lsx(gc)
             # lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
             lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"LOẠI GỖ"	,"MÀU SƠN"	,"NỆM"	,"SỐ LƯỢNG",	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
+            ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+            ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+            push_lsx(lsx_info, ws1, ws2)
+    if  password==st.secrets["password"] and username==st.secrets['use']:
+        st.write('Goodjob!')
 
-            #push lsx_info
-            push_lsx(lsx_info,gc)
-
-
-
-
-
-
+        df2=df[1]
+        data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
+        list_dh=data['SỐ ĐƠN HÀNG'].unique().tolist()
+        colum1,colum2,clll3=st.columns((1,1,3))
+        with colum1:
+            list_sdh=st.multiselect("Nhập số đơn hàng",list_dh)
+        df=data[data["SỐ ĐƠN HÀNG"].isin(list_sdh)]
+        list_r=df["LỆNH SX"].tolist()
+        with st.form(key='columns_in_form'):
+            a=st.multiselect('Các mã LSX cần photo TTSP:',list_r)      
+            st.form_submit_button('Xác nhận')
+        table=pd.DataFrame(a,columns=['LỆNH SX'])
+        table=table.merge(data,how='left',on='LỆNH SX')
+        table
+        if st.button('Xuất danh sách!'):
+            ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
+            ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính11")
+            push_lsx(table,ws1,ws2)
                 
