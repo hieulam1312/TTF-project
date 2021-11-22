@@ -91,7 +91,7 @@ if aa:
         df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
         df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
         df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
-  
+        df1
         year_out=df1['Năm xuất'].unique().tolist()
 
         colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
@@ -103,9 +103,11 @@ if aa:
             _month=st.multiselect('Tháng',month_out)
             df111=df11[df11['Tháng xuất'].isin(_month)]
             dhsx=df111["SỐ ĐƠN HÀNG"].unique().tolist()
-
         with clll3:
-            list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
+            if not _month:
+                list_sdh=st.multiselect("Nhập số đơn hàng",df1["SỐ ĐƠN HÀNG"].unique().tolist())
+            else:
+                list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
         df=df1[df1["SỐ ĐƠN HÀNG"].isin(list_sdh)]
         with st.form(key='columns_in_form'):
             c0,c1,c2,c3,c4,c5,c6,c7,c8= st.columns((1.8,2,3,1,.9,.9,.9,.9,.9))
