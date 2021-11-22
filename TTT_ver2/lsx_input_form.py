@@ -91,7 +91,7 @@ if aa:
         df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
         df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
         df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
-        
+        df1
         year_out=df1['Năm xuất'].unique().tolist()
 
         colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
@@ -207,4 +207,17 @@ if aa:
             ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
             ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính11")
             push_lsx(tabb,ws1,ws2)
-                
+    if  password==st.secrets["pkth_pw"] and username==st.secrets['pkth_user']:    
+        st.write('Goodjob!')
+        with st.form(key='columns_in_form'):
+            df2=df[1]
+            data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
+            list_dh=data['LỆNH SX'].unique().tolist()
+            list_sdh=st.multiselect("Nhập mã LSX",list_dh)
+            st.form_submit_button('Xác nhận')
+            table=pd.DataFrame(list_sdh,columns=['LỆNH SX'])
+            table['NGÀY']=datetime.date.today()
+        if st.button('Xuất danh sách!'):
+            ws1 = gc.open("CHECK LSX - HÀNG NGÀY").worksheet("Sheet1")
+            ws2 = gc.open("CHECK LSX - HÀNG NGÀY").worksheet("Sheet2")
+            push_lsx(table,ws1,ws2)
