@@ -192,7 +192,7 @@ if aa:
             st.form_submit_button('Xác nhận')
         table=pd.DataFrame(a,columns=['LỆNH SX'])
         table=table.merge(data,how='left',on='LỆNH SX')
-        table[1]="PKTH"
+
         table[2]="QLCL"
         table[3]="THU MUA"
         table[4]="TỔ KỸ THUẬT SƠN"
