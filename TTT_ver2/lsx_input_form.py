@@ -2,7 +2,9 @@
 import numpy as np
 from logging import error
 from mimetypes import MimeTypes
+from pandas.io.pytables import Table
 import streamlit as st
+import datetime
 import datetime as dt # to work with date, time
 from bs4 import BeautifulSoup # to work with web scrapping (HTML)
 import pandas as pd # to work with tables (DataFrames) data
@@ -20,7 +22,7 @@ from gspread.utils import A1_ADDR_ROW_COL_RE
 st.set_page_config(layout='wide')
 def pull_lsx(gc):
     spreadsheet_key='1dUUWEBwnD4kSJAwI3Oi4_fXN1Yji8cdth4Rs2RewCuw'
-    sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('MASTER DH')
+    sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('1.Master DH')
     sheet=sh.get_all_values()
     ncc=pd.DataFrame(sheet)
     ncc.columns=ncc.iloc[0]
@@ -34,14 +36,14 @@ def pull_lsx(gc):
     list=lsx_cu['LỆNH SX'].unique().tolist()
     # list
     ncc=ncc[ncc["LỆNH SX"].isin(list)==False]
-    return ncc
+    return ncc,lsx_cu
 # ncc_list=ncc()
 
-def push_lsx(df,gc):
+def push_lsx(df,ws1,ws2):
     spreadsheet_key='1JCyNuairaKmF0KL6Sj-7IegwrrGJ366TUnkUqNxBRAE'
     import gspread_dataframe as gd
     import gspread as gs
-    ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+    # ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
     existing1 = gd.get_as_dataframe(ws1)
     existing1=existing1.dropna()
     updated1 = existing1.append(df)
@@ -50,7 +52,7 @@ def push_lsx(df,gc):
     # sh = gc.open_by_key(spreadsheet_key)
     # worksheet1 = sh.get_worksheet(sheet_index_no1)
     # set_with_dataframe(worksheet1, df)
-    ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+    # ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
     existing2 = gd.get_as_dataframe(ws2)
     updated2 = existing2.append(df)
     gd.set_with_dataframe(ws2, updated2)
@@ -72,19 +74,41 @@ scopes=['https://spreadsheets.google.com/feeds',
 gc = gspread.authorize(credentials)
 st.title('DANH SÁCH LỆNH SẢN XUẤT')
 colu1,colu2,cll3=st.columns((1,1,3))
+df=pull_lsx(gc)
+df1=df[0]
 with colu1:
     username = st.text_input("User Name")
+    aa=st.checkbox("Login")
+
 with colu2:
     password = st.text_input("Password",type='password')
-
-if st.checkbox("Login"):
+if aa:
     if  password==st.secrets["passwords"] and username==st.secrets['user']:
-        c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
+        # c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
 
         if 'count' not in st.session_state:
-            rows = 50
+            rows = 0
+        df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
+        df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
+        df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
+        df1
+        year_out=df1['Năm xuất'].unique().tolist()
 
-        df=pull_lsx(gc)
+        colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
+        with colum1:
+            _year=st.multiselect('Năm',year_out)
+            df11=df1[df1["Năm xuất"].isin(_year)]
+            month_out=df11['Tháng xuất'].unique().tolist()
+        with colum2:
+            _month=st.multiselect('Tháng',month_out)
+            df111=df11[df11['Tháng xuất'].isin(_month)]
+            dhsx=df111["SỐ ĐƠN HÀNG"].unique().tolist()
+        with clll3:
+            if not _month:
+                list_sdh=st.multiselect("Nhập số đơn hàng",df1["SỐ ĐƠN HÀNG"].unique().tolist())
+            else:
+                list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
+        df=df1[df1["SỐ ĐƠN HÀNG"].isin(list_sdh)]
         with st.form(key='columns_in_form'):
             c0,c1,c2,c3,c4,c5,c6,c7,c8= st.columns((1.8,2,3,1,.9,.9,.9,.9,.9))
 
@@ -93,8 +117,7 @@ if st.checkbox("Login"):
             sp=df["TÊN SẢN PHẨM TTF"].tolist()
             # cols = st.beta_columns(5)
             # for i, col in enumerate(cols):
-            rows = 10
-
+            rows = len(list_r)
 
 
             # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
@@ -144,24 +167,57 @@ if st.checkbox("Login"):
             lsx_info=dff.merge(df,how='left',on="LỆNH SX")
             a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
             a
-
-        # t1,t2,t3,t4,t5,t6=st.columns((1,1,1,1,1,1))
-
-
-
         if st.button('Push'):
 
             # Pull order_info
             # lsx_info=pull_lsx(gc)
             # lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
             lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"LOẠI GỖ"	,"MÀU SƠN"	,"NỆM"	,"SỐ LƯỢNG",	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
-
-            #push lsx_info
-            push_lsx(lsx_info,gc)
-
-
-
-
-
-
-                
+            ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+            ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+            push_lsx(lsx_info, ws1, ws2)
+    if  password==st.secrets["password"] and username==st.secrets['use']:
+        st.write('Goodjob!')
+        form=pd.DataFrame({'Tên tài liệu':['Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX'],'Bộ phận':["PKTH","QLCL","NM1","NM3","NM5","THU MUA","T.KH","TỔ KỸ THUẬT SƠN"],"Số lượng":[1,2,5,5,5,2,1,1]})
+        df2=df[1]
+        data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
+        list_dh=data['SỐ ĐƠN HÀNG'].unique().tolist()
+        colum1,colum2,clll3=st.columns((1,1,3))
+        with colum1:
+            list_sdh=st.multiselect("Nhập số đơn hàng",list_dh)
+        df=data[data["SỐ ĐƠN HÀNG"].isin(list_sdh)]
+        list_r=df["LỆNH SX"].tolist()
+        with st.form(key='columns_in_form'):
+            a=st.multiselect('Các mã LSX cần photo TTSP:',list_r)      
+            st.form_submit_button('Xác nhận')
+        table=pd.DataFrame(a,columns=['LỆNH SX'])
+        table=table.merge(data,how='left',on='LỆNH SX')
+        table[1]="PKTH"
+        table[2]="QLCL"
+        table[3]="THU MUA"
+        table[4]="TỔ KỸ THUẬT SƠN"
+        table=table.rename(columns={'NMSX':5})
+        tab=table.melt(id_vars=['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ'],value_name='Bộ phận')
+        tab=tab.drop(columns={'variable'})
+        tabb=tab.merge(form,how='left',on='Bộ phận')
+        tabb['Ngày']=datetime.date.today()
+        tabb=tabb[['Ngày','LỆNH SX','Bộ phận','Số lượng']]
+        tabb
+        if st.button('Xuất danh sách!'):
+            ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
+            ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính11")
+            push_lsx(tabb,ws1,ws2)
+    if  password==st.secrets["pkth_pw"] and username==st.secrets['pkth_user']:    
+        st.write('Goodjob!')
+        with st.form(key='columns_in_form'):
+            df2=df[1]
+            data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
+            list_dh=data['LỆNH SX'].unique().tolist()
+            list_sdh=st.multiselect("Nhập mã LSX",list_dh)
+            st.form_submit_button('Xác nhận')
+            table=pd.DataFrame(list_sdh,columns=['LỆNH SX'])
+            table['NGÀY']=datetime.date.today()
+        if st.button('Xuất danh sách!'):
+            ws1 = gc.open("CHECK LSX - HÀNG NGÀY").worksheet("Sheet1")
+            ws2 = gc.open("CHECK LSX - HÀNG NGÀY").worksheet("Sheet2")
+            push_lsx(table,ws1,ws2)
