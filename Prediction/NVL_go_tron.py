@@ -162,7 +162,7 @@ def form(ncc):
                         d1=[]
                         for nr in range(5+st.session_state.count):
                             
-                            d1.append(r3.number_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=  1))
+                            d1.append(r3.text_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=  1))
 
         with c4:
             if st.button("Xóa nội dung thẻ kiện cũ"):
@@ -177,6 +177,7 @@ def form(ncc):
         dict1={'MÃ THẺ KIỆN':tk1,'QC Dày':a1,'QC Rộng':b1,'QC Dài':c1,'Số thanh':d1}
         df1=pd.DataFrame.from_dict(dict1)    
         df1=df1.astype({'QC Rộng':float,'QC Dài':float,'QC Dày':float,'Số thanh':int,'MÃ THẺ KIỆN':str})
+        df1['Số thanh']=df1['Số thanh'].astype(int)
         khoi=df1['QC Dày']*df1['QC Rộng']*df1['QC Dài']*df1['Số thanh']
         df1['MÃ THẺ KIỆN']="K."+in_list[go_list.index(go[0])]+"."+df1['MÃ THẺ KIỆN'].astype(str)
         df1=df1[df1['Số thanh']>0]
@@ -194,6 +195,7 @@ def form(ncc):
         # df['NCC']=NCC
         df1['ĐỘ ẨM']=da
         df1["NGÀY KIỂM"]=ngaykiem
+        
         total=round(sum(df1['KHỐI LƯỢNG']),4)
         d1=df1.sort_index(ascending=False).reset_index(drop=True) 
         with r4:
