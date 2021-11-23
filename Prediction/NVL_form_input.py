@@ -1,4 +1,4 @@
-# from typing_extensions import Concatenate
+import smtplib
 import numpy as np
 from logging import error
 from mimetypes import MimeTypes
@@ -16,9 +16,8 @@ import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
 from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
-# import barcode
-# from barcode.writer import ImageWriter
-# import cv
+from email.utils import make_msgid
+import mimetypes
 st.set_page_config(layout='wide')
 
 def ncc_f():
@@ -94,9 +93,9 @@ import barcode
 from barcode.writer import ImageWriter
 def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
-        filename = ean.save('code128',{"module_width":0.2, "module_height":8, "font_size":11, "text_distance": 1, "quiet_zone": 1})
+        filename = ean.save('code128',{"module_width":0.15, "module_height":6, "font_size":11, "text_distance": 1, "quiet_zone": 1})
         return filename
-def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
+def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
     password = st.secrets['PWD_EMAIL']
@@ -114,19 +113,57 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list):
     QC kiểm: <b>{}</b><br>
     Mã lô: <b>{}</b><br>
     Ngày kiểm: <b>{}</b><br>
-
+    Độ ẩm: <b>{}</b><br>
     </html>
-    """.format(total,qc,ml,td)
+    """.format(total,qc,ml,td,dm)
+    # now create a Content-ID for the image
+    image_cid = make_msgid(domain='xyz.com')
+    # if `domain` argument isn't provided, it will 
+    # use your computer's name
 
+    # set an alternative html body
+    html4="""\
+    <html>
+        <body>
+            <p>This is an HTML body.<br>
+            It also has an image.
+            </p>
+            <img src="cid:{image_cid}">
+        </body>
+    </html>
+    """.format(image_cid=image_cid[1:-1])
 
    
+    # maintype, subtype = mimetypes.guess_type(fp)[0].split('/')
+
+    #     # attach it
     fp = open('code128.png', 'rb')
+
     msgImage = MIMEImage(fp.read())
     fp.close()
     msgImage.add_header('Content-ID', 'barcode')
-    email.attach(msgImage)
+    # email.attach(msgImage)
 
+    fp = open('code128.png', 'rb')
 
+    img = MIMEImage(fp.read())
+    img.add_header('Content-Disposition', 'attachment', filename='code128.png')
+    img.add_header('X-Attachment-Id', '0')
+    img.add_header('Content-ID', '<0>')
+    fp.close()
+    email.attach(img)
+
+    # Attach HTML body
+    email.attach(MIMEText(
+        '''
+        <html>
+            <body>
+                <h1 style="text-align: center;">THẺ KIỆN</h1>
+                <p><img src="cid:0"></p>
+            </body>
+        </html>'
+        ''',
+        'html', 'utf-8'))
     part1 = MIMEText(html, 'html')
     part2=MIMEText(html3,'html')
     # part3=MIMEText(html4,'html')
@@ -431,8 +468,10 @@ else:
                     </html>
                     """.format(df2.to_html(index=False,col_space=100,justify='center'))
         list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
+        ml
+        da
         if st.button('Hoàn tất'):
-            send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email)
+            send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email,da)
             sheet='Ecount'
             # from cv import push
             ECC=eccount()
