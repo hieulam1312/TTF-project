@@ -40,26 +40,21 @@ def pull_lsx(gc):
 # ncc_list=ncc()
 
 def push_lsx(df,ws1,ws2):
-    spreadsheet_key='1JCyNuairaKmF0KL6Sj-7IegwrrGJ366TUnkUqNxBRAE'
-#     import gspread_dataframe as gd
-#     import gspread as gs
-#     # ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
-#     existing1 = gd.get_as_dataframe(ws1)
-#     existing1=existing1.dropna()
-#     updated1 = existing1.append(df)
-#     gd.set_with_dataframe(ws1,updated1)
-    # sheet_index_no1 = 0
-    # sh = gc.open_by_key(spreadsheet_key)
-    # worksheet1 = sh.get_worksheet(sheet_index_no1)
-    # set_with_dataframe(worksheet1, df)
-    # ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+
+    import gspread_dataframe as gd
+    import gspread as gs
+
+    existing1 = gd.get_as_dataframe(ws1)
+    existing1=existing1[existing1['LỆNH SX'].isnull()==False]
+    updated1 = existing1.append(df)
+    gd.set_with_dataframe(ws1,updated1)
+
     existing2 = gd.get_as_dataframe(ws2)
     updated2 = existing2.append(df)
     gd.set_with_dataframe(ws2, updated2)
 
 
     st.success('Done')
-
 
 # def increment_counter(increment_value=0):
 #     rows += increment_value
