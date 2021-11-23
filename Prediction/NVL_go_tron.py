@@ -162,7 +162,7 @@ def form(ncc):
                         d1=[]
                         for nr in range(5+st.session_state.count):
                             
-                            d1.append(r3.text_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=  1))
+                            d1.append(placeholder.text_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=  1))
 
         with c4:
             if st.button("Xóa nội dung thẻ kiện cũ"):
