@@ -54,9 +54,7 @@ def push_lsx(df,ws1,ws2):
     # set_with_dataframe(worksheet1, df)
     # ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
     existing2 = gd.get_as_dataframe(ws2)
-    existing2
     updated2 = existing2.append(df)
-    update2
     gd.set_with_dataframe(ws2, updated2)
 
 
