@@ -109,11 +109,12 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
 
     html3="""
     <html>
-    Tổng số khối: <b>{}</b><br>
-    QC kiểm: <b>{}</b><br>
-    Mã lô: <b>{}</b><br>
-    Ngày kiểm: <b>{}</b><br>
-    Độ ẩm: <b>{}</b><br>
+    <h2>
+    Tổng số khối:                 {}<h2>
+    QC kiểm: {}<h2>
+    Mã lô: {}<h2>
+    Ngày kiểm: {}<h2>
+    Độ ẩm:{}<h2>
     </html>
     """.format(total,qc,ml,td,dm)
     # now create a Content-ID for the image
