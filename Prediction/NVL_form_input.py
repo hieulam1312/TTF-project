@@ -429,17 +429,25 @@ else:
 
         if len_ >20:
             df_20=df2.iloc[:19]
-            # df_20
+            df_20
+            df_20['Dày']=df_20['Dày'].str.replace(".0","")
+
+            df_20['Rộng']=df_20['Rộng'].str.replace(".0","")
+            df_20['Dài']=df_20['Dài'].str.replace(".0","")
             df_o=df_20.copy()
             df_o=df_o.notnull()
             df_o=df_o.replace(True,0)
             # df_o
+
             df_ov=df2.iloc[20:].reset_index(drop=True)
             df_o.loc[df_ov.index, :] = df_ov[:]
             df_o=df_o.astype(str)
             df_o=df_o.replace("0","-")
+            df_o['Dày']=df_o['Dày'].str.replace(".0","")
+            df_o['Rộng']=df_o['Rộng'].str.replace(".0","")
+            df_o['Dài']=df_o['Dài'].str.replace(".0","")            
             df_over=df_o.copy()
-            # df_over
+            df_over
             # df_over=df_0.loc[df1.index, :] = df1[:]
             html = """ DANH SÁCH THẺ KIỆN\n
                     <body> 
@@ -458,6 +466,13 @@ else:
                     </body>
                         """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
         else:
+            df22=df2.copy()
+            df22=df22.astype(str)
+            df22['Dày']=df22['Dày'].str.replace(".0","")
+            df22['Rộng']=df22['Rộng'].str.replace(".0","")
+            df22['Dài']=df22['Dài'].str.replace(".0","")
+
+            df22
             html = """ DANH SÁCH THẺ KIỆN\n
                     <html>
                     <br>
@@ -467,10 +482,9 @@ else:
                         <br>
                     </body>
                     </html>
-                    """.format(df2.to_html(index=False,col_space=100,justify='center'))
+                    """.format(df22.to_html(index=False,col_space=100,justify='center'))
         list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
-        ml
-        da
+
         if st.button('Hoàn tất'):
             send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email,da)
             sheet='Ecount'
