@@ -432,12 +432,11 @@ else:
             df_20=df_20.astype(str)
             df_20['Dày']=df_20['Dày'].str.replace(".",",")
             df_20['Dày']=df_20['Dày'].str.replace(",0","")
-            df_20
+            
             df_20['Rộng']=df_20['Rộng'].str.replace(".",",")
             df_20['Rộng']=df_20['Rộng'].str.replace(",0","")
             df_20['Dài']=df_20['Dài'].str.replace(".",",")
             df_20['Dài']=df_20['Dài'].str.replace(",0","")
-            df_20
             df_o=df_20.copy()
             df_o=df_o.notnull()
             df_o=df_o.replace(True,0)
@@ -456,7 +455,7 @@ else:
             df_o['Dài']=df_o['Dài'].str.replace(".",",")
             df_o['Dài']=df_o['Dài'].str.replace(",0","")           
             df_over=df_o.copy()
-            df_over
+            
             # df_over=df_0.loc[df1.index, :] = df1[:]
             html = """ DANH SÁCH THẺ KIỆN\n
                     <body> 
@@ -487,7 +486,7 @@ else:
             # df22
             # df22['Dài']=df22['Dài'].str.replace(".0"," ")
             df22.columns= df22.columns.str.replace('.','',regex=True)
-            df22
+            
             html = """ DANH SÁCH THẺ KIỆN\n
                     <html>
                     <br>
