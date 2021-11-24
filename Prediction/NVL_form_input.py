@@ -317,7 +317,7 @@ else:
                     d=[]
                     for nr in range(5+st.session_state.count):
                         
-                        d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=  1))
+                        d.append(r4.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
@@ -428,24 +428,33 @@ else:
         len_=len(df.index.tolist())
 
         if len_ >20:
-            df_20=df2.iloc[:19]
+            df_20=df2.iloc[:20]
             df_20=df_20.astype(str)
-            df_20['Dày']=df_20['Dày'].str.replace(".0","")
-
-            df_20['Rộng']=df_20['Rộng'].str.replace(".0","")
-            df_20['Dài']=df_20['Dài'].str.replace(".0","")
+            df_20['Dày']=df_20['Dày'].str.replace(".",",")
+            df_20['Dày']=df_20['Dày'].str.replace(",0","")
+            df_20
+            df_20['Rộng']=df_20['Rộng'].str.replace(".",",")
+            df_20['Rộng']=df_20['Rộng'].str.replace(",0","")
+            df_20['Dài']=df_20['Dài'].str.replace(".",",")
+            df_20['Dài']=df_20['Dài'].str.replace(",0","")
+            df_20
             df_o=df_20.copy()
             df_o=df_o.notnull()
             df_o=df_o.replace(True,0)
-            # df_o
+        
 
             df_ov=df2.iloc[20:].reset_index(drop=True)
+   
             df_o.loc[df_ov.index, :] = df_ov[:]
             df_o=df_o.astype(str)
-            # df_o=df_o.replace("0","-")
-            df_o['Dày']=df_o['Dày'].str.replace(".0","")
-            df_o['Rộng']=df_o['Rộng'].str.replace(".0","")
-            df_o['Dài']=df_o['Dài'].str.replace(".0","")            
+            df_o=df_o.replace("0",".")
+            df_o['Dày']=df_o['Dày'].str.replace(".",",")
+            df_o['Dày']=df_o['Dày'].str.replace(",0","")
+            # df22
+            df_o['Rộng']=df_o['Rộng'].str.replace(".",",")
+            df_o['Rộng']=df_o['Rộng'].str.replace(",0","")
+            df_o['Dài']=df_o['Dài'].str.replace(".",",")
+            df_o['Dài']=df_o['Dài'].str.replace(",0","")           
             df_over=df_o.copy()
             df_over
             # df_over=df_0.loc[df1.index, :] = df1[:]
