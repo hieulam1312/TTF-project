@@ -429,7 +429,8 @@ else:
 
         if len_ >20:
             df_20=df2.iloc[:19]
-            df_20
+            df_20=df_20.astype(str)
+
             df_20['Dày']=df_20['Dày'].str.replace(".0","")
 
             df_20['Rộng']=df_20['Rộng'].str.replace(".0","")
