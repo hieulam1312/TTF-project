@@ -430,7 +430,6 @@ else:
         if len_ >20:
             df_20=df2.iloc[:19]
             df_20=df_20.astype(str)
-
             df_20['Dày']=df_20['Dày'].str.replace(".0","")
 
             df_20['Rộng']=df_20['Rộng'].str.replace(".0","")
@@ -443,11 +442,12 @@ else:
             df_ov=df2.iloc[20:].reset_index(drop=True)
             df_o.loc[df_ov.index, :] = df_ov[:]
             df_o=df_o.astype(str)
-            df_o=df_o.replace("0","-")
+            # df_o=df_o.replace("0","-")
             df_o['Dày']=df_o['Dày'].str.replace(".0","")
             df_o['Rộng']=df_o['Rộng'].str.replace(".0","")
             df_o['Dài']=df_o['Dài'].str.replace(".0","")            
             df_over=df_o.copy()
+            df_over
             # df_over=df_0.loc[df1.index, :] = df1[:]
             html = """ DANH SÁCH THẺ KIỆN\n
                     <body> 
@@ -467,11 +467,18 @@ else:
                         """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
         else:
             df22=df2.copy()
-            df22=df22.astype(str)
-            df22['Dày']=df22['Dày'].str.replace(".0","")
-            df22['Rộng']=df22['Rộng'].str.replace(".0","")
-            df22['Dài']=df22['Dài'].str.replace(".0","")
-
+            # df22=df22.astype(str)
+            df22['Dày']=df22['Dày'].str.replace(".",",")
+            df22['Dày']=df22['Dày'].str.replace(",0","")
+            # df22
+            df22['Rộng']=df22['Rộng'].str.replace(".",",")
+            df22['Rộng']=df22['Rộng'].str.replace(",0","")
+            df22['Dài']=df22['Dài'].str.replace(".",",")
+            df22['Dài']=df22['Dài'].str.replace(",0","")
+            # df22
+            # df22['Dài']=df22['Dài'].str.replace(".0"," ")
+            df22.columns= df22.columns.str.replace('.','',regex=True)
+            df22
             html = """ DANH SÁCH THẺ KIỆN\n
                     <html>
                     <br>
