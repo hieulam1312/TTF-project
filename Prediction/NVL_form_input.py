@@ -448,7 +448,6 @@ else:
             df_o['Rộng']=df_o['Rộng'].str.replace(".0","")
             df_o['Dài']=df_o['Dài'].str.replace(".0","")            
             df_over=df_o.copy()
-            df_over
             # df_over=df_0.loc[df1.index, :] = df1[:]
             html = """ DANH SÁCH THẺ KIỆN\n
                     <body> 
@@ -473,7 +472,6 @@ else:
             df22['Rộng']=df22['Rộng'].str.replace(".0","")
             df22['Dài']=df22['Dài'].str.replace(".0","")
 
-            df22
             html = """ DANH SÁCH THẺ KIỆN\n
                     <html>
                     <br>
