@@ -104,11 +104,11 @@ with st.form(key='abc'):
     plan_done=[]
     with c2:
         plan_done1=st.multiselect('Sản xuất mới',SXM)
-        plan_done11=st.multiselect('Sản xuất như cũ',SXM)
+        plan_done11=st.multiselect('Sản xuất như cũ',SXNC)
 
     with c3:
         plan_done2=st.multiselect('ĐH mẫu',DHM)
-        plan_done22=st.multiselect('Quy cách bao bì',SXM)
+        plan_done22=st.multiselect('Quy cách bao bì',BB)
     with c4:
         plan_done3=st.text_area('CNC',)
     with c5:
