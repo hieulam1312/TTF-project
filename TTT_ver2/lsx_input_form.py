@@ -56,6 +56,7 @@ def push_lsx(df,ws1,ws2):
 
     st.success('Done')
 
+
 # def increment_counter(increment_value=0):
 #     rows += increment_value
 
@@ -86,7 +87,7 @@ if aa:
         df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
         df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
         df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
-        
+        # df1
         year_out=df1['Năm xuất'].unique().tolist()
 
         colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
@@ -171,9 +172,14 @@ if aa:
             ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
             ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
             push_lsx(lsx_info, ws1, ws2)
+
+
+
+
+
     if  password==st.secrets["password"] and username==st.secrets['use']:
         st.write('Goodjob!')
-        form=pd.DataFrame({'Tên tài liệu':['Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX'],'Bộ phận':["PKTH","QLCL","NM1","NM3","NM5","THU MUA","T.KH","TỔ KỸ THUẬT SƠN"],"Số lượng":[1,2,5,5,5,2,1,1]})
+        form=pd.DataFrame({'Tên tài liệu':['Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX'],'Bộ phận':["PKTH","QLCL","NM1","NM3","NM5","THU MUA","T.KH","TỔ KỸ THUẬT SƠN"],"Số lượng":[1,2,6,6,6,2,1,1]})
         df2=df[1]
         data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
         list_dh=data['SỐ ĐƠN HÀNG'].unique().tolist()
