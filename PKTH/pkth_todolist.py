@@ -46,8 +46,8 @@ def run(done,pl,todo):
         de.style.set_properties(**{'background-color': 'pink',
                            'color': 'green'})
     with t2:
-        st.subheader(':monkey_face:Thuận:monkey_face:')
-        thuan=done_day[done_day['NV']=='Thuận'].reset_index(drop=True)
+        st.subheader(':monkey_face:Long:monkey_face:')
+        thuan=done_day[done_day['NV']=='Long'].reset_index(drop=True)
         thuan[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
     with t3:
         st.subheader(':panda_face:Trọn:panda_face:')
@@ -87,7 +87,7 @@ st.title(':star:CÁC VIỆC ĐÃ HOÀN THÀNH HÔM NAY:star:')
 
 with st.form(key='abc'):
     df['CÔNG VIỆC']=df['TÊN SẢN PHẨM']+" - "+df['LOẠI CÔNG VIỆC']
-    staff_list=['Đệ','Thuận','Trọn','Linh','Vân','Duy']
+    staff_list=['Đệ','Long','Trọn','Linh','Vân','Duy']
     todo=df[['CÔNG VIỆC','LOẠI CÔNG VIỆC']]
     SXM=todo[todo['LOẠI CÔNG VIỆC']=='SX MỚI']
     DHM=todo[todo['LOẠI CÔNG VIỆC'].str.contains('MẪU')]
