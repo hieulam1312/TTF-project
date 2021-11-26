@@ -26,17 +26,21 @@ def run(done,pl,todo):
     up_done=up_done.merge(todo,how='left',on='CÔNG VIỆC')
     td=datetime.date.today()
     up_done['NGÀY']=td
+    # up_done
     up_done=up_done.replace(np.nan,"Công việc khác")
+
     up_done=up_done[up_done['CÔNG VIỆC'].isnull()==False]
     updated = done_day1.append(up_done)
-    updated=updated.replace("",np.nan)
+    # updated=updated.replace("",np.nan)
     updated=updated.dropna()
+
     gd.set_with_dataframe(sh2, updated)
     done_dayY = gd.get_as_dataframe(sh2)
+
     done_dayY['NGÀY']=done_dayY['NGÀY'].astype('datetime64')
     done_dayY['NGÀY']=done_dayY['NGÀY'].dt.date
     done_day=done_dayY[done_dayY['NGÀY']==td]
-    
+    done_day=done_day.dropna()
     t1,t2,t3=st.columns(3)
     with t1:
         st.subheader(':trophy:Đệ:trophy:')
@@ -91,7 +95,7 @@ with st.form(key='abc'):
     todo=df[['CÔNG VIỆC','LOẠI CÔNG VIỆC']]
     SXM=todo[todo['LOẠI CÔNG VIỆC']=='SX MỚI']
     DHM=todo[todo['LOẠI CÔNG VIỆC'].str.contains('MẪU')]
-    CNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('CNC')]
+    # CNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('CNC')]
     BG=todo[todo['LOẠI CÔNG VIỆC'].str.contains('PHIẾU YC')]
     SXNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('SXNC')]
     BB=todo[todo['LOẠI CÔNG VIỆC'].str.contains('BAO BÌ')]
@@ -104,11 +108,11 @@ with st.form(key='abc'):
     plan_done=[]
     with c2:
         plan_done1=st.multiselect('Sản xuất mới',SXM)
-        plan_done11=st.multiselect('Sản xuất như cũ',SXNC)
+        plan_done11=st.multiselect('Sản xuất như cũ',SXM)
 
     with c3:
         plan_done2=st.multiselect('ĐH mẫu',DHM)
-        plan_done22=st.multiselect('Quy cách bao bì',BB)
+        plan_done22=st.multiselect('Quy cách bao bì',SXM)
     with c4:
         plan_done3=st.text_area('CNC',)
     with c5:
@@ -120,6 +124,7 @@ with st.form(key='abc'):
     cnc=plan_done3.split('\n')
     cnc_done=pd.DataFrame(cnc,columns=['CÔNG VIỆC'])
     cnc_done['NV']=name
+    # cnc_done
     pl['NV']=name
     t=out_plan.split('\n')
     done=pd.DataFrame(t,columns=['CÔNG VIỆC'])
@@ -133,4 +138,4 @@ with st.form(key='abc'):
 if st.button('Kết quả tuần này'):
 
     # st.title('THÀNH QUẢ CỦA HÔM NÀY NÈ!:smile:')
-    run(done,pl,todo)
+    run(done_,pl,todo)
