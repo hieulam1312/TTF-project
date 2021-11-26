@@ -270,7 +270,7 @@ def decrement_counter(decrement_value=0):
 c1,c2,c3,c4,c5=st.columns((1,1,1,2,2))
 with c1:
     st.button('Thêm dòng', on_click=increment_counter,
-        kwargs=dict(increment_value=1))
+        kwargs=dict(increment_value=5))
 with c2:
     st.button('Giảm dòng', on_click=decrement_counter,
         kwargs=dict(decrement_value=1))
