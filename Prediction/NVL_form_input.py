@@ -354,9 +354,9 @@ else:
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
-        df['Rộng']=round(df['Rộng'],1)
-        df['Dài']=round(df['Dài'],1)
-        df['Dày']=round(float(a),1)
+        df['Rộng']=round(df['Rộng'],2)
+        df['Dài']=round(df['Dài'],2)
+        df['Dày']=round(float(a),2)
 
         khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
 
