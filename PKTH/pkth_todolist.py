@@ -23,6 +23,7 @@ def run(done,pl,todo):
     sh2=gc1.open("test").worksheet('Sheet2')
     done_day1 = gd.get_as_dataframe(sh2)
     up_done=done.append(pl).reset_index(drop=True)
+    # up_done
     up_done=up_done.merge(todo,how='left',on='CÔNG VIỆC')
     td=datetime.date.today()
     up_done['NGÀY']=td
@@ -30,17 +31,18 @@ def run(done,pl,todo):
     up_done=up_done.replace(np.nan,"Công việc khác")
 
     up_done=up_done[up_done['CÔNG VIỆC'].isnull()==False]
+    
     updated = done_day1.append(up_done)
     # updated=updated.replace("",np.nan)
-    updated=updated.dropna()
-
+    # updated['CÔNG VIỆC']=updated['CÔNG VIỆC'].dropna()
+    
     gd.set_with_dataframe(sh2, updated)
     done_dayY = gd.get_as_dataframe(sh2)
 
     done_dayY['NGÀY']=done_dayY['NGÀY'].astype('datetime64')
     done_dayY['NGÀY']=done_dayY['NGÀY'].dt.date
     done_day=done_dayY[done_dayY['NGÀY']==td]
-    done_day=done_day.dropna()
+    done_day=done_day[done_day['CÔNG VIỆC'].isnull()==False]
     t1,t2,t3=st.columns(3)
     with t1:
         st.subheader(':trophy:Đệ:trophy:')
@@ -119,6 +121,7 @@ with st.form(key='abc'):
         plan_done4=st.multiselect('Báo giá',BG)
     with c6:
         out_plan=st.text_area('CÔNG VIỆC khác:',)
+
     plan_done=plan_done1+plan_done2+plan_done4+plan_done11+plan_done22
     pl=pd.DataFrame(plan_done,columns=['CÔNG VIỆC'])
     cnc=plan_done3.split('\n')
@@ -129,9 +132,11 @@ with st.form(key='abc'):
     t=out_plan.split('\n')
     done=pd.DataFrame(t,columns=['CÔNG VIỆC'])
     done['NV']=name
+
     pl=pl.astype(str)
     done_=pd.concat([done,cnc_done]).reset_index(drop=True)
     done_=done_.astype(str)
+
     st.form_submit_button("Xác nhận")
 
 
