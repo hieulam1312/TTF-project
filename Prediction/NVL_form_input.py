@@ -160,9 +160,9 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
         <html>
             <body>
                 <h1 style="text-align: center;">THẺ KIỆN</h1>
-                <p><img src="cid:0"></p>
+                <p><img src="cid:0"><p>
             </body>
-        </html>'
+        </html>
         ''',
         'html', 'utf-8'))
     part1 = MIMEText(html, 'html')
