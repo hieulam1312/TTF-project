@@ -427,8 +427,8 @@ else:
 
         len_=len(df.index.tolist())
 
-        if len_ >30:
-            df_20=df2.iloc[:30]
+        if len_ >35:
+            df_20=df2.iloc[:35]
             df_20=df_20.astype(str)
             df_20['Dày']=df_20['Dày'].str.replace(".",",")
             df_20['Dày']=df_20['Dày'].str.replace(",0","")
@@ -442,7 +442,7 @@ else:
             df_o=df_o.replace(True,0)
         
 
-            df_ov=df2.iloc[30:].reset_index(drop=True)
+            df_ov=df2.iloc[35:].reset_index(drop=True)
    
             df_o.loc[df_ov.index, :] = df_ov[:]
             df_o=df_o.astype(str)
