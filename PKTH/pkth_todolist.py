@@ -47,31 +47,31 @@ def run(done,pl,todo):
     with t1:
         st.subheader(':trophy:Đệ:trophy:')
 
-        de=done_day[done_day['NV']=='Đệ']
+        de=done_day[done_day['NV']=='ĐỆ']
         de[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
         de.style.set_properties(**{'background-color': 'pink',
                            'color': 'green'})
     with t2:
         st.subheader(':monkey_face:Long:monkey_face:')
-        thuan=done_day[done_day['NV']=='Long'].reset_index(drop=True)
+        thuan=done_day[done_day['NV']=='LONG'].reset_index(drop=True)
         thuan[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
     with t3:
         st.subheader(':panda_face:Trọn:panda_face:')
-        Tron=done_day[done_day['NV']=='Trọn'].reset_index(drop=True)
+        Tron=done_day[done_day['NV']=='TRỌN'].reset_index(drop=True)
         Tron[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
     r1,r2,r3=st.columns(3)
     with r1:
         st.subheader(':penguin:Linh:penguin:')
-        Linh=done_day[done_day['NV']=='Linh'].reset_index(drop=True)
+        Linh=done_day[done_day['NV']=='LINH'].reset_index(drop=True)
         Linh[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
 
     with r2:
         st.subheader(':heart:Vân:heart:')
-        Van=done_day[done_day['NV']=='Vân'].reset_index(drop=True)
+        Van=done_day[done_day['NV']=='VÂN'].reset_index(drop=True)
         Van['CÔNG VIỆC']
     with r3:
         st.subheader(':ring:Duy:ring:')
-        Duy=done_day[done_day['NV']=='Duy'].reset_index(drop=True)
+        Duy=done_day[done_day['NV']=='DUY'].reset_index(drop=True)
         Duy[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
 
 credentials = service_account.Credentials.from_service_account_info(
@@ -93,7 +93,7 @@ st.title(':star:CÁC VIỆC ĐÃ HOÀN THÀNH HÔM NAY:star:')
 
 with st.form(key='abc'):
     df['CÔNG VIỆC']=df['TÊN SẢN PHẨM']+" - "+df['LOẠI CÔNG VIỆC']
-    staff_list=['Đệ','Long','Trọn','Linh','Vân','Duy']
+    staff_list=['ĐỆ','LONG','TRỌN','LINH','VÂN','DUY']
     todo=df[['CÔNG VIỆC','LOẠI CÔNG VIỆC']]
     SXM=todo[todo['LOẠI CÔNG VIỆC']=='SX MỚI']
     DHM=todo[todo['LOẠI CÔNG VIỆC'].str.contains('MẪU')]
