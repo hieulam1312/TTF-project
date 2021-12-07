@@ -409,7 +409,7 @@ else:
             st.write('**NCC:** ',NCC)
         df['THẺ KIỆN']=tk
         df['Mã lô']=ml
-        # df['NCC']=NCC
+        df['NCC']=NCC
         df['ĐỘ ẨM']=da
         # with c2:
         #    image= image=st.image(qr_code(link=tk))
