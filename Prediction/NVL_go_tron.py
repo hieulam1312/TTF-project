@@ -19,7 +19,7 @@ import PIL
 # import barcode
 # from barcode.writer import ImageWriter
 # import cv
-# st.set_page_config(layout='wide')
+st.set_page_config(layout='wide')
 
 # from cvcv import ncc_f
 from ncc import abv
