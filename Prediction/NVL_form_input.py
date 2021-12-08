@@ -18,7 +18,7 @@ from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 from email.utils import make_msgid
 import mimetypes
-st.set_page_config(layout='wide')
+# st.set_page_config(layout='wide')
 
 def ncc_f():
     import streamlit as st
