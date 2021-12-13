@@ -48,22 +48,22 @@ def run(done,pl,todo):
         st.subheader(':trophy:Đệ:trophy:')
 
         de=done_day[done_day['NV']=='ĐỆ']
-        de[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
+        de[['LOẠI CV','CÔNG VIỆC']]
         de.style.set_properties(**{'background-color': 'pink',
                            'color': 'green'})
     with t2:
         st.subheader(':monkey_face:Long:monkey_face:')
         thuan=done_day[done_day['NV']=='LONG'].reset_index(drop=True)
-        thuan[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
+        thuan[['LOẠI CV','CÔNG VIỆC']]
     with t3:
         st.subheader(':panda_face:Trọn:panda_face:')
         Tron=done_day[done_day['NV']=='TRỌN'].reset_index(drop=True)
-        Tron[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
+        Tron[['LOẠI CV','CÔNG VIỆC']]
     r1,r2,r3=st.columns(3)
     with r1:
         st.subheader(':penguin:Linh:penguin:')
         Linh=done_day[done_day['NV']=='LINH'].reset_index(drop=True)
-        Linh[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
+        Linh[['LOẠI CV','CÔNG VIỆC']]
 
     with r2:
         st.subheader(':heart:Vân:heart:')
@@ -72,7 +72,7 @@ def run(done,pl,todo):
     with r3:
         st.subheader(':ring:Duy:ring:')
         Duy=done_day[done_day['NV']=='DUY'].reset_index(drop=True)
-        Duy[['LOẠI CÔNG VIỆC','CÔNG VIỆC']]
+        Duy[['LOẠI CV','CÔNG VIỆC']]
 
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
@@ -94,13 +94,13 @@ st.title(':star:CÁC VIỆC ĐÃ HOÀN THÀNH HÔM NAY:star:')
 with st.form(key='abc'):
     df['CÔNG VIỆC']=df['TÊN SẢN PHẨM']+" - "+df['LOẠI CV']
     staff_list=['ĐỆ','LONG','TRỌN','LINH','VÂN','DUY']
-    todo=df[['CÔNG VIỆC','LOẠI CÔNG VIỆC']]
-    SXM=todo[todo['LOẠI CÔNG VIỆC']=='SX MỚI']
-    DHM=todo[todo['LOẠI CÔNG VIỆC'].str.contains('MẪU')]
-    # CNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('CNC')]
-    BG=todo[todo['LOẠI CÔNG VIỆC'].str.contains('PHIẾU YC')]
-    SXNC=todo[todo['LOẠI CÔNG VIỆC'].str.contains('SXNC')]
-    BB=todo[todo['LOẠI CÔNG VIỆC'].str.contains('BAO BÌ')]
+    todo=df[['CÔNG VIỆC','LOẠI CV']]
+    SXM=todo[todo['LOẠI CV']=='SX MỚI']
+    DHM=todo[todo['LOẠI CV'].str.contains('MẪU')]
+    # CNC=todo[todo['LOẠI CV'].str.contains('CNC')]
+    BG=todo[todo['LOẠI CV'].str.contains('PHIẾU YC')]
+    SXNC=todo[todo['LOẠI CV'].str.contains('SXNC')]
+    BB=todo[todo['LOẠI CV'].str.contains('BAO BÌ')]
     todo_list=df['CÔNG VIỆC'].unique().tolist()
 
     c1,c2,c3=st.columns((1,3,2))
