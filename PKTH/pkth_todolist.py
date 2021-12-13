@@ -92,7 +92,7 @@ df=df[1:]
 st.title(':star:CÁC VIỆC ĐÃ HOÀN THÀNH HÔM NAY:star:')
 
 with st.form(key='abc'):
-    df['CÔNG VIỆC']=df['TÊN SẢN PHẨM']+" - "+df['LOẠI CÔNG VIỆC']
+    df['CÔNG VIỆC']=df['TÊN SẢN PHẨM']+" - "+df['LOẠI CV']
     staff_list=['ĐỆ','LONG','TRỌN','LINH','VÂN','DUY']
     todo=df[['CÔNG VIỆC','LOẠI CÔNG VIỆC']]
     SXM=todo[todo['LOẠI CÔNG VIỆC']=='SX MỚI']
