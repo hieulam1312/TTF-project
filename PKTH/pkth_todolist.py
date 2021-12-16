@@ -94,13 +94,13 @@ st.title(':star:CÁC VIỆC ĐÃ HOÀN THÀNH HÔM NAY:star:')
 with st.form(key='abc'):
     df['CÔNG VIỆC']=df['TÊN SP']+" - "+df['Loại CV']
     staff_list=['ĐỆ','LONG','TRỌN','LINH','VÂN','DUY']
-    todo=df[['CÔNG VIỆC','LOẠI CV']]
-    SXM=todo[todo['LOẠI CV']=='SX MỚI']
-    DHM=todo[todo['LOẠI CV'].str.contains('MẪU')]
-    # CNC=todo[todo['LOẠI CV'].str.contains('CNC')]
-    BG=todo[todo['LOẠI CV'].str.contains('PHIẾU YC')]
-    SXNC=todo[todo['LOẠI CV'].str.contains('SXNC')]
-    BB=todo[todo['LOẠI CV'].str.contains('BAO BÌ')]
+    todo=df[['CÔNG VIỆC','Loại CV']]
+    SXM=todo[todo['Loại CV']=='SX MỚI']
+    DHM=todo[todo['Loại CV'].str.contains('MẪU')]
+    # CNC=todo[todo['Loại CV'].str.contains('CNC')]
+    BG=todo[todo['Loại CV'].str.contains('PHIẾU YC')]
+    SXNC=todo[todo['Loại CV'].str.contains('SXNC')]
+    BB=todo[todo['Loại CV'].str.contains('BAO BÌ')]
     todo_list=df['CÔNG VIỆC'].unique().tolist()
 
     c1,c2,c3=st.columns((1,3,2))
