@@ -136,8 +136,8 @@ import json
 # import trello
 from trello import TrelloClient
 client = TrelloClient(
-    api_key=st.secret["api_key"],
-    token=st.secret["token"],
+    api_key=st.secrets["api_key"],
+    token=st.secrets["token"],
 )
 all_boards = client.list_boards()
 my_board = all_boards[2]
