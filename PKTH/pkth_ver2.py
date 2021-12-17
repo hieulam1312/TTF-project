@@ -133,7 +133,6 @@ def dataset(gc1):
 #Call API Trello
 import requests
 import json
-import trello
 from trello import TrelloClient
 url_member = "https://api.trello.com/1/members/dsd2981"
 querystring = {"key":'6e10303810dbba34a6cfcaae7c1f1ce8',"token":'1efc6b27f6fe47fad9010a08c91413a7e7d377c3888e74c3b084059e998b2a6e'}
