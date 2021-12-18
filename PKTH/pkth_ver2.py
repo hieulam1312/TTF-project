@@ -140,8 +140,9 @@ client = TrelloClient(
     token=st.secrets["token"],
 )
 all_boards = client.list_boards()
-my_board = all_boards[2]
+my_board = all_boards[1]
 my_lists = my_board.list_lists()
+
 get_lable=my_board.get_labels() 
 dic={}
 for lable in get_lable:
@@ -155,6 +156,7 @@ def add_card(dhn_demo,checklist,lable_table):
     dhn_demo=dhn_demo.rename(columns={'LOẠI CV':'index'})
     dhn_demo1=dhn_demo.merge(lable_table,how='left',on='index')
     labledemo=dhn_demo1[1].tolist()
+
     if checklist=="":
 
         dhm_list=(dhn_demo1['ID_CV']+'+'+dhn_demo1['TÊN SẢN PHẨM']).to_list()
