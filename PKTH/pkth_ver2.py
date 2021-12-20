@@ -142,7 +142,7 @@ client = TrelloClient(
 all_boards = client.list_boards()
 my_board = all_boards[1]
 my_lists = my_board.list_lists()
-my_lists
+
 get_lable=my_board.get_labels() 
 dic={}
 for lable in get_lable:
