@@ -258,23 +258,23 @@ sxmoi,sxnc,dhm,BB,pyc,list_done,done=dhn_demo[0],dhn_demo[1],dhn_demo[2],dhn_dem
 b=st.selectbox('Loại công việc',['SX MỚI','SXNC','Đơn hàng mẫu','Phiếu Y/C','Bao bì mới'])
 def trello_df():
     if b=='SX MỚI':
-        doing=sxmoi[(sxmoi['ID_CV'].isin(list_done)==False)&(sxmoi['LOẠI CV']=="SX MỚI")].reset_index(drop=True).head(5)
+        doing=sxmoi[(sxmoi['ID_CV'].isin(list_done)==False)&(sxmoi['LOẠI CV']=="SX MỚI")].reset_index(drop=True)
         list_id=""
     elif b=='Đơn hàng mẫu':
         doing=dhm[dhm['ID_CV'].isin(list_done)==False].reset_index(drop=True)
         list_id=""
     elif b=='Phiếu Y/C':
-        doing=pyc[(pyc['ID_CV'].isin(list_done)==False)&(pyc['LOẠI CV']==b)].reset_index(drop=True).head(5)
+        doing=pyc[(pyc['ID_CV'].isin(list_done)==False)&(pyc['LOẠI CV']==b)].reset_index(drop=True)
         list_id=""
     elif b=='SXNC':
-        doing=sxnc[(sxnc['ID_CV'].isin(list_done)==False)&(sxnc['LOẠI CV']==b)].reset_index(drop=True).head(5)
+        doing=sxnc[(sxnc['ID_CV'].isin(list_done)==False)&(sxnc['LOẠI CV']==b)].reset_index(drop=True)
         list_order=doing['SỐ ĐƠN HÀNG'].unique().tolist()
         list_id={}
         for order in list_order:
             sxnc1=doing[doing['SỐ ĐƠN HÀNG'].str.contains(order)]
             list_id[order]=(sxnc1['ID_CV']+" | "+sxnc1['TÊN KH']+" | "+sxnc1['TÊN SẢN PHẨM']+" | "+sxnc1['S/L']+" | "+sxnc1['GỖ']).to_list()
     elif b=='Bao bì mới':
-        doing=BB[(BB['ID_CV'].isin(list_done)==False)&(BB['LOẠI CV']==b)].reset_index(drop=True).head(5)
+        doing=BB[(BB['ID_CV'].isin(list_done)==False)&(BB['LOẠI CV']==b)].reset_index(drop=True)
         list_order= doing['SỐ ĐƠN HÀNG'].unique().tolist()
         list_id={}
         for order in list_order:
