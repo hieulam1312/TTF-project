@@ -13,7 +13,6 @@ credentials = service_account.Credentials.from_service_account_info(
          'https://www.googleapis.com/auth/drive'],
 )
 gc1 = gspread.authorize(credentials)
-spreadsheet_key = '1eWQcw2FFziobQY8rODoYCjfzV3b-_dksTjSDm0Okdpg'
 
 
 today = datetime.date.today()
