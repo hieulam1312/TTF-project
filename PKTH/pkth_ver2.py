@@ -222,13 +222,14 @@ def pull(my_board,lable_table):
     df_lable=df_l.merge(lable_table,how='left',on=0)
     df_lable=df_lable.rename(columns={"index_x":"LSX",'index_y':'Lable'	})
 
+    df_lable=df_lable[['LSX','Lable']]
     df_2=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict1.items()]))
     doing=df_2.transpose().reset_index()
 
     doing.columns=['LSX','Bộ phận hiện tại','Ngày tạo CV','TÊn','NGÀY NHẬN']
     doing=doing.merge(SL,how='left',on='TÊn')
     doing['S/L']=doing['S/L'].fillna(1)
-    doing=doing.merge(df_lable,how='left',on='LSX').drop(columns={'LSX',0,1})
+    doing=doing.merge(df_lable,how='left',on='LSX').drop(columns={'LSX'})
     doing[['ID_CV','TÊN SP']]=doing['TÊn'].astype(str).str.split('+',1, expand=True)
 
     doing_df=doing[doing['Bộ phận hiện tại']!='HOÀN THÀNH'].drop(columns={'TÊn'}).reset_index(drop=True)
