@@ -25,7 +25,7 @@ with c1:
 
     step=st.selectbox('Chọn thao tác',['Trả mẫu','Mượn mẫu'])
 with c2:
-    factory=st.selectbox('Chọn bộ phận',['NM1','NM3','X4','TD','NM NỆM','QLCL','THU MUA','P.TM'])
+    factory=st.selectbox('Chọn bộ phận',['NM1','NM3','X4','TD','NM5','QLCL','THU MUA','P.TM'])
 filter=st.multiselect('Chọn Khách hàng',sample_name_pd['TÊN KHÁCH HÀNG'].unique().tolist())
 sample=sample_name_pd[sample_name_pd['TÊN KHÁCH HÀNG'].isin(filter)]
 
