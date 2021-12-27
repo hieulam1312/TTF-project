@@ -140,7 +140,7 @@ client = TrelloClient(
     token=st.secrets["token"],
 )
 all_boards = client.list_boards()
-my_board = all_boards[1]
+my_board = all_boards[2]
 my_lists = my_board.list_lists()
 
 get_lable=my_board.get_labels() 
@@ -150,7 +150,7 @@ for lable in get_lable:
 lable_table=pd.DataFrame.from_dict(dic,orient='index').reset_index()
 list_lable=['SXNC','Bao bì mới','CV KHÁC','SX MỚI','CNC','Đơn hàng mẫu','Phiếu Y/C']
 lable_table=lable_table[lable_table['index'].isin(list_lable)]
-
+# lable_table
 # labledemo
 #Created function to pull Trello
 def add_card(dhn_demo,checklist,lable_table):
@@ -221,7 +221,6 @@ def pull(my_board,lable_table):
 
     df_lable=df_l.merge(lable_table,how='left',on=0)
     df_lable=df_lable.rename(columns={"index_x":"LSX",'index_y':'Lable'	})
-
     df_lable=df_lable[['LSX','Lable']]
     df_2=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict1.items()]))
     doing=df_2.transpose().reset_index()
@@ -230,22 +229,38 @@ def pull(my_board,lable_table):
     doing=doing.merge(SL,how='left',on='TÊn')
     doing['S/L']=doing['S/L'].fillna(1)
     doing=doing.merge(df_lable,how='left',on='LSX').drop(columns={'LSX'})
+    df_lable=df_lable[['LSX','Lable']]
+    df_2=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict1.items()]))
+    doing=df_2.transpose().reset_index()
+
+    doing.columns=['LSX','Bộ phận hiện tại','Ngày tạo CV','TÊn','NGÀY NHẬN']
+    doing=doing.merge(SL,how='left',on='TÊn')
     doing[['ID_CV','TÊN SP']]=doing['TÊn'].astype(str).str.split('+',1, expand=True)
 
-    doing_df=doing[doing['Bộ phận hiện tại']!='HOÀN THÀNH'].drop(columns={'TÊn'}).reset_index(drop=True)
-
+    doing['S/L']=doing['S/L'].fillna(1)
+    doing=doing.merge(df_lable,how='left',on='LSX').drop(columns={'LSX'})
     DONE=doing[doing['Bộ phận hiện tại']=='HOÀN THÀNH']
     DONE_ID=DONE['TÊn'].to_list()
-    b=b[b['LSX'].isin(DONE_ID)].drop(columns={0})
 
+    b=b[b['LSX'].isin(DONE_ID)] #.drop(columns={0})
     melt=b.melt(id_vars='LSX',value_name='History')
     melt=melt[melt['History'].isnull()!=True]
+
     melt['History']=melt['History'].apply(literal_return)
-    d=melt.set_index(['LSX','variable']).apply(lambda x: x.apply(pd.Series).stack()).reset_index()
-    e=d[['LSX',"variable",'level_2','History']]
+
+    d=melt.set_index(['LSX','variable']).apply(lambda x: x.apply(pd.Series).stack()).reset_index()  
+
+    e=d[d['variable']!=0][['LSX',"variable",'level_2','History']]
     pivot=e.pivot(index=['LSX',"variable"],columns='level_2',values='History').reset_index()
+
     pivot=pivot[pivot[1]!='KÝ DUYỆT'][['LSX', 1, 2]]
     pivot.columns=['TÊn','Nhân viên','Thời gian nhận']
+
+
+    done_df=DONE.merge(pivot,how='left',on='TÊn')[[ 'ID_CV','TÊN SP', 'S/L','Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','NGÀY NHẬN', 'Lable']]
+    done_df.columns=['ID_CV', 'TÊN SP', 'S/L', 'Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','Ngày hoàn thành', 'Loại CV']
+
+    doing_df=doing[doing['Bộ phận hiện tại']!='HOÀN THÀNH'].drop(columns={'TÊn'}).reset_index(drop=True)
 
     done_df=DONE.merge(pivot,how='left',on='TÊn')[[ 'ID_CV','TÊN SP', 'S/L','Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','NGÀY NHẬN', 'Lable']]
     done_df.columns=['ID_CV', 'TÊN SP', 'S/L', 'Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','Ngày hoàn thành', 'Loại CV']
