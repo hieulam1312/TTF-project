@@ -55,6 +55,26 @@ if st.button('Xuất danh sách'):
     existing = gd.get_as_dataframe(ws)
     updated = existing.append(table_df)
     gd.set_with_dataframe(ws, updated)
+
+    order_key=updated['Tên Mẫu'].unique().tolist()
+    _list={}
+    early_list={}
+    for i in order_key:
+        _list[i]={}
+        _list[i]['Ngày']=updated.loc[updated['Tên Mẫu']==i]['NGÀY'].to_list()
+        _list[i]['Thao tác']=updated.loc[updated['Tên Mẫu']==i]['THAO TÁC'].to_list()
+        _list[i]['Bộ phận']=updated.loc[updated['Tên Mẫu']==i]['BỘ PHẬN'].to_list()
+        _list[i]['KH']=updated.loc[updated['Tên Mẫu']==i]['TÊN KHÁCH HÀNG'].to_list()
+
+    dataa=pd.DataFrame.from_dict(_list, orient='index').reset_index()
+
+    new_list={k:{sk:sv[-1] for sk,sv in s.items() if len(sv)>0} for k,s in _list.items() }
+    new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
+
+
+    ws2 = gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('VỊ TRÍ HIỆN TẠI')
+    new_list_df
+    gd.set_with_dataframe(ws2, new_list_df)
     st.success('Done')
 
 
