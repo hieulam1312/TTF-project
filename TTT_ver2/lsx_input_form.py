@@ -55,13 +55,40 @@ def push_lsx(df,ws1,ws2):
 
 
     st.success('Done')
+def download_link(object_to_download, download_filename, download_link_text):
+    import base64,io
+    if isinstance(object_to_download,pd.DataFrame):
+        # object_to_download = object_to_download.to_excel(index = False, header=True,encoding="cp1258")
+            
+        towrite = io.BytesIO()
+        downloaded_file = object_to_download.to_excel(towrite, encoding='utf-8', index=False, header=True) # write to BytesIO buffer
+        towrite.seek(0)  # reset pointer
+        b64 = base64.b64encode(towrite.read()).decode() 
+    return f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Bấm vào đây để tải danh sách về</a>'
+
+def push_lsx_ver2(df,ws1,ws2):
+
+    import gspread_dataframe as gd
+    import gspread as gs
+
+    existing1 = gd.get_as_dataframe(ws1)
+    existing1=existing1[existing1['LỆNH SX'].isnull()==False]
+    updated1 = existing1.append(df)
+    gd.set_with_dataframe(ws1,updated1)
+
+    existing2 = gd.get_as_dataframe(ws2)
+    existing2=existing2.astype(str)
+
+    col = 'LỆNH SX'
+    cols_to_replace = ['SỐ LƯỢNG', 'LOẠI GỖ','MÀU SƠN','Versionn']
+    # updated2=existing2.loc[existing2[col].isin(df[col]), cols_to_replace] = df.loc[df[col].isin(existing2[col]),cols_to_replace].values
+    existing2.loc[existing2[col].isin(df[col])==True, cols_to_replace]=df[cols_to_replace].values
+    df      # 
+    gd.set_with_dataframe(ws2, existing2)
+
+    st.success('Done')
 
 
-# def increment_counter(increment_value=0):
-#     rows += increment_value
-
-# def decrement_counter(decrement_value=0):
-#     rows -= decrement_value
 credentials = service_account.Credentials.from_service_account_info(
 st.secrets["gcp_service_account"],
 scopes=['https://spreadsheets.google.com/feeds',
@@ -70,8 +97,9 @@ scopes=['https://spreadsheets.google.com/feeds',
 gc = gspread.authorize(credentials)
 st.title('DANH SÁCH LỆNH SẢN XUẤT')
 colu1,colu2,cll3=st.columns((1,1,3))
-df=pull_lsx(gc)
-df1=df[0]
+df_df=pull_lsx(gc)
+df1=df_df[0].astype(str)
+lsx_cu=df_df[1]
 with colu1:
     username = st.text_input("User Name")
     aa=st.checkbox("Login")
@@ -81,98 +109,154 @@ with colu2:
 if aa:
     if  password==st.secrets["passwords"] and username==st.secrets['user']:
         # c0,c1,c2,c3,c4,c5,c6,c7= st.columns((1.8,1,.9,.9,.9,.9,.9,9))
-
+        
         if 'count' not in st.session_state:
             rows = 0
-        df1['NGÀY XUẤT']=df1['NGÀY XUẤT'].astype("datetime64")
-        df1['Năm xuất']=df1['NGÀY XUẤT'].dt.year
-        df1['Tháng xuất']=df1['NGÀY XUẤT'].dt.month
-        # df1
-        year_out=df1['Năm xuất'].unique().tolist()
+        select=st.selectbox('Chọn',['RA LSX MỚI','CẬP NHẬT LẠI LSX CŨ'])
+        if select=='RA LSX MỚI':
 
-        colum1,colum2,clll3,clum3,clum4=st.columns((1,1,1,1,1))
-        with colum1:
-            _year=st.multiselect('Năm',year_out)
-            df11=df1[df1["Năm xuất"].isin(_year)]
-            month_out=df11['Tháng xuất'].unique().tolist()
-        with colum2:
-            _month=st.multiselect('Tháng',month_out)
-            df111=df11[df11['Tháng xuất'].isin(_month)]
-            dhsx=df111["SỐ ĐƠN HÀNG"].unique().tolist()
-        with clll3:
-            if not _month:
-                list_sdh=st.multiselect("Nhập số đơn hàng",df1["SỐ ĐƠN HÀNG"].unique().tolist())
-            else:
-                list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
-        df=df1[df1["SỐ ĐƠN HÀNG"].isin(list_sdh)]
-        with st.form(key='columns_in_form'):
-            c0,c1,c2,c3,c4,c5,c6,c7,c8= st.columns((1.8,2,3,1,.9,.9,.9,.9,.9))
+            dhsx=df1["SỐ ĐƠN HÀNG"].unique().tolist()
 
-            list_r=df["LỆNH SX"].tolist()
-            kh_r=df["TÊN KHÁCH HÀNG"].tolist()  
-            sp=df["TÊN SẢN PHẨM TTF"].tolist()
-            # cols = st.beta_columns(5)
-            # for i, col in enumerate(cols):
-            rows = len(list_r)
+            list_sdh=st.multiselect("Nhập số đơn hàng",dhsx)
+            df=df1[df1["SỐ ĐƠN HÀNG"].isin(list_sdh)]
+            with st.form(key='columns_in_form'):
+                c0,c1,c2,c3,c4,c5,c6,c7,c8= st.columns((1.8,2,3,1,.9,.9,.9,.9,.9))
+
+                list_r=df["LỆNH SX"].tolist()
+                kh_r=df["TÊN KHÁCH HÀNG"].tolist()  
+                sp=df["TÊN SẢN PHẨM TTF"].tolist()
+                # cols = st.beta_columns(5)
+                # for i, col in enumerate(cols):
+                rows = len(list_r)
 
 
-            # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
-            with c0:
-                lsx=[]
-                for nr in range(rows):
-                    lsx.append(c0.selectbox('',[list_r[nr]], key=f'dfuestidn {nr}'))
-                # st.selectbox('Lệnh sản xuất',['a','b','c'])
-            with c3:
+                # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
+                with c0:
+                    lsx=[]
+                    for nr in range(rows):
+                        lsx.append(c0.selectbox('',[list_r[nr]], key=f'dfuestidn {nr}'))
+                    # st.selectbox('Lệnh sản xuất',['a','b','c'])
+                with c3:
 
-                nm=[]
-                for nr in range(rows):
-                    nm.append(c3.selectbox('Nhà máy',["",'NM1','NM3','NM5'], key=f'dfquestidn {nr}'))
-                # st.selectbox('Lệnh sản xuất',['a','b','c'])
-            with c4:
-                ldh=[]
-                for nr in range(rows):
-                    ldh.append(c4.selectbox('Loại đơn hàng',["",'C',"M"], key=f'dfquesatdidn {nr}'))  
-            with c5:
-                gc1=[]
-                for nr in range(rows):
-                    gc1.append(c5.selectbox('Gia công ',["",'N',"Y"], key=f'dfqudesưtdidn {nr}')) 
-            with c6:
-                uc=[]
-                for nr in range(rows):
-                    uc.append(c6.selectbox('V/e uốn cong ',["",'N',"Y"], key=f'dfqudesưtdidn{nr}')) 
-            with c7:
-                vn=[]
-                for nr in range(rows):
-                    vn.append(c7.selectbox('Verneer ',["",'N',"Y"], key=f'dfqudestưdidn {nr}')) 
-            with c8:
-                kl=[]
-                for nr in range(rows):
-                    kl.append(c8.selectbox('Kim loại ',["",'N',"Y"], key=f'dfqudestdidn1 {nr}')) 
-            with  c1:
-                ks=[]
-                for nr in range(rows):
-                    ks.append(c1.selectbox('',[kh_r[nr]], key=f'dfuesstidn {nr}'))
-            with c2:
-                sap=[]
-                for nr in range(rows):
-                    sap.append(c2.selectbox('',[sp[nr]], key=f'dfuestissdn {nr}'))
-            st.form_submit_button('Submit')
-            
-            dict={"LỆNH SX":lsx,"NMSX":nm,"SẢN PHẨM (C/M)":ldh,"GIA CÔNG (Y/N)":gc1,"V/E U/CONG (Y/N)":uc,"DÁN VNR (Y/N)":vn,"K/L ĐB (Y/N)":kl}
+                    nm=[]
+                    for nr in range(rows):
+                        nm.append(c3.selectbox('Nhà máy',["",'NM1','NM3','NM5'], key=f'dfquestidn {nr}'))
+                    # st.selectbox('Lệnh sản xuất',['a','b','c'])
+                with c4:
+                    ldh=[]
+                    for nr in range(rows):
+                        ldh.append(c4.selectbox('Loại đơn hàng',["",'C',"M"], key=f'dfquesatdidn {nr}'))  
+                with c5:
+                    gc1=[]
+                    for nr in range(rows):
+                        gc1.append(c5.selectbox('Gia công ',["",'N',"Y"], key=f'dfqudesưtdidn {nr}')) 
+                with c6:
+                    uc=[]
+                    for nr in range(rows):
+                        uc.append(c6.selectbox('V/e uốn cong ',["",'N',"Y"], key=f'dfqudesưtdidn{nr}')) 
+                with c7:
+                    vn=[]
+                    for nr in range(rows):
+                        vn.append(c7.selectbox('Verneer ',["",'N',"Y"], key=f'dfqudestưdidn {nr}')) 
+                with c8:
+                    kl=[]
+                    for nr in range(rows):
+                        kl.append(c8.selectbox('Kim loại ',["",'N',"Y"], key=f'dfqudestdidn1 {nr}')) 
+                with  c1:
+                    ks=[]
+                    for nr in range(rows):
+                        ks.append(c1.selectbox('',[kh_r[nr]], key=f'dfuesstidn {nr}'))
+                with c2:
+                    sap=[]
+                    for nr in range(rows):
+                        sap.append(c2.selectbox('',[sp[nr]], key=f'dfuestissdn {nr}'))
+                st.form_submit_button('Submit')
+                
+                dict={"LỆNH SX":lsx,"NMSX":nm,"SẢN PHẨM (C/M)":ldh,"GIA CÔNG (Y/N)":gc1,"V/E U/CONG (Y/N)":uc,"DÁN VNR (Y/N)":vn,"K/L ĐB (Y/N)":kl}
+                dff=pd.DataFrame.from_dict(dict)
+                lsx_info=dff.merge(df,how='left',on="LỆNH SX")
+                a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
+                a
+            if st.button('Push'):
+
+                # Pull order_info
+                lsx_info["MÀU SƠN"]=lsx_info["MÀU SƠN"].str.replace('NA','N/A')
+                lsx_info=lsx_info.astype(str)
+                # lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
+                lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"  ,	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
+                ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+                ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+                push_lsx(lsx_info, ws1, ws2)
+
+        if select=="CẬP NHẬT LẠI LSX CŨ":
+            list_sdh=st.multiselect("Nhập số đơn hàng",lsx_cu["SỐ ĐƠN HÀNG"].unique().tolist())
+            with st.form(key='columns_in_form'):
+
+                if not list_sdh:
+                    st.info('Nhập SĐH')
+                else:
+
+                    c0,c1,c2,c3,c4,c5,c6=st.columns((1.8,2,3,1,.9,.9,3))
+
+                    df=lsx_cu[lsx_cu["SỐ ĐƠN HÀNG"].isin(list_sdh)].reset_index(drop=True)
+
+                    list_r=df["LỆNH SX"].tolist()
+                    kh_r=df["TÊN KHÁCH HÀNG"].tolist()  
+                    sp=df["TÊN SẢN PHẨM TTF"].tolist()
+                    SL=df['SỐ LƯỢNG'].tolist()
+                    GO=df['LOẠI GỖ'].tolist()
+                    SON=df['MÀU SƠN'].tolist()
+                    # cols = st.beta_columns(5)
+                    # for i, col in enumerate(cols):
+                    rows = len(list_r)
+
+
+                    # list_r=[50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
+                    with c0:
+                        lsx=[]
+                        for nr in range(rows):
+                            lsx.append(c0.selectbox('',[list_r[nr]], key=f'dfuestidn {nr}'))
+                        # st.selectbox('Lệnh sản xuất',['a','b','c'])
+                    with c3:
+                        ldh=[]
+                        for nr in range(rows):
+                            ldh.append(c4.text_input('Loại Gỗ',GO[nr], key=f'dfquesatdidn {nr}'))  
+                    with c4:
+                        gc1=[]
+                        for nr in range(rows):
+                            gc1.append(c5.text_input('SỐ LƯỢNG ',SL[nr], key=f'dfqudesưtdidn {nr}')) 
+                    with c5:
+                        uc=[]
+                        for nr in range(rows):
+                            uc.append(c6.text_input('MÀU SƠN ',SON[nr], key=f'dfqudesưtdidn{nr}')) 
+                    with  c1:
+                        ks=[]
+                        for nr in range(rows):
+                            ks.append(c1.selectbox('',[kh_r[nr]], key=f'dfuesstidn {nr}'))
+                    with c2:
+                        sap=[]
+                        for nr in range(rows):
+                            sap.append(c2.selectbox('',[sp[nr]], key=f'dfuestissdn {nr}'))
+                st.form_submit_button('Submit')
+                    
+            dict={"LỆNH SX":lsx,"LOẠI GỖ":ldh,"SỐ LƯỢNG":gc1,'MÀU SƠN':uc}
             dff=pd.DataFrame.from_dict(dict)
+            df=df.drop(columns=["LOẠI GỖ",'SỐ LƯỢNG','MÀU SƠN','Unnamed: 0'])
             lsx_info=dff.merge(df,how='left',on="LỆNH SX")
-            a=lsx_info[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)"]]
-            a
-        if st.button('Push'):
+            a=lsx_info.drop(columns='Versionn') #[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"]]
 
-            # Pull order_info
-            lsx_info["MÀU SƠN"]=lsx_info["MÀU SƠN"].str.replace('NA','N/A')
 
-            # lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
-            lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"LOẠI GỖ"	,"MÀU SƠN"	,"NỆM"	,"SỐ LƯỢNG",	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
-            ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
-            ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
-            push_lsx(lsx_info, ws1, ws2)
+            a['Versionn']=df['Versionn'].astype(int)+1
+
+            if st.button('Xuất danh sách!'):
+                lsx_info=a[["LỆNH SX",	 "NMSX",	"LOẠI GỖ",'SỐ LƯỢNG','MÀU SƠN',	"SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"  ,	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ",'Versionn']]
+                ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
+                ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
+                lsx_info=lsx_info.astype(str)
+                push_lsx_ver2(lsx_info,ws1,ws2)
+                st.markdown("")
+                tmp_download_link = download_link(lsx_info, 'YOUR_DF.csv', 'Bấm vào đây để tải danh sách!')
+                st.markdown(tmp_download_link, unsafe_allow_html=True)
 
 
 
