@@ -77,7 +77,7 @@ def push_lsx_ver2(df,ws1,ws2):
     gd.set_with_dataframe(ws1,updated1)
 
     existing2 = gd.get_as_dataframe(ws2)
-    existing2=existing2.astype(str)
+#     existing2=existing2.astype(str)
 
     col = 'LỆNH SX'
     cols_to_replace = ['SỐ LƯỢNG', 'LOẠI GỖ','MÀU SƠN','Versionn']
