@@ -138,7 +138,7 @@ elif thaotac=='Xuất kho':
         the_table = ax.table(cellText = data.values, colLabels = data.columns,loc='bottom')
         pp = PdfPages("foo.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
-        pp.close()
+#         pp.close()
         # tmp_download_link = download_link(the_table,'YOUR_DF.csv', 'Bấm vào đây để tải danh sách!')
 
         # st.markdown(tmp_download_link, unsafe_allow_html=True)
