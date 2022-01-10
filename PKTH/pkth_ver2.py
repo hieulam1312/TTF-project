@@ -148,7 +148,7 @@ dic={}
 for lable in get_lable:
     dic[lable.name]=[lable.id,lable]
 lable_table=pd.DataFrame.from_dict(dic,orient='index').reset_index()
-list_lable=['SXNC','Bao bì mới','CV KHÁC','SX MỚI','CNC','Đơn hàng mẫu','Phiếu Y/C']
+list_lable=['SXNC','Bao bì','CV KHÁC','SX MỚI','CNC','Đơn hàng mẫu','Phiếu Y/C',"Cập nhật QC/BV","Kiểm mẫu"]
 lable_table=lable_table[lable_table['index'].isin(list_lable)]
 # lable_table
 # labledemo
