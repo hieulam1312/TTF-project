@@ -96,7 +96,7 @@ elif thaotac=='Xuất kho':
     vattuxuatkho=xuatkho['Tên vật tư'].tolist()
     xlxuat=xuatkho['Số lượng'].tolist()
     data1=form(vattuxuatkho,xlxuat,order_item,xuatkho)
-    data1
+
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
