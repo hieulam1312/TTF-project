@@ -48,6 +48,18 @@ def form(ncc):
         data=pd.DataFrame.from_dict(dic)
         data['Đơn hàng']=order_item[0]
         data['Ngày nhập kho']=pd.to_datetime('today').date()
+        data
         return data
+def push(df,gc):
+    import gspread_dataframe as gd
+    import gspread as gs
+    sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Nhập kho')
+    data=gd.get_as_dataframe(sheet)
+    new_df=data.append(df)
+    new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
+    gd.set_with_dataframe(sheet,new_df)
+
 data=form(order_item)
-data
+# data=data.dropna()
+if st.button('Xuất danh sách'):
+    push(data,gc)
