@@ -135,7 +135,7 @@ elif thaotac=='Xuất kho':
         # ax.axis('tight')
         ax.axis('off')
 
-        the_table = ax.table(cellText = data.values, colLabels = df.columns,loc='bottom')
+        the_table = ax.table(cellText = data.values, colLabels = data.columns,loc='bottom')
         pp = PdfPages("foo.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
         pp.close()
