@@ -1,4 +1,5 @@
 import datetime as dt
+from os import close
 from re import T
 from PIL.Image import new
 import pandas as pd
@@ -96,7 +97,7 @@ elif thaotac=='Xuất kho':
     vattuxuatkho=xuatkho['Tên vật tư'].tolist()
     xlxuat=xuatkho['Số lượng'].tolist()
     data1=form(vattuxuatkho,xlxuat,order_item,xuatkho)
-
+    data1
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
@@ -136,19 +137,13 @@ elif thaotac=='Xuất kho':
         ax.axis('off')
 
         the_table = ax.table(cellText = data.values, colLabels = data.columns,loc='bottom')
-        pp = PdfPages("foo.pdf")
+        pp = PdfPages("phieu_xuat_kho.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
-#         pp.close()
-        # tmp_download_link = download_link(the_table,'YOUR_DF.csv', 'Bấm vào đây để tải danh sách!')
+        pp.close()
 
-        # st.markdown(tmp_download_link, unsafe_allow_html=True)
-
-        import os
-        import base64
-        def get_binary_file_downloader_html(bin_file, file_label='File'):
-            with open(bin_file, 'rb') as f:
-                data = f.read()
+        with open("phieu_xuat_kho.pdf", 'rb') as f:
+            data = f.read()
             bin_str = base64.b64encode(data).decode()
-            href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
-            return href
-        st.markdown(get_binary_file_downloader_html('phieu_xuat_kho.pdf','data'), unsafe_allow_html=True)
+            href = f'<a href="data:application/octet-stream;base64,{bin_str}" download=phieu_xuat_kho.pdf.pdf>Download data</a>'
+            f.close()
+    st.markdown(href, unsafe_allow_html=True)
