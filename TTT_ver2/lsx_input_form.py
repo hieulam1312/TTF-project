@@ -96,7 +96,7 @@ scopes=['https://spreadsheets.google.com/feeds',
 )
 gc = gspread.authorize(credentials)
 st.title('DANH SÁCH LỆNH SẢN XUẤT')
-colu1,colu2,cll3=st.columns((1,1,3))
+colu1,colu2,cll3=st.columns(3)
 df_df=pull_lsx(gc)
 df1=df_df[0].astype(str)
 lsx_cu=df_df[1]
