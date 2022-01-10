@@ -81,7 +81,7 @@ elif thaotac=='Nhập kho':
     dvt=production['ĐVT'].tolist()
 
 
-    data=form(pr,sl,order_item)
+    data=form(pr,sl,order_item,production)
     data
     if st.button('Xuất danh sách'):
         push(data,gc)
