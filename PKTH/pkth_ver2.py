@@ -273,6 +273,8 @@ st.subheader('MỚI')
 dhn_demo=dataset(gc1)
 sxmoi,sxnc,dhm,BB,pyc,list_done,done=dhn_demo[0],dhn_demo[1],dhn_demo[2],dhn_demo[3],dhn_demo[4],dhn_demo[5],dhn_demo[6]
 b=st.selectbox('Loại công việc',['SX MỚI','SXNC','Đơn hàng mẫu','Phiếu Y/C','Bao bì mới'])
+sxnc
+list_done
 def trello_df():
     if b=='SX MỚI':
         doing=sxmoi[(sxmoi['ID_CV'].isin(list_done)==False)&(sxmoi['LOẠI CV']=="SX MỚI")].reset_index(drop=True)
