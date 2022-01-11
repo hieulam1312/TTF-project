@@ -15,8 +15,14 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 if 'count' not in st.session_state:
     st.session_state.count = 0
-
-
+def pull_lsx(gc):
+    sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('1.Master DH')
+    sheet=sh.get_all_values()
+    ncc=pd.DataFrame(sheet).astype(str)
+    ncc.columns=ncc.iloc[0]
+    ncc=ncc[1:]
+    ncc=ncc[['LỆNH SX','SỐ ĐH','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG',]]
+    return ncc
 
 def form(pr,sl,order_item,production):
     with st.form(key='columns_in_form'):
@@ -24,7 +30,7 @@ def form(pr,sl,order_item,production):
         if not order_item:
             st.info('Nhập đầy đủ thông tin ở phía trên')
         else:
-            r1,r2,=st.columns(2)
+            r1,r2,r3=st.columns(3)
             with r1:
                 b1=[]
                 for nr in range(rowss):
@@ -33,20 +39,24 @@ def form(pr,sl,order_item,production):
             with r2:
                 b2=[]
                 for nr in range (rowss):
-                    b2.append(r2.text_input('Số lượng',sl[nr],key=f'dfuesidn {nr}'))
+                    b2.append(r2.text_input('SL đặt hàng',sl[nr],key=f'dfuesidn {nr}'))
+            with r3:
+                b3=[]
+                for nr in range (rowss):
+                    b3.append(r3.text_input('SL nhập kho',key=f'dfuesidn {nr}'))
         st.form_submit_button('Hoàn tất')
-        dic={'Tên vật tư':b1,'Số lượng':b2}
+        dic={'Tên vật tư':b1,'Số lượng':b3}
         data=pd.DataFrame.from_dict(dic)
         data['Đơn hàng']=order_item[0]
         data['Ngày nhập kho']=pd.to_datetime('today').date()
         return data
-def push(df,gc):
+def push(df,gc,sheet):
     import gspread_dataframe as gd
     import gspread as gs
-    sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Nhập kho')
+    sheet=gc.open("Kho sơn - DS đặt hàng").worksheet(sheet)
     data=gd.get_as_dataframe(sheet)
     new_df=data.append(df)
-    new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
+    # new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
     gd.set_with_dataframe(sheet,new_df)
 def pull(gc):
     import gspread_dataframe as gd
@@ -81,23 +91,32 @@ elif thaotac=='Nhập kho':
     dvt=production['ĐVT'].tolist()
 
 
-    data=form(pr,sl,order_item,production)
+    data=form(pr,sl,order_item)
     data
     if st.button('Xuất danh sách'):
-        push(data,gc)
+        push(data,gc,'Nhập kho')
     
 elif thaotac=='Xuất kho':
-
-    nm=st.multiselect('Xuất cho nhà máy:',['NM1','NM3','NM5','Khác'])
-    lsx=st.text_input('Tên Lệnh SX',)
+    c1,c2=st.columns(2)
+    with c1:
+            nm=st.multiselect('Xuất cho nhà máy:',['NM1','NM3','NM5','Khác'])
+    with c2:
+        lsx_df=pull_lsx(gc)
+        lsx_id=lsx_df['LỆNH SX'].tolist()
+        lsx=st.multiselect('Tên Lệnh SX',lsx_id)
+    lsx_df[lsx_df['LỆNH SX']==lsx[0]]
+    c3,c4=st.columns(2)
+    with c3:
+        cd=st.multiselect('Xuất cho công đoạn:',['Lót 1','Lót 2','Bóng thành phẩm'])
+    with c4:
+        sl_sp=st.text_input('Cho số lượng ghế:',)
     data=pull(gc)
-    data
     st.subheader('Xuất các vật tư sau:')
     xuatkho=data[data['Đơn hàng']==order_item[0]]
     vattuxuatkho=xuatkho['Tên vật tư'].tolist()
     xlxuat=xuatkho['Số lượng'].tolist()
     data1=form(vattuxuatkho,xlxuat,order_item,xuatkho)
-    data1
+
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
@@ -127,10 +146,14 @@ elif thaotac=='Xuất kho':
     if st.button('Hoàn tất xuất kho'):
         data=data1.append(data2)
         data['Nhà máy']=nm[0]
-        data['Lệnh SX']=lsx
+        data['Lệnh SX']=lsx[0]
+        data['Công đoạn']=cd[0]
+        data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
         data=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
         data
+        push(data,gc,'Xuất kho')
+
         fig, ax = plt.subplots(figsize = (4,.2))
         ax.set_title('TTF - Phiếu xuất kho',loc='left')
         # ax.axis('tight')
@@ -147,3 +170,4 @@ elif thaotac=='Xuất kho':
             href = f'<a href="data:application/octet-stream;base64,{bin_str}" download=phieu_xuat_kho.pdf.pdf>Download data</a>'
             f.close()
     st.markdown(href, unsafe_allow_html=True)
+        
