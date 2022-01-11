@@ -284,14 +284,14 @@ def trello_df():
         doing=pyc[(pyc['ID_CV'].isin(list_done)==False)&(pyc['LOẠI CV']==b)].reset_index(drop=True)
         list_id=""
     elif b=='SXNC':
-        doing=sxnc[(sxnc['ID_CV'].isin(list_done)==False)&(sxnc['LOẠI CV']==b)].reset_index(drop=True)
+        doing=sxnc[(sxnc["SỐ ĐƠN HÀNG"].isin(list_done)==False)&(sxnc['LOẠI CV']==b)].reset_index(drop=True)
         list_order=doing['SỐ ĐƠN HÀNG'].unique().tolist()
         list_id={}
         for order in list_order:
             sxnc1=doing[doing['SỐ ĐƠN HÀNG'].str.contains(order)]
             list_id[order]=(sxnc1['ID_CV']+" | "+sxnc1['TÊN KH']+" | "+sxnc1['TÊN SẢN PHẨM']+" | "+sxnc1['S/L']+" | "+sxnc1['GỖ']).to_list()
     elif b=='Bao bì mới':
-        doing=BB[(BB['ID_CV'].isin(list_done)==False)&(BB['LOẠI CV']==b)].reset_index(drop=True)
+        doing=BB[(BB["SỐ ĐƠN HÀNG"].isin(list_done)==False)&(BB['LOẠI CV']==b)].reset_index(drop=True)
         list_order= doing['SỐ ĐƠN HÀNG'].unique().tolist()
         list_id={}
         for order in list_order:
