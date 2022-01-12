@@ -172,7 +172,7 @@ elif thaotac=='Xuất kho':
 
         the_table = ax.table(cellText = data.values, colLabels = data.columns,loc='bottom')
         the_table.auto_set_font_size(False)
-        the_table.set_fontsize(30)
+        the_table.set_fontsize(15)
 #         the_tab
         pp = PdfPages("phieu_xuat_kho.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
