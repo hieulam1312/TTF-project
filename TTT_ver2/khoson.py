@@ -106,6 +106,7 @@ elif thaotac=='Xuất kho':
         lsx_id=lsx_df['LỆNH SX'].tolist()
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
     sanpham=lsx_df[lsx_df['LỆNH SX']==lsx[0]]
+    sanpham
     c3,c4=st.columns(2)
     with c3:
         cd=st.multiselect('Xuất cho công đoạn:',['Lót 1','Lót 2','Bóng thành phẩm'])
