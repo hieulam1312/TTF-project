@@ -2,6 +2,7 @@ import datetime as dt
 from os import close
 from re import T
 from PIL.Image import new
+from numpy.core.fromnumeric import size
 import pandas as pd
 from pyasn1.debug import Scope
 import streamlit as st
@@ -104,7 +105,7 @@ elif thaotac=='Xuất kho':
         lsx_df=pull_lsx(gc)
         lsx_id=lsx_df['LỆNH SX'].tolist()
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-    lsx_df[lsx_df['LỆNH SX']==lsx[0]]
+    sanpham=lsx_df[lsx_df['LỆNH SX']==lsx[0]]
     c3,c4=st.columns(2)
     with c3:
         cd=st.multiselect('Xuất cho công đoạn:',['Lót 1','Lót 2','Bóng thành phẩm'])
@@ -119,21 +120,29 @@ elif thaotac=='Xuất kho':
 
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
+    def imcrement_counter(increment_value=0):
+        st.session_state.count -= increment_value
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
     with c1:
         st.button('Thêm dòng', on_click=increment_counter,
             kwargs=dict(increment_value=1))
-        h=st.session_state.count
-    
+    with c2:
+        st.button('Giảm dòng', on_click=imcrement_counter,
+            kwargs=dict(increment_value=1))
+    h=st.session_state.count   
     with st.form(key='abc'):
         st.subheader('Bổ sung thêm các vật tư sau')
-
-
+        df=pd.read_excel('t.xlsx')
+        vattu=df['Tên sản phẩm'].unique().tolist()
         r1,r2,=st.columns(2)
         with r1:
             b1=[]
             for nr in range(h):
-                b1.append(r1.text_input('Tên vật tư',key=f'dfuestidn {nr}'))
+                r=r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}')
+                if not r:
+                    st.write('')
+                else:
+                 b1.append(r[0])
 
         with r2:
             b2=[]
@@ -145,12 +154,14 @@ elif thaotac=='Xuất kho':
 
     if st.button('Hoàn tất xuất kho'):
         data=data1.append(data2)
+        data['Tên Sản phẩm']=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
         data['Nhà máy']=nm[0]
         data['Lệnh SX']=lsx[0]
         data['Công đoạn']=cd[0]
         data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
         data=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
+        data=data.astype(str)
         data
         push(data,gc,'Xuất kho')
 
