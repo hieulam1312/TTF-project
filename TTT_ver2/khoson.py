@@ -132,7 +132,7 @@ elif thaotac=='Xuất kho':
     h=st.session_state.count   
     with st.form(key='abc'):
         st.subheader('Bổ sung thêm các vật tư sau')
-        df=pd.read_excel('TTT_ver2/t.xlsx')
+        df=pd.read_excel('t.xlsx')
         vattu=df['Tên sản phẩm'].unique().tolist()
         r1,r2,=st.columns(2)
         with r1:
@@ -164,6 +164,7 @@ elif thaotac=='Xuất kho':
         data=data.astype(str)
         data
         push(data,gc,'Xuất kho')
+
         fig, ax = plt.subplots(figsize = (4,.2))
         ax.set_title('TTF - Phiếu xuất kho',loc='left')
         # ax.axis('tight')
