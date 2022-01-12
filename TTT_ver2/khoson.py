@@ -132,7 +132,7 @@ elif thaotac=='Xuất kho':
     h=st.session_state.count   
     with st.form(key='abc'):
         st.subheader('Bổ sung thêm các vật tư sau')
-        df=pd.read_excel('TTT_ver2/t.xlsx')
+        df=pd.read_excel('t.xlsx')
         vattu=df['Tên sản phẩm'].unique().tolist()
         r1,r2,=st.columns(2)
         with r1:
@@ -160,21 +160,21 @@ elif thaotac=='Xuất kho':
         data['Công đoạn']=cd[0]
         data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
-        data=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
-        data=data.astype(str)
-        data
-        push(data,gc,'Xuất kho')
-
+        data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
+        data1=data1.astype(str)
+        data1
+        push(data1,gc,'Xuất kho')
+        data2=data1.drop(columns={'Nhà máy','Lệnh SX','Ngày xuất kho','Công đoạn'})
         fig, ax = plt.subplots(figsize = (4,.2))
-        ax.set_title('TTF - Phiếu xuất kho',loc='left')
-        # ax.axis('tight')
+        ax.set_title('TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date()),size=6,loc='left')
+        plt.suptitle('LSX: {} - Nhà máy: {} - Công đoạn: {}'.format(lsx[0],nm[0],cd[0]),size=4,ha='right')
+        ax.axis('tight')
         ax.axis('off')
 
-        the_table = ax.table(cellText = data.values, colLabels = data.columns,loc='bottom')
+        the_table = ax.table(cellText = data2.values, colLabels = data2.columns,loc='bottom')
         the_table.auto_set_font_size(False)
         the_table.set_fontsize(7)
         the_table.scale(2, 2)
-
         pp = PdfPages("phieu_xuat_kho.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
         pp.close()
