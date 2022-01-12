@@ -189,7 +189,7 @@ if aa:
                 push_lsx(lsx_info, ws1, ws2)
 
         if select=="CẬP NHẬT LẠI LSX CŨ":
-            list_sdh=st.multiselect("Nhập số đơn hàng",lsx_cu["SỐ ĐƠN HÀNG"].unique().tolist())
+            list_sdh=st.multiselect("Nhập số đơn hàng",lsx_cu["LỆNH SX"].unique().tolist())
             with st.form(key='columns_in_form'):
 
                 if not list_sdh:
@@ -198,7 +198,7 @@ if aa:
 
                     c0,c1,c2,c3,c4,c5,c6=st.columns((1.8,2,3,1,.9,.9,3))
 
-                    df=lsx_cu[lsx_cu["SỐ ĐƠN HÀNG"].isin(list_sdh)].reset_index(drop=True)
+                    df=lsx_cu[lsx_cu["LỆNH SX"].isin(list_sdh)].reset_index(drop=True)
 
                     list_r=df["LỆNH SX"].tolist()
                     kh_r=df["TÊN KHÁCH HÀNG"].tolist()  
