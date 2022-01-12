@@ -165,7 +165,7 @@ elif thaotac=='Xuất kho':
         data
         push(data,gc,'Xuất kho')
 
-        fig, ax = plt.subplots(figsize = (4,.2))
+        fig, ax = plt.subplots(figsize = (6,.2))
         ax.set_title('TTF - Phiếu xuất kho',loc='left')
         # ax.axis('tight')
         ax.axis('off')
