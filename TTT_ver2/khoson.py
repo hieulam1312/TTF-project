@@ -167,7 +167,7 @@ elif thaotac=='Xuất kho':
         data2=data1.drop(columns={'Nhà máy','Lệnh SX','Ngày xuất kho','Công đoạn'})
         fig, ax = plt.subplots(figsize = (4,.2))
         ax.set_title('TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date()),size=12,loc='left')
-        plt.suptitle('LSX: {} - Nhà máy: {} - Công đoạn: {}'.format(lsx[0],nm[0],cd[0]),size=10,ha='right')
+        plt.suptitle('LSX: {} - Nhà máy: {} - Công đoạn: {}'.format(lsx[0],nm[0],cd[0]),size=8,ha='right')
         ax.axis('tight')
         ax.axis('off')
 
