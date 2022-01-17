@@ -281,7 +281,6 @@ if aa:
 
         table[2]="QLCL"
         table[3]="THU MUA"
-        table[4]="TỔ KỸ THUẬT SƠN"
         table=table.rename(columns={'NMSX':5})
         tab=table.melt(id_vars=['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ'],value_name='Bộ phận')
         tab=tab.drop(columns={'variable'})
