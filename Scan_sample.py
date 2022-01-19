@@ -55,15 +55,15 @@ if st.button('Xuất danh sách'):
     updated = existing.append(table_df)
 #     gd.set_with_dataframe(ws, updated)
     st.success('Done')
-    order_key=updated['TÊN MẪU'].unique().tolist()
+    order_key=updated['Tên Mẫu'].unique().tolist()
     _list={}
     early_list={}
     for i in order_key:
         _list[i]={}
-        _list[i]['Ngày']=updated.loc[updated['TÊN MẪU']==i]['NGÀY'].to_list()
-        _list[i]['Thao tác']=updated.loc[updated['TÊN MẪU']==i]['THAO TÁC'].to_list()
-        _list[i]['Bộ phận']=updated.loc[updated['TÊN MẪU']==i]['BỘ PHẬN'].to_list()
-        _list[i]['KH']=updated.loc[updated['TÊN MẪU']==i]['TÊN KHÁCH HÀNG'].to_list()
+        _list[i]['Ngày']=updated.loc[updated['Tên Mẫu']==i]['NGÀY'].to_list()
+        _list[i]['Thao tác']=updated.loc[updated['Tên Mẫu']==i]['THAO TÁC'].to_list()
+        _list[i]['Bộ phận']=updated.loc[updated['Tên Mẫu']==i]['BỘ PHẬN'].to_list()
+        _list[i]['KH']=updated.loc[updated['Tên Mẫu']==i]['TÊN KHÁCH HÀNG'].to_list()
 
     dataa=pd.DataFrame.from_dict(_list, orient='index').reset_index()
 
