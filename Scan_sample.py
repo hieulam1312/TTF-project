@@ -53,8 +53,8 @@ if st.button('Xuất danh sách'):
     ws = gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('Sheet1')
     existing = gd.get_as_dataframe(ws)
     updated = existing.append(table_df)
-#     gd.set_with_dataframe(ws, updated)
-    st.success('Done')
+    gd.set_with_dataframe(ws, updated)
+#     st.success('Done')
     order_key=updated['Tên Mẫu'].unique().tolist()
     _list={}
     early_list={}
@@ -71,10 +71,10 @@ if st.button('Xuất danh sách'):
     new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
     new_list_df=new_list_df.astype(str)
 
-#     ws2 = gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('VỊ TRÍ HIỆN TẠI')
-    new_list_df
-#     gd.set_with_dataframe(ws2, new_list_df)
-#     st.success('Done')
+    ws2 = gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('VỊ TRÍ HIỆN TẠI')
+#     new_list_df
+    gd.set_with_dataframe(ws2, new_list_df)
+    st.success('Done')
 
     
 # if st.button('Gửi báo cáo'):
