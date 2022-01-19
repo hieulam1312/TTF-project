@@ -72,7 +72,7 @@ if st.button('Xuất danh sách'):
 
 
     ws2 = gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('VỊ TRÍ HIỆN TẠI')
-    new_list_df
+#     new_list_df
     gd.set_with_dataframe(ws2, new_list_df)
     st.success('Done')
 
