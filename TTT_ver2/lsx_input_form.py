@@ -25,6 +25,7 @@ def pull_lsx(gc):
     sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('1.Master DH')
     sheet=sh.get_all_values()
     ncc=pd.DataFrame(sheet)
+    ncc=ncc.astype(str)
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
     ncc["SỐ ĐƠN HÀNG"]=ncc["SỐ ĐH"]
@@ -32,6 +33,7 @@ def pull_lsx(gc):
     sh2=gc.open('LSX - lưu trữ').worksheet('LSX ĐÃ IN')
     sheet2=sh2.get_all_values()
     lsx_cu=pd.DataFrame(sheet2)
+    lsx_cu=lsx_cu.astype(str)
     lsx_cu.columns=lsx_cu.iloc[0]
     list=lsx_cu['LỆNH SX'].unique().tolist()
     # list
