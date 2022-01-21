@@ -238,7 +238,7 @@ if aa:
                     with c2:
                         sap=[]
                         for nr in range(rows):
-                            sap.append(c2.text_input('',[sp[nr][0]], key=f'dfuestissdn {nr}'))
+                            sap.append(c2.text_input('',sp[nr], key=f'dfuestissdn {nr}'))
                 st.form_submit_button('Submit')
                     
             dict={"LỆNH SX":lsx,"LOẠI GỖ":ldh,"SỐ LƯỢNG":gc1,'MÀU SƠN':uc}
