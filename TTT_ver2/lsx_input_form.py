@@ -243,7 +243,7 @@ if aa:
                     
             dict={"LỆNH SX":lsx,"LOẠI GỖ":ldh,"SỐ LƯỢNG":gc1,'MÀU SƠN':uc}
             dff=pd.DataFrame.from_dict(dict)
-            df=df.drop(columns=["LOẠI GỖ",'SỐ LƯỢNG','MÀU SƠN','Unnamed: 0'])
+            df=df.drop(columns=["TÊN SẢN PHẨM TTF","LOẠI GỖ",'SỐ LƯỢNG','MÀU SƠN','Unnamed: 0'])
             lsx_info=dff.merge(df,how='left',on="LỆNH SX")
             a=lsx_info.drop(columns='Versionn') #[["LỆNH SX","TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"]]
 
