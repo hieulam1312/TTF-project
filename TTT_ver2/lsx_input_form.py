@@ -82,7 +82,7 @@ def push_lsx_ver2(df,ws1,ws2):
 #     existing2=existing2.astype(str)
 
     col = 'LỆNH SX'
-    cols_to_replace = ['SỐ LƯỢNG', 'LOẠI GỖ','MÀU SƠN','Versionn']
+    cols_to_replace = ["TÊN SẢN PHẨM TTF",'SỐ LƯỢNG', 'LOẠI GỖ','MÀU SƠN','Versionn']
     # updated2=existing2.loc[existing2[col].isin(df[col]), cols_to_replace] = df.loc[df[col].isin(existing2[col]),cols_to_replace].values
     existing2.loc[existing2[col].isin(df[col])==True, cols_to_replace]=df[cols_to_replace].values
     df      # 
