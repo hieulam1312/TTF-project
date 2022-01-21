@@ -241,7 +241,7 @@ if aa:
                             sap.append(c2.text_input('',sp[nr], key=f'dfuestissdn {nr}'))
                 st.form_submit_button('Submit')
                     
-            dict={"LỆNH SX":lsx,"LOẠI GỖ":ldh,"SỐ LƯỢNG":gc1,'MÀU SƠN':uc}
+            dict={"LỆNH SX":lsx,"LOẠI GỖ":ldh,"SỐ LƯỢNG":gc1,'MÀU SƠN':uc,["TÊN SẢN PHẨM TTF":sap}
             dff=pd.DataFrame.from_dict(dict)
             df=df.drop(columns=["TÊN SẢN PHẨM TTF","LOẠI GỖ",'SỐ LƯỢNG','MÀU SƠN','Unnamed: 0'])
             lsx_info=dff.merge(df,how='left',on="LỆNH SX")
