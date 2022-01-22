@@ -1,5 +1,4 @@
 import datetime as dt
-from math import prod
 from os import close
 from re import T
 from PIL.Image import new
