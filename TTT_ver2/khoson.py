@@ -135,7 +135,7 @@ elif thaotac=='Xuất kho':
             for nr in range (h):
                 b2.append(r2.text_input('Số lượng',key=f'dfuesidn {nr}'))
         st.form_submit_button('Hoàn tất')
-        dic2={'Tên vật tư':b1,'Số lượng':b2}
+        dic2={'Tên vật tư':b1[0],'Số lượng':b2}
         data2=pd.DataFrame.from_dict(dic2)
 
     if st.button('Hoàn tất xuất kho'):
