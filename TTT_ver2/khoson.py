@@ -128,7 +128,7 @@ elif thaotac=='Xuất kho':
         with r1:
             b1=[]
             for nr in range(h):
-                b1.append(r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}'))
+                b1.append(r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}')[0])
 
         with r2:
             b2=[]
