@@ -111,7 +111,7 @@ elif thaotac=='Xuất kho':
     with c4:
         sl_sp=st.text_input('Cho số lượng ghế:',)
     def imcrement_counter(increment_value=0):
-    st.session_state.count -= increment_value
+        st.session_state.count -= increment_value
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
