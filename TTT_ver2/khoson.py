@@ -145,7 +145,7 @@ elif thaotac=='Xuất kho':
         data['Công đoạn']=cd[0]
         data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
-        data=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
+        data=data.copy()
         data
         push(data,gc,'Xuất kho')
 
