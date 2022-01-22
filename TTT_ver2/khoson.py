@@ -132,7 +132,7 @@ elif thaotac=='Xuất kho':
         with r1:
             b1=[]
             for nr in range(h):
-                r=r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}')
+                r=r1.selectbox('Tên vật tư',vattu,key=f'dfuestidn {nr}')
                 b1.append(r)
         with r2:
             b2=[]
