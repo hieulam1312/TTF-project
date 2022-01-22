@@ -116,7 +116,7 @@ elif thaotac=='Xuất kho':
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
     with c1:
         st.button('Thêm dòng', on_click=increment_counter,
-            kwargs=dict(increment_value=5))
+            kwargs=dict(increment_value=1))
         h=st.session_state.count
     
     with st.form(key='abc'):
