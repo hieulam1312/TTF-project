@@ -1,4 +1,5 @@
 import datetime as dt
+from math import prod
 from os import close
 from re import T
 from PIL.Image import new
@@ -77,13 +78,13 @@ sheet1=gc.open("Kho sơn - DS đặt hàng").worksheet('Sheet1')
 data=sheet1.get_all_records()
 df=pd.DataFrame(data)
 order_list=df['Đơn hàng'].unique().tolist()
-order_item=st.multiselect('Chọn đơn hàng',order_list)
 thaotac=st.selectbox('Chọn loại thao tác',['Nhập kho','Xuất kho'])
 
 
 if not thaotac:
     st.info('Chọn loại thao tác để tiếp tục')
 elif thaotac=='Nhập kho': 
+    order_item=st.multiselect('Chọn đơn hàng',order_list)
 
     production= df[df['Đơn hàng'].isin(order_item)]
 
@@ -92,7 +93,7 @@ elif thaotac=='Nhập kho':
     dvt=production['ĐVT'].tolist()
 
 
-    data=form(pr,sl,order_item)
+    data=form(pr,sl,order_item,production)
     data
     if st.button('Xuất danh sách'):
         push(data,gc,'Nhập kho')
@@ -112,13 +113,6 @@ elif thaotac=='Xuất kho':
         cd=st.multiselect('Xuất cho công đoạn:',['Lót 1','Lót 2','Bóng thành phẩm'])
     with c4:
         sl_sp=st.text_input('Cho số lượng ghế:',)
-    data=pull(gc)
-    st.subheader('Xuất các vật tư sau:')
-    xuatkho=data[data['Đơn hàng']==order_item[0]]
-    vattuxuatkho=xuatkho['Tên vật tư'].tolist()
-    xlxuat=xuatkho['Số lượng'].tolist()
-    data1=form(vattuxuatkho,xlxuat,order_item,xuatkho)
-
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     def imcrement_counter(increment_value=0):
@@ -126,25 +120,20 @@ elif thaotac=='Xuất kho':
     c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
     with c1:
         st.button('Thêm dòng', on_click=increment_counter,
-            kwargs=dict(increment_value=1))
+            kwargs=dict(increment_value=2))
     with c2:
         st.button('Giảm dòng', on_click=imcrement_counter,
             kwargs=dict(increment_value=1))
     h=st.session_state.count   
     with st.form(key='abc'):
         st.subheader('Bổ sung thêm các vật tư sau')
-        df=pd.read_excel('TTT_ver2/t.xlsx')
+        df=pd.read_excel('t.xlsx')
         vattu=df['Tên sản phẩm'].unique().tolist()
         r1,r2,=st.columns(2)
         with r1:
             b1=[]
             for nr in range(h):
-                r=r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}')
-                if not r:
-                    st.write('')
-                else:
-                 b1.append(r[0])
-
+                b1.append(r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}'))
         with r2:
             b2=[]
             for nr in range (h):
@@ -154,27 +143,29 @@ elif thaotac=='Xuất kho':
         data2=pd.DataFrame.from_dict(dic2)
 
     if st.button('Hoàn tất xuất kho'):
-        data=data1.append(data2)
+        data=data2.copy()
         data['Tên Sản phẩm']=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
         data['Nhà máy']=nm[0]
         data['Lệnh SX']=lsx[0]
         data['Công đoạn']=cd[0]
         data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
-        data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
-        data1=data1.astype(str)
+        data=data.astype(str)
+        data
+        # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
+        data1=data.copy()
         data1
         push(data1,gc,'Xuất kho')
         data2=data1.drop(columns={'Nhà máy','Lệnh SX','Ngày xuất kho','Công đoạn'})
         fig, ax = plt.subplots(figsize = (4,.2))
-        ax.set_title('TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date()),size=10,loc='left')
-        plt.suptitle('LSX: {} - Nhà máy: {} - Công đoạn: {}'.format(lsx[0],nm[0],cd[0]),size=6,ha='right')
+        ax.set_title('TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date()),size=6,loc='left')
+        plt.suptitle('LSX: {} - Nhà máy: {} - Công đoạn: {}'.format(lsx[0],nm[0],cd[0]),size=4,ha='right')
         ax.axis('tight')
         ax.axis('off')
 
         the_table = ax.table(cellText = data2.values, colLabels = data2.columns,loc='bottom')
-#         the_table.auto_set_font_size(False)
-#         the_table.set_fontsize(7)
+        the_table.auto_set_font_size(False)
+        the_table.set_fontsize(7)
         the_table.scale(2, 2)
         pp = PdfPages("phieu_xuat_kho.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
