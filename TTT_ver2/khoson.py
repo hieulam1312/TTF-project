@@ -123,11 +123,12 @@ elif thaotac=='Xuất kho':
         st.subheader('Danh sách vật tư')
         df=pd.read_excel('TTT_ver2/t.xlsx')
         
+        vattu=df['Tên sản phẩm'].unique().tolist()
         r1,r2,=st.columns(2)
         with r1:
             b1=[]
             for nr in range(h):
-                b1.append(r1.text_input('Tên vật tư',key=f'dfuestidn {nr}'))
+                b1.append(r1.multiselect('Tên vật tư',vattu,key=f'dfuestidn {nr}'))
 
         with r2:
             b2=[]
