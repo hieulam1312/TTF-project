@@ -154,7 +154,6 @@ elif thaotac=='Xuất kho':
         data
         # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
         data1=data.copy()
-        data1
         push(data1,gc,'Xuất kho')
         data2=data1.drop(columns={'Nhà máy','Lệnh SX','Ngày xuất kho','Công đoạn'})
         fig, ax = plt.subplots(figsize = (4,.2))
