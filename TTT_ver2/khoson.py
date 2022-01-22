@@ -122,7 +122,7 @@ elif thaotac=='Xuất kho':
     with st.form(key='abc'):
         st.subheader('Danh sách vật tư')
         df=pd.read_excel('TTT_ver2/t.xlsx')
-        df
+        
         r1,r2,=st.columns(2)
         with r1:
             b1=[]
