@@ -163,7 +163,7 @@ elif thaotac=='Xuất kho':
         ax.axis('tight')
         ax.axis('off')
 
-        the_table = ax.table(cellText = data2.values, colLabels = data2.columns,loc='bottom')
+        the_table = ax.table(cellText = data2.values, colLabels = data2.columns,loc='center')
 #         the_table.auto_set_font_size(False)
 #         the_table.set_fontsize(7)
         the_table.scale(2, 2)
