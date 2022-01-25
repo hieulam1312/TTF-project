@@ -148,7 +148,7 @@ elif thaotac=='Xuất kho':
         data['Tên Sản phẩm']=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
         data['Nhà máy']=nm[0]
         data['Lệnh SX']=lsx[0]
-        data['Công đoạn']=cd[0]
+#         data['Công đoạn']=cd[0]
         data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
         data=data.astype(str)
@@ -159,7 +159,7 @@ elif thaotac=='Xuất kho':
         data2=data1.drop(columns={'Nhà máy','Lệnh SX','Ngày xuất kho','Công đoạn'})
         fig, ax = plt.subplots(figsize = (4,.2))
         ax.set_title('TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date()),size=10,loc='left')
-        plt.suptitle('LSX: {} - Nhà máy: {} - Công đoạn: {}'.format(lsx[0],nm[0],cd[0]),size=6,ha='right')
+        plt.suptitle('LSX: {} - Nhà máy: {}'.format(lsx[0],nm[0]),size=6,ha='right')
         ax.axis('tight')
         ax.axis('off')
 
