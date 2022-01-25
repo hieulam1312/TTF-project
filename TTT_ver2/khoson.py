@@ -123,6 +123,8 @@ elif thaotac=='Xuất kho':
     with c2:
         st.button('Giảm dòng', on_click=imcrement_counter,
             kwargs=dict(increment_value=1))
+    with c3:
+        st.write('Tổng số dòng: {}').format(st.session_state.count )
     h=st.session_state.count   
     with st.form(key='abc'):
         st.subheader('Bổ sung thêm các vật tư sau')
