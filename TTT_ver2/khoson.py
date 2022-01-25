@@ -109,8 +109,8 @@ elif thaotac=='Xuất kho':
 
     c3,c4=st.columns(2)
     with c3:
-        cd=st.multiselect('Xuất cho công đoạn:',['Lót PU','Lót PU trắng','Lót màu PU','Lót NC','Lót màu NC','Sơn màu PU','Bóng màu PU','Bóng màu NC'])
-    with c4:
+#         cd=st.multiselect('Xuất cho công đoạn:',['Lót PU','Lót PU trắng','Lót màu PU','Lót NC','Lót màu NC','Sơn màu PU','Bóng màu PU','Bóng màu NC'])
+#     with c4:
         sl_sp=st.text_input('Cho số lượng ghế:',)
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
