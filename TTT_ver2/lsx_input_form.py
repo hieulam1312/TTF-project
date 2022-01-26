@@ -266,34 +266,43 @@ if aa:
 
     if  password==st.secrets["password"] and username==st.secrets['use']:
         st.write('Goodjob!')
-        form=pd.DataFrame({'Tên tài liệu':['Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX'],'Bộ phận':["PKTH","QLCL","NM1","NM3","NM5","THU MUA","T.KH","TỔ KỸ THUẬT SƠN"],"Số lượng":[1,2,6,6,6,2,1,1]})
+        #,'Bộ phận':["PKTH","QLCL","NM1","NM3","NM5","THU MUA","T.KH","TỔ KỸ THUẬT SƠN"],"Số lượng":[1,2,6,6,6,2,1,1]
+        form=pd.DataFrame({'Tên tài liệu':['Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX','Lệnh sản xuất - LSX']})
         df2=df_df[1]
         data=df2[['LỆNH SX','SỐ ĐƠN HÀNG',"NMSX",'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ']]
         list_dh=data['SỐ ĐƠN HÀNG'].unique().tolist()
-        colum1,colum2,clll3=st.columns((1,1,3))
+        colum1,colum2,clll3=st.columns((1,1,1))
         with colum1:
             list_sdh=st.multiselect("Nhập số đơn hàng",list_dh)
+        with colum2:
+            versionlsx=st.text_input('Version LSX:',)
+        with clll3:
+            cate=st.multiselect('Loại thông tin:',['LSX','TTSP+LSX','TTSP'])
         df=data[data["SỐ ĐƠN HÀNG"].isin(list_sdh)]
         list_r=df["LỆNH SX"].tolist()
         with st.form(key='columns_in_form'):
             a=st.multiselect('Các mã LSX cần photo TTSP:',list_r)      
             st.form_submit_button('Xác nhận')
         table=pd.DataFrame(a,columns=['LỆNH SX'])
+        table['Version LSX']=versionlsx
+        table['Loại thông tin']=cate[0]
         table=table.merge(data,how='left',on='LỆNH SX')
 
-        table[2]="QLCL"
-        table[3]="THU MUA"
         table=table.rename(columns={'NMSX':5})
-        tab=table.melt(id_vars=['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ'],value_name='Bộ phận')
+        tab=table.melt(id_vars=['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ','Version LSX','Loại thông tin'],value_name='Bộ phận')
         tab=tab.drop(columns={'variable'})
-        tabb=tab.merge(form,how='left',on='Bộ phận')
+        tabb=tab.copy() # .merge(form,how='left',on='Bộ phận')
         tabb['Ngày']=datetime.date.today()
-        tabb=tabb[['Ngày','LỆNH SX','Bộ phận','Số lượng']]
+        tabb=tabb[['Ngày','LỆNH SX','Bộ phận','Version LSX','Loại thông tin']]
         tabb
         if st.button('Xuất danh sách!'):
             ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
             ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("TD CHUYỂN GIAO TTSP TKH")
             push_lsx(tabb,ws1,ws2)
+
+
+
+
     if  password==st.secrets["pkth_pw"] and username==st.secrets['pkth_user']:    
         st.write('Goodjob!')
         with st.form(key='columns_in_form'):
