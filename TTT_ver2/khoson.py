@@ -158,17 +158,79 @@ elif thaotac=='Xuất kho':
         # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
         data1=data.copy()
         push(data1,gc,'Xuất kho')
-        data2=data1.drop(columns={'Nhà máy','Lệnh SX','Ngày xuất kho'})
-        fig, ax = plt.subplots(figsize = (4,.2))
-        ax.set_title('TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date()),size=10,loc='left')
-        plt.suptitle('LSX: {} - Nhà máy: {}'.format(lsx[0],nm[0]),size=6,ha='right')
-        ax.axis('tight')
-        ax.axis('off')
+        data2=data1[['Tên vật tư','Số lượng']]
 
-        the_table = ax.table(cellText = data2.values, colLabels = data2.columns,loc='bottom')
-#         the_table.auto_set_font_size(False)
-#         the_table.set_fontsize(7)
-        the_table.scale(2, 2)
+        title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
+        subtitle_text = 'LSX: {} - Nhà máy: {}'.format(lsx[0],nm[0])
+        annotation_text = 'Giám đốc nhà máy                                          Thủ kho sơn'
+        sp='Tên sản phẩm: {} - số lượng ghế: {}'.format(sanpham['TÊN SẢN PHẨM TTF'].tolist()[0],sl_sp)
+ 
+        footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
+        plt.figure(linewidth=1,
+               
+                tight_layout={'pad':1},
+                # figsize=(5,4)
+                )
+
+        # Add a table at the bottom of the axes
+        the_table = plt.table(cellText=data2.values,
+                            rowLoc='right',
+                            colLabels=data2.columns,
+                            loc='center')
+
+        # Scaling is the only influence we have over top and bottom cell padding.
+        # Make the rows taller (i.e., make cell y scale larger).
+        the_table.scale(1, 1.15)
+
+        # Hide axes
+        ax = plt.gca()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+
+        # Hide axes border
+        plt.box(on=None)
+
+        # Add title
+        plt.suptitle(title_text,
+                    weight='bold',
+                    size=14,
+                    )
+
+        # Add subtitle
+        plt.figtext(0.5, 0.9,
+                    subtitle_text,
+                    horizontalalignment='center',
+                    size=9, style='italic',
+                   
+                )
+        plt.figtext(0.1, 0.8,
+                    sp,
+                    horizontalalignment='left',
+                    size=7,
+                   
+                )
+        # Add footer
+        # plt.figtext(0.95, 0.05, footer_text,
+        #             horizontalalignment='right',
+        #             size=6,
+        #             weight='light',
+                    
+        #         )
+
+        # Add annotation
+        plt.figtext(0.5, 0.1,
+                    annotation_text,
+                    horizontalalignment='center',
+                    size=9, weight='light',
+                    
+                )
+
+        plt.draw()
+
+        fig = plt.gcf()
+
+
+        # the_table.scale(2,1)
         pp = PdfPages("phieu_xuat_kho.pdf")
         pp.savefig(fig, bbox_inches = 'tight')
         pp.close()
