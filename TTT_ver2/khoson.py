@@ -218,7 +218,7 @@ elif thaotac=='Xuất kho':
         #         )
 
         # Add annotation
-        plt.figtext(0.5, 0.1,
+        plt.figtext(0.5, 0.15,
                     annotation_text,
                     horizontalalignment='center',
                     size=9, weight='light',
