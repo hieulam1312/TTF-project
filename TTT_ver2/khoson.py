@@ -125,7 +125,7 @@ elif thaotac=='Xuất kho':
             kwargs=dict(increment_value=1))
     with c3:
         st.write('Tổng số dòng: {}'.format(st.session_state.count ))
-    h=st.session_state.count   
+    h=st.session_state.count+4   
     with st.form(key='abc'):
         st.subheader('Bổ sung thêm các vật tư sau')
         df=pd.read_excel('TTT_ver2/t.xlsx')
