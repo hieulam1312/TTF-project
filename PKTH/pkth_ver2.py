@@ -113,7 +113,7 @@ def dataset(gc1):
 
 
     BB=lsx[lsx['LOẠI ĐH']=='M']
-    BB['LOẠI CV']='Bao bì mới'
+    BB['LOẠI CV']='Bao bì'
     BB['ID_CV']=BB['ID_CV']+'.BB'
 
     ### combine data source
