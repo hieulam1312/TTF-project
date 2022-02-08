@@ -10,7 +10,6 @@ import pandas as pd #-> Để update data dạng bản
 import json 
 from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
 import os
-from sqlalchemy import false
 import streamlit as st
 from google.oauth2 import service_account
 ## Collect QR scan database from Googlesheet
