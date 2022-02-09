@@ -244,4 +244,4 @@ elif thaotac=='Xuất kho':
         
     st.download_button(label='📥 Tải file xuống',
                                 data=data ,
-                                file_name= "phieu_xuat_kho")
+                                file_name= "phieu_xuat_kho.pdf")
