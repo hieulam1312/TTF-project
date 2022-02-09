@@ -123,6 +123,7 @@ new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
 # st.write('helo Linh')
 user=st.sidebar.text_input('User name')
 pw=st.sidebar.text_input('Password',type='password')
+check=st.checkbox()
 def to_excel(df1,df2):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -136,10 +137,10 @@ def to_excel(df1,df2):
     writer.save()
     processed_data = output.getvalue()
     return processed_data
-if not user or not pw:
+if not check:
     st.info('Nhập tên đăng nhập và mật khẩu')
-elif user==st.secrets['user'] and pw==st.secrets['password']:
 
+elif user==st.secrets['user'] and pw==st.secrets['password']:
     st.header('Cập nhật tiến độ mẫu năm 2022')
     order_df
     df_xlsx = to_excel(new_list_df,dataa)
