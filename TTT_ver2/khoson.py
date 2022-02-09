@@ -239,7 +239,6 @@ elif thaotac=='Xuất kho':
             data = f.read()
             bin_str = base64.b64encode(data).decode()
             f.close()
-    st.markdown(href, unsafe_allow_html=True)        
     st.download_button(label='📥 Tải file xuống',
                                 data=data ,
                                 file_name= "phieu_xuat_kho.pdf")
