@@ -10,11 +10,14 @@ import pandas as pd #-> Để update data dạng bản
 import json 
 from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
 import os
-import pyxlsb
 import streamlit as st
 from google.oauth2 import service_account
 ## Collect QR scan database from Googlesheet
 
+
+from io import BytesIO
+from pyxlsb import open_workbook as open_xlsb
+import streamlit as st
 
 credentials=service_account.Credentials.from_service_account_info(
     st.secrets['gcp_service_account'],
@@ -117,16 +120,9 @@ td_tm=td_.loc[td_['LOẠI THU MUA'].notnull()]
 new_list={k:{sk:sv[-1] for sk,sv in s.items() if len(sv)>0} for k,s in _list.items() }
 new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
 
-st.write('helo Linh')
-new_list_df
-order_df
-td_2022_df
-dataa
-
-from io import BytesIO
-from pyxlsb import open_workbook as open_xlsb
-import streamlit as st
-
+# st.write('helo Linh')
+user=st.sidebar.text_input('User name')
+pw=st.sidebar.text_input('Password',type='password')
 def to_excel(df1,df2):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -140,7 +136,13 @@ def to_excel(df1,df2):
     writer.save()
     processed_data = output.getvalue()
     return processed_data
-df_xlsx = to_excel(new_list_df,dataa)
-st.download_button(label='📥 Download Current Result',
+if not user or not pw:
+    st.info('Nhập tên đăng nhập và mật khẩu')
+elif user==st.secrets['user'] and pw==st.secrets['password']:
+
+    st.header('Cập nhật tiến độ mẫu năm 2022')
+    order_df
+    df_xlsx = to_excel(new_list_df,dataa)
+    st.download_button(label='📥 Tải file xuống',
                                 data=df_xlsx ,
                                 file_name= 'Mau2022.xlsx')
