@@ -242,3 +242,6 @@ elif thaotac=='Xuất kho':
             f.close()
     st.markdown(href, unsafe_allow_html=True)
         
+    st.download_button(label='📥 Tải file xuống',
+                                data=pp ,
+                                file_name= "phieu_xuat_kho.pdf")
