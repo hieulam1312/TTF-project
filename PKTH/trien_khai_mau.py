@@ -123,7 +123,7 @@ new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
 # st.write('helo Linh')
 user=st.sidebar.text_input('User name')
 pw=st.sidebar.text_input('Password',type='password')
-check=st.checkbox("Login")
+check=st.sidebar.checkbox("Login")
 def to_excel(df1,df2):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
