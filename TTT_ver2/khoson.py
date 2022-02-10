@@ -102,18 +102,26 @@ elif thaotac=='Xuất kho':
     lsx_df=pull_lsx(gc)
     sdh=lsx_df['SỐ ĐH'].unique().tolist()
     with c1:
-            nm=st.multiselect('Xuất cho nhà máy:',['NM1','NM3','NM5','Khác'])
-            sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
+        nm=st.multiselect('Xuất cho nhà máy:',['NM1','NM3','NM5','Khác'])
     with c2:
+        sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
+    with st.form(key='abcd'):
+    
+
+
+        
         lsx_id=lsx_df[lsx_df['SỐ ĐH'].isin(sdh_id)]['LỆNH SX'].tolist()
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
         sanpham= lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-    c3,c4=st.columns(2)
-    with c3:
-        if len(lsx)==1:
-           sl_sp=st.text_input('Cho số lượng ghế:',)
-        else:
-            sl_sp="-"
+        c3,c4=st.columns(2)
+        with c3:
+            if len(lsx)==1:
+                sl_sp=st.text_input('Cho số lượng ghế:',)
+                id=lsx[0]
+            else:
+                sl_sp="-"
+                id=sdh_id[0]
+        st.form_submit_button('Hoàn tất')
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     def imcrement_counter(increment_value=0):
@@ -149,10 +157,10 @@ elif thaotac=='Xuất kho':
 
     if st.button('Hoàn tất xuất kho'):
         data=data2.copy()
-        data['Tên Sản phẩm']=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
+        data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
         data['Nhà máy']=nm[0]
-        data['Lệnh SX']=lsx[0]
-#         data['Công đoạn']=cd[0]
+        data['Lệnh SX']=str(lsx)
+        data['SỐ ĐH']=sdh_id[0]
         data['SL sản phẩm']=sl_sp
         data['Ngày xuất kho']=pd.to_datetime('today').date()
         data=data.astype(str)
@@ -163,9 +171,9 @@ elif thaotac=='Xuất kho':
         data2=data1[['Tên vật tư','Số lượng']]
 
         title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
-        subtitle_text = 'LSX: {} - Nhà máy: {}'.format(lsx[0],nm[0])
+        subtitle_text = 'LSX: {} - Nhà máy: {}'.format(id,nm[0])
         annotation_text = 'Giám đốc nhà máy                                          Thủ kho sơn'
-        sp='Tên sản phẩm: {} - số lượng ghế: {}'.format(sanpham['TÊN SẢN PHẨM TTF'].tolist()[0],sl_sp)
+        sp='Tên SP: {} \n - SL ghế: {}'.format(sanpham['TÊN SẢN PHẨM TTF'].tolist(),sl_sp)
  
         footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
         plt.figure(linewidth=1,
