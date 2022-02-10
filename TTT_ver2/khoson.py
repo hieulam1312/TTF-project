@@ -173,7 +173,7 @@ elif thaotac=='Xuất kho':
         title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
         subtitle_text = 'LSX: {} - Nhà máy: {}'.format(id,nm[0])
         annotation_text = 'Giám đốc nhà máy                                          Thủ kho sơn'
-        sp='Tên SP: {} \n - SL ghế: {}'.format(sanpham['TÊN SẢN PHẨM TTF'].tolist(),sl_sp)
+        sp='Tên SP: {} \n - SL ghế: {}'.format(sanpham['TÊN SẢN PHẨM TTF'].tolist()[0],sl_sp)
  
         footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
         plt.figure(linewidth=1,
