@@ -107,13 +107,13 @@ elif thaotac=='Xuất kho':
     with c2:
         lsx_id=lsx_df[lsx_df['SỐ ĐH'].isin(sdh_id)]['LỆNH SX'].tolist()
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-        sanpham= lsx_df[lsx_df['LỆNH SX']==lsx[0]]
-    sanpham
+        sanpham= lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
     c3,c4=st.columns(2)
     with c3:
-#         cd=st.multiselect('Xuất cho công đoạn:',['Lót PU','Lót PU trắng','Lót màu PU','Lót NC','Lót màu NC','Sơn màu PU','Bóng màu PU','Bóng màu NC'])
-#     with c4:
-        sl_sp=st.text_input('Cho số lượng ghế:',)
+        if len(lsx)==1:
+           sl_sp=st.text_input('Cho số lượng ghế:',)
+        else:
+            sl_sp="-"
     def increment_counter(increment_value=0):
         st.session_state.count += increment_value
     def imcrement_counter(increment_value=0):
