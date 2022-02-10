@@ -99,13 +99,15 @@ elif thaotac=='Nhập kho':
     
 elif thaotac=='Xuất kho':
     c1,c2=st.columns(2)
+    lsx_df=pull_lsx(gc)
+    sdh=lsx_df['SỐ ĐH'].unique().tolist()
     with c1:
             nm=st.multiselect('Xuất cho nhà máy:',['NM1','NM3','NM5','Khác'])
+            sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
     with c2:
-        lsx_df=pull_lsx(gc)
-        lsx_id=lsx_df['LỆNH SX'].tolist()
+        lsx_id=lsx_df[lsx_df['SỐ ĐH'].isin(sdh_id)]['LỆNH SX'].tolist()
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-    sanpham=lsx_df[lsx_df['LỆNH SX']==lsx[0]]
+        sanpham= lsx_df[lsx_df['LỆNH SX']==lsx[0]]
     sanpham
     c3,c4=st.columns(2)
     with c3:
