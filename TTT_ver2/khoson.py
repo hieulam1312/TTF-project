@@ -172,7 +172,7 @@ elif thaotac=='Xuất kho':
         
         if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
             tsp=""
-         else:
+        else:
             tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
         title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
         subtitle_text = 'LSX: {} - Nhà máy: {}'.format(id,nm[0])
