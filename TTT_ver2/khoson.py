@@ -169,11 +169,15 @@ elif thaotac=='Xuất kho':
         data1=data.copy()
         push(data1,gc,'Xuất kho')
         data2=data1[['Tên vật tư','Số lượng']]
-
+        
+        if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
+            tsp=""
+         else:
+            tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
         title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
         subtitle_text = 'LSX: {} - Nhà máy: {}'.format(id,nm[0])
         annotation_text = 'Giám đốc nhà máy                                          Thủ kho sơn'
-        sp='Tên SP: {} \n - SL ghế: {}'.format(sanpham['TÊN SẢN PHẨM TTF'].tolist()[0],sl_sp)
+        sp='Tên SP: {} \n - SL ghế: {}'.format(tsp,sl_sp)
  
         footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
         plt.figure(linewidth=1,
