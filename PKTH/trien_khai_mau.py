@@ -1,4 +1,5 @@
 # Import Library
+from tkinter.tix import COLUMN
 from types import new_class
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
@@ -61,7 +62,7 @@ under_12td_df=pd.DataFrame(under_12td)
 sh8=gc1.open('TTF - MẪU 2022 - TRIỂN KHAI').worksheet('Sheet53')
 dataaa=sh8.get_all_records()
 data=pd.DataFrame(dataaa)
-nm_df=td_df.loc[(td_df['NHÀ MÁY']!='X4')|(td_df['NHÀ MÁY']!='NM NỆM')]
+nm_df=td_df.loc[(td_df['NHÀ MÁY']!='X4')&(td_df['NHÀ MÁY']!='NM NỆM')]
 td_new_df=pd.concat([nm_df,td_x4_df])
 td_new_df=td_new_df[['SỐ ĐƠN HÀNG','BƯỚC','IN','OT','NHÀ MÁY','NMVLM','BỘ PHẬN','NGÀY GIẢI QUYẾT','NHÓM MẪU']]
 td_new_df=td_new_df.rename(columns={'IN': 'NGÀY NHẬN','OT':'NGÀY GIAO','NMVLM':'NVLM'})
@@ -83,6 +84,7 @@ xl_df=xl_df.rename(columns={'SỐ ĐH':'SỐ ĐƠN HÀNG'})
 
 under_12ds_df=under_12ds_df.drop(['NV LÀM MẪU'],axis=1)
 order_df=order_df.drop(['BAO BÌ','GHI CHÚ','HÌNH ẢNH'], axis = 1)
+# order_df
 new_order=order_df.merge(xl_df,how='left',on='SỐ ĐƠN HÀNG')
 order_2022_df=pd.concat([new_order,under_12ds_df])
 order_new=order_2022_df .merge(nvlm_df,how='left',on='SỐ ĐƠN HÀNG')
@@ -123,7 +125,117 @@ new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
 # st.write('helo Linh')
 user=st.sidebar.text_input('User name')
 pw=st.sidebar.text_input('Password',type='password')
-check=st.sidebar.checkbox("Login")
+check=st.sidebar.checkbox('Login')
+td_=td_2022_df.replace("",np.nan)
+td_sd=td_.merge(order_df,how='left',on='SỐ ĐƠN HÀNG')
+
+td_sd=td_sd[['SỐ ĐƠN HÀNG','BƯỚC','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM','NV PTM_x','NHÀ MÁY_x','NVLM','TÌNH TRẠNG','BỘ PHẬN','NGÀY NHẬN','NGÀY GIAO','NGÀY GIẢI QUYẾT','NHÓM MẪU']]
+td_sd_=td_sd.rename(columns={'TÊN KHÁCH HÀNG_x':'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM_x':'TÊN SẢN PHẨM','NV PTM_x':'NV PTM','NHÀ MÁY_x':'NHÀ MÁY','NVLM_x':'NVLM','TÌNH TRẠNG_y':'TÌNH TRẠNG','NGÀY GIAO_x':'NGÀY GIAO'})
+td__=td_sd_.loc[td_sd_['NHÓM MẪU'].isnull()==False]
+td__['NGÀY NHẬN']=pd.to_datetime(td__['NGÀY NHẬN'])
+td__['NGÀY GIAO']=pd.to_datetime(td__['NGÀY GIAO'])
+td_2022_df=td__
+td_2021_=td_2022_df.loc[td_2022_df['TÌNH TRẠNG']=='Đang triển khai']
+
+doing_=td_2022_df.copy()
+doing_df=doing_.loc[(doing_['NGÀY NHẬN'].isnull()==False) &
+         (doing_['NGÀY GIAO'].isnull()==True)&(doing_['NGÀY NHẬN'].shift(-1).isnull()==True)]
+doing_df['TÌNH_TRẠNG']='Đang xử lí'
+doing_df.columns=doing_df.columns.str.replace(" ","_")
+
+# Lọc danh sách nhóm mẫu để phân loại theo định nghĩa sau:
+# A: Mẫu làm mới, không có thu mua [1,2,3,7,8,9,10,11]
+# B: Mẫu làm mới, có thu mua [1,2,3,5,6,7,8,9,10,11]
+# C: Mẫu cũ, nhưng làm thêm [1,2,3,7,8,9,10,11]
+# D: Mẫu cũ, lấy khung tồn [1,2,3,10,11]
+
+A_td=td_2021_.loc[(td_2021_['NHÓM MẪU']=='A')]
+
+A_=A_td.loc[(A_td['BƯỚC']!=4.0) & (A_td['BƯỚC']!=5.0) &(A_td['BƯỚC']!=6.0)]
+A_=A_.replace('NaT',np.nan)
+A_.columns=A_.columns.str.replace(" ","_")
+
+A_chưa_nhận=A_.loc[(A_['NGÀY_NHẬN'].isnull()==True) &
+         (A_['NGÀY_GIAO'].shift(1).isnull()==False)]
+A_chưa_nhận['TÌNH_TRẠNG']='Chưa nhận'
+A_chưa_giao= A_.loc[(A_['NGÀY_GIAO'].isnull()==True) &
+         (A_['NGÀY_NHẬN'].shift(-1).isnull()==False)]
+A_chưa_giao['TÌNH_TRẠNG']='Chưa giao'
+B1_td=td_2021_.loc[(td_2021_['NHÓM MẪU']=='B1')]
+
+B1_=B1_td.loc[(B1_td['BƯỚC']!=4.0)&(B1_td['BƯỚC']!=5.0)]
+B1_=B1_.replace('NaT',np.nan)
+B1_.columns=B1_.columns.str.replace(" ","_")
+
+B1_chưa_nhận=B1_.loc[(B1_['NGÀY_NHẬN'].isnull()==True) &
+         (B1_['NGÀY_GIAO'].shift(1).isnull()==False)]
+B1_chưa_nhận['TÌNH_TRẠNG']='Chưa nhận'
+
+B1_chưa_giao= B1_.loc[(B1_['NGÀY_GIAO'].isnull()==True) &
+         (B1_['NGÀY_NHẬN'].shift(-1).isnull()==False)]
+B1_chưa_giao['TÌNH_TRẠNG']='Chưa giao'
+B2_td=td_2021_.loc[(td_2021_['NHÓM MẪU']=='B2')]
+
+B2_=B2_td.loc[(B2_td['BƯỚC']!=4.0)&(B2_td['BƯỚC']!=6.0)]
+B2_=B2_.replace('NaT',np.nan)
+B2_.columns=B2_.columns.str.replace(" ","_")
+
+B2_chưa_nhận=B2_.loc[(B2_['NGÀY_NHẬN'].isnull()==True) &
+         (B2_['NGÀY_GIAO'].shift(1).isnull()==False)]
+B2_chưa_nhận['TÌNH_TRẠNG']='Chưa nhận'
+
+B2_chưa_giao= B2_.loc[(B2_['NGÀY_GIAO'].isnull()==True) &
+         (B2_['NGÀY_NHẬN'].shift(-1).isnull()==False)]
+B2_chưa_giao['TÌNH_TRẠNG']='Chưa giao'
+C_td=td_2021_.loc[(td_2021_['NHÓM MẪU']=='C')]
+
+C_=C_td.loc[(C_td['BƯỚC']!=4.0) & (C_td['BƯỚC']!=5.0) &(C_td['BƯỚC']!=6.0)]
+C_=C_.replace('NaT',np.nan)
+C_.columns=C_.columns.str.replace(" ","_")
+
+C_chưa_nhận=C_.loc[(C_['NGÀY_NHẬN'].isnull()==True) &
+         (C_['NGÀY_GIAO'].shift(1).isnull()==False)]
+C_chưa_nhận['TÌNH_TRẠNG']='Chưa nhận'
+
+C_chưa_giao= C_.loc[(C_['NGÀY_GIAO'].isnull()==True) &
+         (C_['NGÀY_NHẬN'].shift(-1).isnull()==False)]
+C_chưa_giao['TÌNH_TRẠNG']='Chưa giao'
+
+D_td=td_2021_.loc[(td_2021_['NHÓM MẪU']=='C')]
+#1,2,3,10,11
+D_=D_td.loc[(C_td['BƯỚC']!=4.0) & (D_td['BƯỚC']!=5.0) &(D_td['BƯỚC']!=6.0) &(D_td['BƯỚC']!=7.0) &(D_td['BƯỚC']!=8.0) &(D_td['BƯỚC']!=9.0)]
+D_=D_.replace('NaT',np.nan)
+D_.columns=D_.columns.str.replace(" ","_")
+
+D_chưa_nhận=D_.loc[(D_['NGÀY_NHẬN'].isnull()==True) &
+         (D_['NGÀY_GIAO'].shift(1).isnull()==False)]
+D_chưa_nhận['TÌNH_TRẠNG']='Chưa nhận'
+
+D_chưa_giao= D_.loc[(D_['NGÀY_GIAO'].isnull()==True) &
+         (D_['NGÀY_NHẬN'].shift(-1).isnull()==False)]
+D_chưa_giao['TÌNH_TRẠNG']='Chưa giao'
+
+all_error=pd.concat([D_chưa_nhận,D_chưa_giao,C_chưa_nhận,C_chưa_giao,B1_chưa_nhận,B2_chưa_giao,B2_chưa_nhận,B1_chưa_giao,A_chưa_nhận,A_chưa_giao])
+all_error=all_error[all_error['BƯỚC']<12]
+
+
+
+
+
+
+calc=td_new_df[['SỐ ĐƠN HÀNG',"BƯỚC",'BỘ PHẬN','NGÀY NHẬN','NGÀY GIAO']].loc[td_new_df['BƯỚC'].isin([1,3,7,8,10,11])]
+A=calc.melt(id_vars=["SỐ ĐƠN HÀNG","BƯỚC",'BỘ PHẬN'],value_vars=['NGÀY NHẬN','NGÀY GIAO'],var_name='THAO TÁC',value_name='NGÀY')
+b=A[(A['THAO TÁC']=="NGÀY NHẬN")&(A['BƯỚC'].isin([1,7,8,11]))| (A['THAO TÁC']=="NGÀY GIAO")& (A['BƯỚC'].isin([3,10]))].reset_index(drop=True)
+b=b[b['SỐ ĐƠN HÀNG']!=""]
+c=b.pivot(index=["SỐ ĐƠN HÀNG"],columns='BỘ PHẬN',values='NGÀY').reset_index().merge(order_new,how='left',on='SỐ ĐƠN HÀNG')
+
+# c
+
+
+
+
+
+
 def to_excel(df1,df2):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -132,6 +244,7 @@ def to_excel(df1,df2):
     td_2022_df.to_excel(writer, sheet_name='TD',index=False)
     dataa.to_excel(writer, sheet_name='dataa',index=False)
     td_tm.to_excel(writer, sheet_name='td_tm',index=False)
+    c.to_excel(writer,sheet_name='calc',index=False)
     workbook = writer.book
     # worksheet = writer.sheets['Sheet1','Sheet2']
     writer.save()
@@ -144,6 +257,20 @@ elif user==st.secrets['user'] and pw==st.secrets['password']:
     st.header('Cập nhật tiến độ mẫu năm 2022')
     order_df
     df_xlsx = to_excel(new_list_df,dataa)
-    st.download_button(label='📥 Tải file xuống',
+    st.download_button(label='📥 Tải DS họp mẫu',
                                 data=df_xlsx ,
+                                file_name= 'Mau2022.xlsx')
+
+    st.header('Danh sách ĐHM scan thiếu/sai')
+    all_error
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    all_error.to_excel(writer, sheet_name='error',index=False)
+    workbook = writer.book
+    # worksheet = writer.sheets['Sheet1','Sheet2']
+    writer.save()
+    processed_data = output.getvalue()
+
+    st.download_button(label='📥 Tải DS ĐHM scan thiếu sai',
+                                data=processed_data,
                                 file_name= 'Mau2022.xlsx')
