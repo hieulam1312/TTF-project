@@ -1,4 +1,5 @@
 # Import Library
+from tkinter.tix import COLUMN
 from types import new_class
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
@@ -220,9 +221,7 @@ all_error=all_error[all_error['BƯỚC']<12]
 
 
 
-
-
-calc=td_new_df[['SỐ ĐƠN HÀNG',"BƯỚC",'BỘ PHẬN','NGÀY NHẬN','NGÀY GIAO']].loc[td_new_df['BƯỚC'].isin([1,3,7,8,10,11])]
+calc=td_all_df[['SỐ ĐƠN HÀNG',"BƯỚC",'BỘ PHẬN','NGÀY NHẬN','NGÀY GIAO']].loc[(td_all_df['BƯỚC'].isin([1,3,7,8,10,11]) & td_all_df['SỐ ĐƠN HÀNG'].isnull()==False)]
 A=calc.melt(id_vars=["SỐ ĐƠN HÀNG","BƯỚC",'BỘ PHẬN'],value_vars=['NGÀY NHẬN','NGÀY GIAO'],var_name='THAO TÁC',value_name='NGÀY')
 b=A[(A['THAO TÁC']=="NGÀY NHẬN")&(A['BƯỚC'].isin([1,7,8,11]))| (A['THAO TÁC']=="NGÀY GIAO")& (A['BƯỚC'].isin([3,10]))].reset_index(drop=True)
 b=b[b['SỐ ĐƠN HÀNG']!=""]
@@ -273,3 +272,16 @@ elif user==st.secrets['user'] and pw==st.secrets['password']:
     st.download_button(label='📥 Tải DS ĐHM scan thiếu sai',
                                 data=processed_data,
                                 file_name= 'Mau2022.xlsx')
+
+
+
+
+
+
+
+
+
+
+
+
+
