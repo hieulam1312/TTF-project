@@ -1,5 +1,4 @@
 # Import Library
-from tkinter.tix import COLUMN
 from types import new_class
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
