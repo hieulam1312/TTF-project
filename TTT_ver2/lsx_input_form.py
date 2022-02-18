@@ -182,7 +182,7 @@ if aa:
             if st.button('Push'):
 
                 # Pull order_info
-                lsx_info["MÀU SƠN"]=lsx_info["MÀU SƠN"].str.replace('NA','N/A')
+                lsx_info["MÀU SƠN"]=lsx_info["MÀU SƠN"].str.replace('NA','N/A ')
                 lsx_info=lsx_info.astype(str)
 #                 lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"SỐ LƯỢNG",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
                 lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",	"SỐ LƯỢNG",		"LOẠI GỖ",	"MÀU SƠN"	,"NỆM",	"SỐ ĐƠN HÀNG",'MÃ KH',	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"  ,'QUI CÁCH SP (W x D x H) cm',	"ĐVT",	"NGÀY XUẤT",	"GHI CHÚ"]]
