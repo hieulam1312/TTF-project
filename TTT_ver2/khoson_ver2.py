@@ -128,7 +128,7 @@ with c3:
     st.write('Tổng số dòng: {}'.format(h ))
 with st.form(key='abc'):
     st.subheader('Bước sơn có các vật tư sau cho 1kg hỗn hợp')
-    df=pd.read_excel('t.xlsx')
+    df=pd.read_excel('TTT_ver2/t.xlsx')
     vattu=df['Tên sản phẩm'].unique().tolist()
     r1,r2,=st.columns(2)
     with r1:
