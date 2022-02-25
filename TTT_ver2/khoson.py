@@ -6,7 +6,6 @@ from PIL.Image import new
 from numpy.core.fromnumeric import size
 import pandas as pd
 from pyasn1.debug import Scope
-from sqlalchemy import column
 import streamlit as st
 import base64,io,gspread
 from google.oauth2 import service_account
@@ -128,7 +127,7 @@ with c3:
     st.write('Tổng số dòng: {}'.format(h ))
 with st.form(key='abc'):
     st.subheader('Bước sơn có các vật tư sau:')
-    df=pd.read_excel('TTT_ver2/t.xlsx')
+    df=pd.read_excel('t.xlsx')
     vattu=df['Tên sản phẩm'].unique().tolist()
     r1,r2,=st.columns(2)
     with r1:
@@ -147,9 +146,9 @@ data2=pd.DataFrame.from_dict(dic2)
 
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
-    data['Tên Sản phẩm']=sanpham['TÊN SẢN PHẨM TTF']
+    data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
     data['Nhà máy']=nm[0]
-    data['Lệnh SX']=lsx[0]
+    data['Lệnh SX']=str(lsx)
     data['SỐ ĐH']=sdh_id[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh
