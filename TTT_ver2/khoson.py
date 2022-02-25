@@ -1,5 +1,4 @@
 import datetime as dt
-from ipaddress import collapse_addresses
 from os import close
 from re import T
 from PIL.Image import new
@@ -78,157 +77,182 @@ sheet1=gc.open("Kho sơn - DS đặt hàng").worksheet('Sheet1')
 data=sheet1.get_all_records()
 df=pd.DataFrame(data)
 order_list=df['Đơn hàng'].unique().tolist()
-
-    
-
-c1,c2=st.columns(2)
-lsx_df=pull_lsx(gc)
-sdh=lsx_df['SỐ ĐH'].unique().tolist()
-with c1:
-    nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2',"Metro",'Handpick'])
-with c2:
-    kh=st.selectbox("Loại đề xuất",['Kế hoạch','Phát sinh'])
-
-sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
-with st.form(key='abcd'):
-    lsx_id=lsx_df[lsx_df['SỐ ĐH'].isin(sdh_id)]['LỆNH SX'].tolist()
-    l1,l2=st.columns(2)
-    with l1:
-        lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-        sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
-
-    sanpham
-    with l2:
-        sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        sl_sp=st.text_input('Cho số lượng ghế:',)
-        slson=st.text_input('Số kg cần lấy')
+thaotac=st.selectbox('Chọn loại thao tác',['Nhập kho','Xuất kho'])
 
 
-    st.form_submit_button('Hoàn tất')
+if not thaotac:
+    st.info('Chọn loại thao tác để tiếp tục')
+elif thaotac=='Nhập kho': 
+    order_item=st.multiselect('Chọn đơn hàng',order_list)
+
+    production= df[df['Đơn hàng'].isin(order_item)]
+
+    pr=production['Tên vật tư'].tolist()
+    sl=production['Số lượng'].tolist()
+    dvt=production['ĐVT'].tolist()
 
 
-id=lsx[0]
-
-def increment_counter(increment_value=0):
-    st.session_state.count += increment_value
-def imcrement_counter(increment_value=0):
-    st.session_state.count -= increment_value
-c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
-with c1:
-    st.button('Thêm dòng', on_click=increment_counter,
-        kwargs=dict(increment_value=1))
-with c2:
-    st.button('Giảm dòng', on_click=imcrement_counter,
-        kwargs=dict(increment_value=1))
-with c3:
-    h=st.session_state.count+4   
-
-    st.write('Tổng số dòng: {}'.format(h ))
-with st.form(key='abc'):
-    st.subheader('Bước sơn có các vật tư sau:')
-    df=pd.read_excel('t.xlsx')
-    vattu=df['Tên sản phẩm'].unique().tolist()
-    r1,r2,=st.columns(2)
-    with r1:
-        b1=[]
-        for nr in range(h):
-            r=r1.selectbox('Tên vật tư',vattu,key=f'dfuestidn {nr}')
-            b1.append(r)
-    with r2:
-        b2=[]
-        for nr in range (h):
-            b2.append(r2.text_input('Khối lượng',key=f'dfuesidn {nr}'))
-    st.form_submit_button('Hoàn tất')
-    
-dic2={'Tên vật tư':b1,'Số lượng':b2}
-data2=pd.DataFrame.from_dict(dic2)
-
-if st.button('Hoàn tất xuất kho'):
-    data=data2.copy()
-    data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
-    data['Nhà máy']=nm[0]
-    data['Lệnh SX']=str(lsx)
-    data['SỐ ĐH']=sdh_id[0]
-    data['SL sản phẩm']=sl_sp
-    data['Loại đề xuất']=kh
-    data['Bước sơn']=cd[0]
-    data['Khối lượng sơn']=slson
-    data['Ngày xuất kho']=pd.to_datetime('today').date()
-    data=data.astype(str)
+    data=form(pr,sl,order_item,production)
     data
-    # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
-    data1=data.copy()
-    push(data1,gc,'Xuất kho')
-    data2=data1[['Tên vật tư','Số lượng']]
+    if st.button('Xuất danh sách'):
+        push(data,gc,'Nhập kho')
     
-    if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
-        tsp=""
-    else:
-        tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
-    title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
-    subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(id,nm[0])
-    annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(tsp,sl_sp,cd[0],slson)
-    footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
-    plt.figure(linewidth=1,
-            
-            tight_layout={'pad':1},
-            # figsize=(5,4)
-            )
+elif thaotac=='Xuất kho':
+    c1,c2=st.columns(2)
+    lsx_df=pull_lsx(gc)
+    sdh=lsx_df['SỐ ĐH'].unique().tolist()
+    with c1:
+        nm=st.multiselect('Xuất cho nhà máy:',['NM1','NM3','NM5','Khác'])
+    with c2:
+        sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
+    with st.form(key='abcd'):
+    
 
 
-    # Hide axes
-    ax = plt.gca()
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
+        
+        lsx_id=lsx_df[lsx_df['SỐ ĐH'].isin(sdh_id)]['LỆNH SX'].tolist()
+        lsx=st.multiselect('Tên Lệnh SX',lsx_id)
+        sanpham= lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
+        c3,c4=st.columns(2)
+        with c3:
+            if len(lsx)==1:
+                sl_sp=st.text_input('Cho số lượng ghế:',)
+                id=lsx[0]
+            else:
+                sl_sp="-"
+                id=sdh_id[0]
+        st.form_submit_button('Hoàn tất')
+    def increment_counter(increment_value=0):
+        st.session_state.count += increment_value
+    def imcrement_counter(increment_value=0):
+        st.session_state.count -= increment_value
+    c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
+    with c1:
+        st.button('Thêm dòng', on_click=increment_counter,
+            kwargs=dict(increment_value=1))
+    with c2:
+        st.button('Giảm dòng', on_click=imcrement_counter,
+            kwargs=dict(increment_value=1))
+    with c3:
+        st.write('Tổng số dòng: {}'.format(st.session_state.count ))
+    h=st.session_state.count+4   
+    with st.form(key='abc'):
+        st.subheader('Bổ sung thêm các vật tư sau')
+        df=pd.read_excel('TTT_ver2/t.xlsx')
+        vattu=df['Tên sản phẩm'].unique().tolist()
+        r1,r2,=st.columns(2)
+        with r1:
+            b1=[]
+            for nr in range(h):
+                r=r1.selectbox('Tên vật tư',vattu,key=f'dfuestidn {nr}')
+                b1.append(r)
+        with r2:
+            b2=[]
+            for nr in range (h):
+                b2.append(r2.text_input('Số lượng',key=f'dfuesidn {nr}'))
+        st.form_submit_button('Hoàn tất')
+        
+        dic2={'Tên vật tư':b1,'Số lượng':b2}
+        data2=pd.DataFrame.from_dict(dic2)
 
-    # Hide axes border
-    plt.box(on=None)
-
-    # Add title
-    plt.suptitle(title_text,
-                weight='bold',
-                size=14,
+    if st.button('Hoàn tất xuất kho'):
+        data=data2.copy()
+        data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
+        data['Nhà máy']=nm[0]
+        data['Lệnh SX']=str(lsx)
+        data['SỐ ĐH']=sdh_id[0]
+        data['SL sản phẩm']=sl_sp
+        data['Ngày xuất kho']=pd.to_datetime('today').date()
+        data=data.astype(str)
+        data
+        # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
+        data1=data.copy()
+        push(data1,gc,'Xuất kho')
+        data2=data1[['Tên vật tư','Số lượng']]
+        
+        if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
+            tsp=""
+        else:
+            tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
+        title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
+        subtitle_text = 'LSX: {} - Nhà máy: {}'.format(id,nm[0])
+        annotation_text = 'Giám đốc nhà máy                                          Thủ kho sơn'
+        sp='Tên SP: {} \n - SL ghế: {}'.format(tsp,sl_sp)
+ 
+        footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
+        plt.figure(linewidth=1,
+               
+                tight_layout={'pad':1},
+                # figsize=(5,4)
                 )
 
-    # Add subtitle
-    plt.figtext(0.5, 0.9,
-                subtitle_text,
-                horizontalalignment='center',
-                size=12, style='italic',
-                
-            )
-    plt.figtext(0.1, 0.5,
-                sp,
-                horizontalalignment='left',
-                size=10,
-                
+        # Add a table at the bottom of the axes
+        the_table = plt.table(cellText=data2.values,
+                            rowLoc='right',
+                            colLabels=data2.columns,
+                            loc='center')
 
-            )
+        # Scaling is the only influence we have over top and bottom cell padding.
+        # Make the rows taller (i.e., make cell y scale larger).
+        the_table.scale(1, 1.15)
 
-    # Add annotation
-    plt.figtext(0.5, 0.3,
-                annotation_text,
-                horizontalalignment='center',
-                size=9, weight='light',
-                
-            )
+        # Hide axes
+        ax = plt.gca()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
 
-    plt.draw()
+        # Hide axes border
+        plt.box(on=None)
 
-    fig = plt.gcf()
+        # Add title
+        plt.suptitle(title_text,
+                    weight='bold',
+                    size=14,
+                    )
+
+        # Add subtitle
+        plt.figtext(0.5, 0.9,
+                    subtitle_text,
+                    horizontalalignment='center',
+                    size=9, style='italic',
+                   
+                )
+        plt.figtext(0.1, 0.8,
+                    sp,
+                    horizontalalignment='left',
+                    size=7,
+                   
+                )
+        # Add footer
+        # plt.figtext(0.95, 0.05, footer_text,
+        #             horizontalalignment='right',
+        #             size=6,
+        #             weight='light',
+                    
+        #         )
+
+        # Add annotation
+        plt.figtext(0.5, 0.15,
+                    annotation_text,
+                    horizontalalignment='center',
+                    size=9, weight='light',
+                    
+                )
+
+        plt.draw()
+
+        fig = plt.gcf()
 
 
-    # the_table.scale(2,1)
-    pp = PdfPages("phieu_xuat_kho.pdf")
-    pp.savefig(fig, bbox_inches = 'tight')
-    pp.close()
+        # the_table.scale(2,1)
+        pp = PdfPages("phieu_xuat_kho.pdf")
+        pp.savefig(fig, bbox_inches = 'tight')
+        pp.close()
 
-    with open("phieu_xuat_kho.pdf", 'rb') as f:
-        data = f.read()
-        bin_str = base64.b64encode(data).decode()
-        f.close()
+        with open("phieu_xuat_kho.pdf", 'rb') as f:
+            data = f.read()
+            bin_str = base64.b64encode(data).decode()
+            f.close()
     st.download_button(label='📥 Tải file xuống',
-                            data=data ,
-                            file_name= "phieu_xuat_kho.pdf")
+                                data=data ,
+                                file_name= "phieu_xuat_kho.pdf")
