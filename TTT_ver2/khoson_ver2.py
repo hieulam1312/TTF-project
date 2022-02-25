@@ -87,7 +87,7 @@ sdh=lsx_df['SỐ ĐH'].unique().tolist()
 with c1:
     nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2',"Metro",'Handpick'])
 with c2:
-    kh=st.selectbox("Loại đề xuất",['Theo kế hoạch','Phát sinh'])
+    kh=st.selectbox("Loại đề xuất",['Kế hoạch','Phát sinh'])
 
 sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
 with st.form(key='abcd'):
@@ -96,7 +96,7 @@ with st.form(key='abcd'):
     with l1:
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        cd=st.text_input('Loại Bước sơn')
+        cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
 
     sanpham
     with l2:
@@ -126,8 +126,8 @@ with c3:
 
     st.write('Tổng số dòng: {}'.format(h ))
 with st.form(key='abc'):
-    st.subheader('Bước sơn có các vật tư sau cho 1kg hỗn hợp')
-    df=pd.read_excel('TTT_ver2/t.xlsx')
+    st.subheader('Bước sơn có các vật tư sau:')
+    df=pd.read_excel('t.xlsx')
     vattu=df['Tên sản phẩm'].unique().tolist()
     r1,r2,=st.columns(2)
     with r1:
@@ -152,7 +152,7 @@ if st.button('Hoàn tất xuất kho'):
     data['SỐ ĐH']=sdh_id[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh
-    data['Bước sơn']=cd
+    data['Bước sơn']=cd[0]
     data['Khối lượng sơn']=slson
     data['Ngày xuất kho']=pd.to_datetime('today').date()
     data=data.astype(str)
@@ -169,7 +169,7 @@ if st.button('Hoàn tất xuất kho'):
     title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(id,nm[0])
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(tsp,sl_sp,cd,slson)
+    sp='\n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(tsp,sl_sp,cd[0],slson)
     footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
     plt.figure(linewidth=1,
             
