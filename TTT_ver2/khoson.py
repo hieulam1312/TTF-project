@@ -147,9 +147,9 @@ data2=pd.DataFrame.from_dict(dic2)
 
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
-    data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
+    data['Tên Sản phẩm']=sanpham['TÊN SẢN PHẨM TTF']
     data['Nhà máy']=nm[0]
-    data['Lệnh SX']=str(lsx)
+    data['Lệnh SX']=lsx[0]
     data['SỐ ĐH']=sdh_id[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh
