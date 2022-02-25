@@ -85,7 +85,7 @@ c1,c2=st.columns(2)
 lsx_df=pull_lsx(gc)
 sdh=lsx_df['SỐ ĐH'].unique().tolist()
 with c1:
-    nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2',"Metro",'Handpick'])
+    nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
 with c2:
     kh=st.selectbox("Loại đề xuất",['Kế hoạch','Phát sinh'])
 
