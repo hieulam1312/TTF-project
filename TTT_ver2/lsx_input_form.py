@@ -277,7 +277,7 @@ if aa:
         with colum2:
             versionlsx=st.text_input('Version LSX:',)
         with clll3:
-            cate=st.multiselect('Loại thông tin:',['LSX','TTSP+LSX','TTSP'])
+            cate=st.multiselect('Loại thông tin:',['LSX','TTSP+LSX','TTSP','LSX + TTSP + BVA4'])
         df=data[data["SỐ ĐƠN HÀNG"].isin(list_sdh)]
         list_r=df["LỆNH SX"].tolist()
         with st.form(key='columns_in_form'):
