@@ -158,17 +158,16 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
     email.attach(MIMEText(
         '''
         <html>
-            <body>
-                <h1 style="text-align: center;">THẺ KIỆN</h1>
-                <p><img src="cid:0"><p>
-            </body>
+                <h1 style="text-align: center;">THẺ KIỆN  NGÀY {}    <h1>
+                <img src="cid:0">
+                <h3>Tổng số khối:     {}   &nbsp;    &nbsp;  QC kiểm: {}  &nbsp;  &nbsp;   Mã lô: {}                &nbsp;  &nbsp;               &nbsp; &nbsp;            Độ ẩm:{} <h3>
         </html>
-        ''',
+        '''.format(td,total,qc,ml,dm),
         'html', 'utf-8'))
     part1 = MIMEText(html, 'html')
-    part2=MIMEText(html3,'html')
+    # part2=MIMEText(html3,'html')
     # part3=MIMEText(html4,'html')
-    email.attach(part2)
+    # email.attach(part2)
     # email.attach(part3)
     email.attach(part1)
     try:
