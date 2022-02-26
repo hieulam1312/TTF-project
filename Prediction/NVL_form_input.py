@@ -360,13 +360,13 @@ else:
         khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
 
         df['SỐ KHỐI']=round(khoi/10**9,4)
-        td=pd.to_datetime('today')
+        td=pd.to_datetime('today').date()
         df['NGÀY KIỂM']=td
         # df['THẺ KIỆN']=tk
         df['NCC']=ncc[0]
         df['LOẠI GỖ']=go[0]
         df['QC KIỂM']=qc[0]
-        df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
+#         df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
 
         total=round(sum(df['SỐ KHỐI']),4)
         df=df[df['SỐ KHỐI']>0]
