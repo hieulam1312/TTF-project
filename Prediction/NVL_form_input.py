@@ -499,7 +499,7 @@ else:
         list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
 
         if st.button('Hoàn tất'):
-            send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email,da)
+#             send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email,da)
             sheet='Ecount'
             # from cv import push
             ECC=eccount()
