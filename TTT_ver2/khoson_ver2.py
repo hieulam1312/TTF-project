@@ -80,6 +80,7 @@ df=pd.DataFrame(data)
 order_list=df['Đơn hàng'].unique().tolist()
 
     
+st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 
 c1,c2=st.columns(2)
 lsx_df=pull_lsx(gc)
