@@ -6,7 +6,6 @@ from PIL.Image import new
 from numpy.core.fromnumeric import size
 import pandas as pd
 from pyasn1.debug import Scope
-from sqlalchemy import column
 import streamlit as st
 import base64,io,gspread
 from google.oauth2 import service_account
