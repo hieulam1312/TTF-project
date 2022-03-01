@@ -54,7 +54,7 @@ def push_doing(doing):
     gd.set_with_dataframe(done11,doing)
 
 def dataset(gc1):
-    sh1=gc1.open("TTF - MẪU 2021 - TRIỂN KHAI").worksheet('D.SÁCH')
+    sh1=gc1.open("TTF - MẪU 2022 - TRIỂN KHAI").worksheet('D.SÁCH')
     sh11=sh1.get_all_records()
     dhm=pd.DataFrame(sh11)
 
