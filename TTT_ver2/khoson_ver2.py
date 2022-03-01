@@ -6,6 +6,7 @@ from PIL.Image import new
 from numpy.core.fromnumeric import size
 import pandas as pd
 from pyasn1.debug import Scope
+from sqlalchemy import column
 import streamlit as st
 import base64,io,gspread
 from google.oauth2 import service_account
@@ -81,28 +82,26 @@ order_list=df['Đơn hàng'].unique().tolist()
 
     
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
-
-c1,c2=st.columns(2)
 lsx_df=pull_lsx(gc)
-sdh=lsx_df['SỐ ĐH'].unique().tolist()
-with c1:
-    nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
-with c2:
-    kh=st.selectbox("Loại đề xuất",['Kế hoạch','Phát sinh'])
 
-sdh_id=st.multiselect('Xuất cho Đơn hàng:',sdh)
 with st.form(key='abcd'):
-    lsx_id=lsx_df[lsx_df['SỐ ĐH'].isin(sdh_id)]['LỆNH SX'].tolist()
+    c1,c2=st.columns(2)
+    with c1:
+        nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
+    with c2:
+        kh=st.selectbox("Loại đề xuất",['Kế hoạch','Phát sinh'])
+        lsx_id=lsx_df['LỆNH SX'].unique().tolist()
     l1,l2=st.columns(2)
     with l1:
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
+        sl_sp=st.text_input('Cho số lượng ghế:',)
 
     sanpham
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        sl_sp=st.text_input('Cho số lượng ghế:',)
+        cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
+
         slson=st.text_input('Số kg cần lấy')
 
 
@@ -139,12 +138,12 @@ with st.form(key='abc'):
     with r2:
         b2=[]
         for nr in range (h):
-            b2.append(r2.text_input('Khối lượng',key=f'dfuesidn {nr}'))
+            b2.append(r2.number_input('Khối lượng',key=f'dfuesidn {nr}'))
     st.form_submit_button('Hoàn tất')
-    
-dic2={'Tên vật tư':b1,'Số lượng':b2}
+dic2={'Tên vật tư':b1,'Tỉ lệ':b2}
 data2=pd.DataFrame.from_dict(dic2)
-
+data2['Số lượng']=(int(slson)*data2["Tỉ lệ"].astype(int))/sum(b2) 
+data2
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
     data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
@@ -154,6 +153,7 @@ if st.button('Hoàn tất xuất kho'):
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh
     data['Bước sơn']=cd[0]
+    # data[]
     data['Khối lượng sơn']=slson
     data['Ngày xuất kho']=pd.to_datetime('today').date()
     data=data.astype(str)
