@@ -166,7 +166,7 @@ if st.button('Hoàn tất xuất kho'):
         tsp=""
     else:
         tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
-    import datetime as dt
+import datetime as dt
 from ipaddress import collapse_addresses
 from os import close
 from re import T
