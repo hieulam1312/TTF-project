@@ -148,7 +148,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
     data['Nhà máy']=nm[0]
     data['Lệnh SX']=str(lsx)
-    data['SỐ ĐH']=sdh_id[0]
+#     data['SỐ ĐH']=sdh_id[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh
     data['Bước sơn']=cd[0]
