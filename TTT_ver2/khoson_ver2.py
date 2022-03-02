@@ -156,7 +156,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Khối lượng sơn']=slson
     from datetime import datetime
     import pytz
-    tz = pytz.timezone('Asia/Hanoi')
+    tz = pytz.timezone('asia/ho_chi_minh')
     data['Ngày xuất kho']=datetime.now(tz).date()
     data=data.astype(str)
     data
