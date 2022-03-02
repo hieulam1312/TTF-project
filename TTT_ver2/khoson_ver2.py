@@ -6,6 +6,7 @@ from PIL.Image import new
 from numpy.core.fromnumeric import size
 import pandas as pd
 from pyasn1.debug import Scope
+from sqlalchemy import column
 import streamlit as st
 import base64,io,gspread
 from google.oauth2 import service_account
@@ -88,7 +89,7 @@ with st.form(key='abcd'):
     with c1:
         nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
     with c2:
-        kh=st.selectbox("Loại đề xuất",['Kế hoạch','Phát sinh'])
+        kh=st.multiselect("Loại đề xuất",['Kế hoạch','Phát sinh'])
         lsx_id=lsx_df['LỆNH SX'].unique().tolist()
     l1,l2=st.columns(2)
     with l1:
@@ -148,9 +149,9 @@ if st.button('Hoàn tất xuất kho'):
     data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
     data['Nhà máy']=nm[0]
     data['Lệnh SX']=str(lsx)
-#     data['SỐ ĐH']=sdh_id[0]
+    # data['SỐ ĐH']=sdh_id[0]
     data['SL sản phẩm']=sl_sp
-    data['Loại đề xuất']=kh
+    data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd[0]
     # data[]
     data['Khối lượng sơn']=slson
@@ -159,17 +160,17 @@ if st.button('Hoàn tất xuất kho'):
     data
     # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
     data1=data.copy()
-    push(data1,gc,'Xuất kho')
+    # push(data1,gc,'Xuất kho')
     data2=data1[['Tên vật tư','Số lượng']]
     
     if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
         tsp=""
     else:
         tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
-    title_text ='TTF - Phiếu xuất kho ngày {}'.format(pd.to_datetime('today').date())
+    title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(pd.to_datetime('today').date().strftime("%d/%m/%Y"),pd.to_datetime('today').strftime("%H:%M"))
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(id,nm[0])
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(tsp,sl_sp,cd[0],slson)
+    sp='\n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(kh[0],tsp,sl_sp,cd[0],slson)
     footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
     plt.figure(linewidth=1,
             
