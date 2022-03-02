@@ -141,7 +141,7 @@ with st.form(key='abc'):
     st.form_submit_button('Hoàn tất')
 dic2={'Tên vật tư':b1,'Tỉ lệ':b2}
 data2=pd.DataFrame.from_dict(dic2)
-data2['Số lượng']=(int(slson)*data2["Tỉ lệ"].astype(int))/sum(b2) 
+data2['Số lượng']=(int(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
 data2
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
