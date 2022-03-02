@@ -162,7 +162,7 @@ if st.button('Hoàn tất xuất kho'):
     data
     # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
     data1=data.copy()
-    # push(data1,gc,'Xuất kho')
+    push(data1,gc,'Xuất kho')
     data2=data1[['Tên vật tư','Số lượng']]
     
     if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
