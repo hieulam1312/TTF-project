@@ -101,7 +101,7 @@ with st.form(key='abcd'):
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
         cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
 
-        slson=st.text_input('Số kg cần lấy')
+        slson=st.number_input('Số kg cần lấy')
 
 
     st.form_submit_button('Hoàn tất')
@@ -141,7 +141,7 @@ with st.form(key='abc'):
     st.form_submit_button('Hoàn tất')
 dic2={'Tên vật tư':b1,'Tỉ lệ':b2}
 data2=pd.DataFrame.from_dict(dic2)
-data2['Số lượng']=(int(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
+data2['Số lượng']=(float(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
 data2
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
