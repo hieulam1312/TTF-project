@@ -84,12 +84,15 @@ st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 lsx_df=pull_lsx(gc)
 
 with st.form(key='abcd'):
-    c1,c2=st.columns(2)
+    c1,c2,c3=st.columns(3)
     with c1:
         nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
     with c2:
         kh=st.multiselect("Loại đề xuất",['Kế hoạch','Phát sinh'])
         lsx_id=lsx_df['LỆNH SX'].unique().tolist()
+    with c3:
+        time=st.multiselect('Giờ nhận sơn:',['06:50 - 07:15',"13:00 - 13:15",'16:00 - 16:15','19:00 - 19:15'])
+
     l1,l2=st.columns(2)
     with l1:
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
@@ -148,7 +151,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
     data['Nhà máy']=nm[0]
     data['Lệnh SX']=str(lsx)
-    # data['SỐ ĐH']=sdh_id[0]
+    data['Giờ lấy sơn']=time[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd[0]
@@ -173,7 +176,7 @@ if st.button('Hoàn tất xuất kho'):
     title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(datetime.now(tz).date().strftime("%d/%m/%Y"),datetime.now(tz).strftime("%H:%M"))
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(id,nm[0])
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(kh[0],tsp,sl_sp,cd[0],slson)
+    sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd[0],slson)
     footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
     plt.figure(linewidth=1,
             
@@ -203,7 +206,7 @@ if st.button('Hoàn tất xuất kho'):
                 size=12, style='italic',
                 
             )
-    plt.figtext(0.1, 0.5,
+    plt.figtext(0.1, 0.4,
                 sp,
                 horizontalalignment='left',
                 size=10,
