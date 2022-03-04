@@ -164,7 +164,9 @@ if st.button('Hoàn tất xuất kho'):
    data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
     data=data.astype(str)
     data
-    # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
+    barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M')
+
+    data['Mã phiếu đề xuất']=barcode
     data1=data.copy()
     push(data1,gc,'Xuất kho')
     data2=data1[['Tên vật tư','Số lượng']]
@@ -214,7 +216,10 @@ if st.button('Hoàn tất xuất kho'):
                 
 
             )
-
+    plt.figtext(0.8, 0.8,
+            barcode,
+            horizontalalignment='right',
+            size=12,style='italic')
     # Add annotation
     plt.figtext(0.5, 0.3,
                 annotation_text,
