@@ -155,7 +155,7 @@ if st.button('Hoàn tất xuất kho'):
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd[0]
-    data['Khách hàng]=sanpham['TÊN KHÁCH HÀNG'].unique().tolist()
+    data['Khách hàng]=str(sanpham['TÊN KHÁCH HÀNG'].tolist())
     data['Khối lượng sơn']=slson
     from datetime import datetime
     import pytz
