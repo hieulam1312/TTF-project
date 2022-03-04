@@ -155,12 +155,13 @@ if st.button('Hoàn tất xuất kho'):
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd[0]
-    # data[]
+ 
     data['Khối lượng sơn']=slson
     from datetime import datetime
     import pytz
     tz = pytz.timezone('asia/ho_chi_minh')
-    data['Ngày xuất kho']=datetime.now(tz)
+    data['Ngày xuất kho']=datetime.now(tz).date().strftime("%d/%m/%Y")
+   data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
     data=data.astype(str)
     data
     # data1=data.drop(columns={'Ngày nhập kho','Đơn hàng'})   
