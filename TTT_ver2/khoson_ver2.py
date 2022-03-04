@@ -161,7 +161,7 @@ if st.button('Hoàn tất xuất kho'):
     import pytz
     tz = pytz.timezone('asia/ho_chi_minh')
     data['Ngày xuất kho']=datetime.now(tz).date().strftime("%d/%m/%Y")
-   data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
+    data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
     data=data.astype(str)
     data
     barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M')
