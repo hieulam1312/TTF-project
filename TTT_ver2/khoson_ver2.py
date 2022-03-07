@@ -23,7 +23,7 @@ def pull_lsx(gc):
     ncc=pd.DataFrame(sheet).astype(str)
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
-    ncc=ncc[['LỆNH SX','SỐ ĐH','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG',]]
+    ncc=ncc[['LỆNH SX','SỐ ĐH','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','MÀU SƠN']]
     return ncc
 
 def form(pr,sl,order_item,production):
@@ -149,6 +149,7 @@ data2
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
     data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
+    
     data['Nhà máy']=nm[0]
     data['Lệnh SX']=str(lsx)
     data['Giờ lấy sơn']=time[0]
@@ -156,6 +157,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd[0]
     data['Khách hàng']=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
+    data['MÀU SƠN']=str(sanpham['MÀU SƠN'].tolist()[0])
     data['Khối lượng sơn']=slson
     from datetime import datetime
     import pytz
