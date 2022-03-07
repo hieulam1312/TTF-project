@@ -60,12 +60,12 @@ def push(df,gc,sheet):
     new_df=data.append(df)
     # new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
     gd.set_with_dataframe(sheet,new_df)
-def pull(gc):
-    import gspread_dataframe as gd
-    import gspread as gs
-    sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Nhập kho')
-    data=gd.get_as_dataframe(sheet)
-    return data
+# def pull(gc):
+#     import gspread_dataframe as gd
+#     import gspread as gs
+#     sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Nhập kho')
+#     data=gd.get_as_dataframe(sheet)
+#     return data
 Cre=service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=['https://spreadsheets.google.com/feeds',
@@ -73,11 +73,11 @@ Cre=service_account.Credentials.from_service_account_info(
 )
 gc=gspread.authorize(Cre)
 
-sheet1=gc.open("Kho sơn - DS đặt hàng").worksheet('Sheet1')
+# sheet1=gc.open("Kho sơn - DS đặt hàng").worksheet('Sheet1')
 
-data=sheet1.get_all_records()
-df=pd.DataFrame(data)
-order_list=df['Đơn hàng'].unique().tolist()
+# data=sheet1.get_all_records()
+# df=pd.DataFrame(data)
+# order_list=df['Đơn hàng'].unique().tolist()
 
     
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
