@@ -1,3 +1,4 @@
+# Import Library
 import requests #-> Để gọi API
 import re #-> Để xử lý data dạng string
 from datetime import datetime as dt #-> Để xử lý data dạng datetime
@@ -146,8 +147,7 @@ TTSP_HP=table3_final.rename(columns={'TTSP': 'Tên_tài_liệu','BV':'NOTE' })
 TTSP_HP1=TTSP_HP.merge(syntax,how='left',left_on=["BỘ_PHẬN"],right_on=["Bộ_phận"])
 TTSP_HP_=TTSP_HP1[['Dấu_thời_gian','MÃ_PHIẾU_ĐỀ_XUẤT','Tên_tài_liệu_x','NOTE','BỘ_PHẬN','Tên_tài_liệu_y','Số_lượng']]
 # TTSP_HP_=TTSP_HP_.rename(columns={'Tên_tài_liệu_x':'Tên_tài_liệu'})
-TTSP_HP_=TTSP_HP_[TTSP_HP_['Tên_tài_liệu_y'].isnull()==False]
-# TTSP_HP_
+# TTSP_HP_.tail(100)
 TTSP_HP_1=TTSP_HP_.loc[(TTSP_HP_['Tên_tài_liệu_y'].str.contains('TTSP - Handpick'))]
 TTSP_HP_final=TTSP_HP_1.rename(columns={'Tên_tài_liệu_y':'LOẠI_TÀI_LIỆU','Tên_tài_liệu_x':'Tên_tài_liệu'})
 
@@ -277,3 +277,4 @@ set_with_dataframe(worksheet4,hp_final)
 set_with_dataframe(worksheet5,lsx_final)
 st.success('Xong rồi nà')
 # # DONE: Bây giờ bạn có thể mở spreadsheet và kiểm tra nội dung đã update chứ
+
