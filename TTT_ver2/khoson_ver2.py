@@ -102,8 +102,8 @@ with st.form(key='abcd'):
     sanpham
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
-
+#         cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
+        cd=st.text_input('Loại Bước Sơn',)
         slson=st.number_input('Số kg cần lấy')
 
 
@@ -155,7 +155,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Giờ lấy sơn']=time[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh[0]
-    data['Bước sơn']=cd[0]
+    data['Bước sơn']=cd
     data['Khách hàng']=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
     data['MÀU SƠN']=str(sanpham['MÀU SƠN'].tolist()[0])
     data['Khối lượng sơn']=slson
@@ -181,7 +181,7 @@ if st.button('Hoàn tất xuất kho'):
     title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(datetime.now(tz).date().strftime("%d/%m/%Y"),datetime.now(tz).strftime("%H:%M"))
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(id,nm[0])
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd[0],slson)
+    sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
     footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
     plt.figure(linewidth=1,
             
