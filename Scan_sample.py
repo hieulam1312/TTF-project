@@ -13,7 +13,6 @@ credentials = service_account.Credentials.from_service_account_info(
          'https://www.googleapis.com/auth/drive'],
 )
 gc1 = gspread.authorize(credentials)
-spreadsheet_key = '1eWQcw2FFziobQY8rODoYCjfzV3b-_dksTjSDm0Okdpg'
 
 
 today = datetime.date.today()
@@ -26,7 +25,7 @@ with c1:
 
     step=st.selectbox('Chọn thao tác',['Trả mẫu','Mượn mẫu'])
 with c2:
-    factory=st.selectbox('Chọn bộ phận',['NM1','NM3','X4','TD','NM NỆM','QLCL','THU MUA','P.TM'])
+    factory=st.selectbox('Chọn bộ phận',['NM1','NM3','X4','TD','NM5','QLCL','THU MUA','P.TM'])
 filter=st.multiselect('Chọn Khách hàng',sample_name_pd['TÊN KHÁCH HÀNG'].unique().tolist())
 sample=sample_name_pd[sample_name_pd['TÊN KHÁCH HÀNG'].isin(filter)]
 
@@ -42,7 +41,7 @@ table_
 if st.button('Xuất danh sách'):
 # pdf=table_df.to_pd
     dict_id={}
-    sheet_index_no1= 8
+    sheet_index_no1= 4
 
     spreadsheet_key = '1eWQcw2FFziobQY8rODoYCjfzV3b-_dksTjSDm0Okdpg' # input SPREADSHEET_KEY HERE
     sh = gc1.open_by_key(spreadsheet_key)
@@ -55,7 +54,7 @@ if st.button('Xuất danh sách'):
     existing = gd.get_as_dataframe(ws)
     updated = existing.append(table_df)
     gd.set_with_dataframe(ws, updated)
-
+#     st.success('Done')
     order_key=updated['Tên Mẫu'].unique().tolist()
     _list={}
     early_list={}
@@ -70,13 +69,12 @@ if st.button('Xuất danh sách'):
 
     new_list={k:{sk:sv[-1] for sk,sv in s.items() if len(sv)>0} for k,s in _list.items() }
     new_list_df=pd.DataFrame.from_dict(new_list, orient='index').reset_index()
-
+    new_list_df=new_list_df.astype(str)
 
     ws2 = gc1.open("PKTH - Theo dõi kho lưu mẫu").worksheet('VỊ TRÍ HIỆN TẠI')
-    new_list_df
+#     new_list_df
     gd.set_with_dataframe(ws2, new_list_df)
     st.success('Done')
-
 
     
 # if st.button('Gửi báo cáo'):
