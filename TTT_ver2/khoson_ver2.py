@@ -183,64 +183,111 @@ if st.button('Hoàn tất xuất kho'):
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
     sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
     footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
-    plt.figure(linewidth=1,
-            
-            tight_layout={'pad':1},
-            # figsize=(5,4)
-            )
+    with PdfPages('multipage_pdf.pdf') as pp:
+        plt.figure(linewidth=1,
+                    
+                    tight_layout={'pad':1},
+                    # figsize=(5,4)
+                    )
+        ax = plt.gca()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
 
+        # Hide axes border
+        plt.box(on=None)
 
-    # Hide axes
-    ax = plt.gca()
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
+        # Add title
+        plt.suptitle(title_text,
+                    weight='bold',
+                    size=14,
+                    )
 
-    # Hide axes border
-    plt.box(on=None)
-
-    # Add title
-    plt.suptitle(title_text,
-                weight='bold',
-                size=14,
+        # Add subtitle
+        plt.figtext(0.5, 0.9,
+                    subtitle_text,
+                    horizontalalignment='center',
+                    size=12, style='italic',
+                    
+                )
+        plt.figtext(0.8, 0.8,
+                barcode,
+                horizontalalignment='right',
+                size=12,style='italic')
+        plt.figtext(0.1, 0.4,
+                    sp,
+                    horizontalalignment='left',
+                    size=10,
                 )
 
-    # Add subtitle
-    plt.figtext(0.5, 0.9,
-                subtitle_text,
-                horizontalalignment='center',
-                size=12, style='italic',
-                
-            )
-    plt.figtext(0.1, 0.4,
-                sp,
-                horizontalalignment='left',
-                size=10,
-                
+        # Add annotation
+        plt.figtext(0.5, 0.3,
+                    annotation_text,
+                    horizontalalignment='center',
+                    size=9, weight='light'        
+                )
+        footer_text = 'trang 1/2 - kho sơn'
+        ...
+        plt.figtext(0.95, 0.05, footer_text, horizontalalignment='right', size=6, weight='light')
+        plt.draw()
 
-            )
-    plt.figtext(0.8, 0.8,
-            barcode,
-            horizontalalignment='right',
-            size=12,style='italic')
-    # Add annotation
-    plt.figtext(0.5, 0.3,
-                annotation_text,
-                horizontalalignment='center',
-                size=9, weight='light',
-                
-            )
-
-    plt.draw()
-
-    fig = plt.gcf()
+        fig1 = plt.gcf()
+        pp.savefig()  # saves the current figure into a pdf page
+        plt.close()
+        plt.rc('text', usetex=False)
 
 
-    # the_table.scale(2,1)
-    pp = PdfPages("phieu_xuat_kho.pdf")
-    pp.savefig(fig, bbox_inches = 'tight')
-    pp.close()
+        plt.figure(linewidth=1,
+                    
+                    tight_layout={'pad':1},
+                    # figsize=(5,4)
+                    )
+        ax = plt.gca()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
 
-    with open("phieu_xuat_kho.pdf", 'rb') as f:
+        # Hide axes border
+        plt.box(on=None)
+
+        # Add title
+        plt.suptitle(title_text,
+                    weight='bold',
+                    size=14,
+                    )
+
+        # Add subtitle
+        plt.figtext(0.5, 0.9,
+                    subtitle_text,
+                    horizontalalignment='center',
+                    size=12, style='italic',
+                    
+                )
+        plt.figtext(0.8, 0.8,
+                barcode,
+                horizontalalignment='right',
+                size=12,style='italic')
+        plt.figtext(0.1, 0.4,
+                    sp,
+                    horizontalalignment='left',
+                    size=10,
+                )
+
+        # Add annotation
+        plt.figtext(0.5, 0.3,
+                    annotation_text,
+                    horizontalalignment='center',
+                    size=9, weight='light'        
+                )
+        footer_text = 'trang 2/2 - nhà máy'
+        ...
+        plt.figtext(0.95, 0.05, footer_text, horizontalalignment='right', size=6, weight='light')
+        plt.draw()
+
+        fig1 = plt.gcf()
+
+        pp.savefig()  # saves the current figure into a pdf page
+        plt.close()
+
+    with open("multipage_pdf.pdf", 'rb') as f:
         data = f.read()
         bin_str = base64.b64encode(data).decode()
         f.close()
