@@ -182,7 +182,7 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
         st.success('Đã gửi mail thành công')
         return(1)
     except:
-        print("Could not send mail to {}".format(receiver_email))
+        print("Could not send mail to")
         return(0)
 
 
