@@ -99,8 +99,10 @@ with st.form(key='abcd'):
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
         if lsx!="Nội địa":
             sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
+            namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
         else:
             sanpham=""
+            namesp=""
         sl_sp=st.text_input('Cho số lượng ghế:',)
 
     sanpham
@@ -160,7 +162,7 @@ if st.button('Hoàn tất xuất kho'):
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd
-    data['Khách hàng']=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
+    data['Khách hàng']=namesp
     data['MÀU SƠN']=str(sanpham['MÀU SƠN'].tolist()[0])
     data['Khối lượng sơn']=slson
     from datetime import datetime
