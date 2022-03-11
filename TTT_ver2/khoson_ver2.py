@@ -111,9 +111,11 @@ with st.form(key='abcd'):
     st.form_submit_button('Hoàn tất')
 if lsx[0]!="Nội địa":
     namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
+    nam=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
 else:
     sanpham=""
     namesp=""
+    nam=""
 sanpham
 id=lsx[0]
 
@@ -153,7 +155,7 @@ data2['Số lượng']=(float(slson)*data2["Tỉ lệ"].astype(float))/sum(b2)
 data2
 if st.button('Hoàn tất xuất kho'):
     data=data2.copy()
-    data['Tên Sản phẩm']=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
+    data['Tên Sản phẩm']=nam
     
     data['Nhà máy']=nm[0]
     data['Lệnh SX']=str(lsx)
