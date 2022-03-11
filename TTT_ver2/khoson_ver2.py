@@ -100,7 +100,7 @@ with st.form(key='abcd'):
 
         sl_sp=st.text_input('Cho số lượng ghế:',)
 
-    sanpham
+   
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
 #         cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
@@ -110,12 +110,11 @@ with st.form(key='abcd'):
 
     st.form_submit_button('Hoàn tất')
 if lsx!="Nội địa":
-    sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
     namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
 else:
     sanpham=""
     namesp=""
-
+sanpham
 id=lsx[0]
 
 def increment_counter(increment_value=0):
