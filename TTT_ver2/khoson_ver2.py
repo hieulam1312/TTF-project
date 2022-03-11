@@ -90,13 +90,17 @@ with st.form(key='abcd'):
     with c2:
         kh=st.multiselect("Loại đề xuất",['Kế hoạch','Phát sinh'])
         lsx_id=lsx_df['LỆNH SX'].unique().tolist()
-    with c3:
-        time=st.multiselect('Giờ nhận sơn:',['06:50 - 07:15',"13:00 - 13:15",'16:00 - 16:15','19:00 - 19:15'])
+        lsx_id.append('Nội địa')
 
+    with c3:
+        time=st.multiselect('Giờ nhận sơn:',['06:50 - 07:15','09:30 - 09:45',"13:00 - 13:15",'16:00 - 16:15','19:00 - 19:15'])
     l1,l2=st.columns(2)
     with l1:
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-        sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
+        if lsx!="Nội địa":
+            sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
+        else:
+            sanpham=""
         sl_sp=st.text_input('Cho số lượng ghế:',)
 
     sanpham
