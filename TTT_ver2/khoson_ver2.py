@@ -67,7 +67,7 @@ def pull(gc):
     sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
     sheet=sh.get_all_records()
     data=pd.DataFrame(sheet).astype(str)
-    data
+
     data=data[data['FILTER']=="C"]
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("'",""),data['Lệnh SX'].str.replace("'","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("[",""),data['Lệnh SX'].str.replace("[","")
