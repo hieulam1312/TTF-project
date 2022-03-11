@@ -13,6 +13,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from streamlit.elements.arrow import Data #-> Để nhập Google Spreadsheet Credentials
 import pandas as pd
 import numpy as np
+from io import BytesIO
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 if 'count' not in st.session_state:
