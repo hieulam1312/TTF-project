@@ -60,12 +60,19 @@ def push(df,gc,sheet):
     new_df=data.append(df)
     # new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
     gd.set_with_dataframe(sheet,new_df)
-# def pull(gc):
-#     import gspread_dataframe as gd
-#     import gspread as gs
-#     sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Nhập kho')
-#     data=gd.get_as_dataframe(sheet)
-#     return data
+def pull(gc):
+    import gspread_dataframe as gd
+    import gspread as gs
+    sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
+    data=gd.get_as_dataframe(sheet)
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    data.to_excel(writer, sheet_name='Sheet1',index=False)
+    workbook = writer.book
+    # worksheet = writer.sheets['Sheet1','Sheet2']
+    writer.save()
+    processed_data = output.getvalue()
+    return processed_data
 Cre=service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=['https://spreadsheets.google.com/feeds',
@@ -79,6 +86,10 @@ gc=gspread.authorize(Cre)
 # df=pd.DataFrame(data)
 # order_list=df['Đơn hàng'].unique().tolist()
 
+if st.sidebar.button('Tải DS cho Kế toán'):
+    st.sidebar.download_button(label='📥 Tải file xuống',
+                            data=pull(gc),
+                            file_name= "phieu_xuat_kho.xlsx")
     
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 lsx_df=pull_lsx(gc)
