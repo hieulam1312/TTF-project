@@ -64,8 +64,15 @@ def push(df,gc,sheet):
 def pull(gc):
     import gspread_dataframe as gd
     import gspread as gs
-    sheet=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
-    data=gd.get_as_dataframe(sheet)
+    sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
+    sheet=sh.get_all_records()
+    data=pd.DataFrame(sheet).astype(str)
+    data
+    data=data[data['FILTER']=="C"]
+    data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("'",""),data['Lệnh SX'].str.replace("'","")
+    data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("[",""),data['Lệnh SX'].str.replace("[","")
+    data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("]",""),data['Lệnh SX'].str.replace("]","")
+    data=data[['Mã phiếu đề xuất','Tên Sản phẩm','Lệnh SX','Tên vật tư','Số lượng','Ngày xuất kho','Nhà máy','NHÀ MÁY','Khách hàng']]
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Sheet1',index=False)
@@ -88,10 +95,10 @@ gc=gspread.authorize(Cre)
 # order_list=df['Đơn hàng'].unique().tolist()
 
 if st.sidebar.button('Tải DS cho Kế toán'):
+    data=pull(gc)
     st.sidebar.download_button(label='📥 Tải file xuống',
-                            data=pull(gc),
+                            data=data,
                             file_name= "phieu_xuat_kho.xlsx")
-    
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 lsx_df=pull_lsx(gc)
 
