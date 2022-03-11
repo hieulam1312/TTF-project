@@ -97,12 +97,7 @@ with st.form(key='abcd'):
     l1,l2=st.columns(2)
     with l1:
         lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-        if lsx!="Nội địa":
-            sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-            namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
-        else:
-            sanpham=""
-            namesp=""
+
         sl_sp=st.text_input('Cho số lượng ghế:',)
 
     sanpham
@@ -114,7 +109,12 @@ with st.form(key='abcd'):
 
 
     st.form_submit_button('Hoàn tất')
-
+if lsx!="Nội địa":
+    sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
+    namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
+else:
+    sanpham=""
+    namesp=""
 
 id=lsx[0]
 
