@@ -109,7 +109,7 @@ with st.form(key='abcd'):
 
 
     st.form_submit_button('Hoàn tất')
-if lsx!="Nội địa":
+if lsx[0]!="Nội địa":
     namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
 else:
     sanpham=""
