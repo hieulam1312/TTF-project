@@ -183,7 +183,7 @@ if st.button('Hoàn tất xuất kho'):
     from datetime import datetime
     import pytz
     tz = pytz.timezone('asia/ho_chi_minh')
-    data['Ngày xuất kho']=datetime.now(tz).date().strftime("%d/%m/%Y")
+    data['Ngày xuất kho']=datetime.now(tz).date().strftime("%m/%d/%Y")
     data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
     data=data.astype(str)
     data
