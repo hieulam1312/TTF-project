@@ -112,10 +112,12 @@ with st.form(key='abcd'):
 if lsx[0]!="Nội địa":
     namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
     nam=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
+    mauson=str(sanpham['MÀU SƠN'].tolist()[0])
 else:
     sanpham=""
     namesp=""
     nam=""
+    mauson=""
 sanpham
 id=lsx[0]
 
@@ -164,7 +166,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Loại đề xuất']=kh[0]
     data['Bước sơn']=cd
     data['Khách hàng']=namesp
-    data['MÀU SƠN']=str(sanpham['MÀU SƠN'].tolist()[0])
+    data['MÀU SƠN']=mauson
     data['Khối lượng sơn']=slson
     from datetime import datetime
     import pytz
@@ -180,7 +182,7 @@ if st.button('Hoàn tất xuất kho'):
     push(data1,gc,'Xuất kho')
     data2=data1[['Tên vật tư','Số lượng']]
     
-    if len(sanpham['TÊN SẢN PHẨM TTF'].tolist()) ==0:
+    if len(nam) ==0:
         tsp=""
     else:
         tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
