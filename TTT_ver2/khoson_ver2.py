@@ -122,10 +122,30 @@ with st.form(key='abcd'):
    
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-#         cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
-        cd=st.text_input('Loại bước sơn',)
-        cd=cd.replace('(',"").replace("%","").replace(")","").upper()
-        cd=''.join([i for i in cd if not i.isdigit()])
+#         cd=st.multiselect('Loại Bước sơn',[
+"BÓNG HJFD",
+"BÓNG HXXT",
+"BÓNG NC HB",
+"BÓNG NC SCR",
+"BÓNG NC NY",
+"BÓNG BEX",
+"BÓNG PU NANO CHEM" ,
+"LÓT MÀU",
+"LÓT NC HB",
+"LÓT NC PAK",
+"LÓT NC 2307",
+"LÓT PU",
+"LÓT SO",
+"STAIN MÀU",
+"LAU MÀU",
+"SỬA GỖ",
+"TẨY GỖ",
+"CHỐNG MỐC",
+"XĂNG NC",
+"XĂNG PU"])
+#         cd=st.text_input('Loại bước sơn',)
+#         cd=cd.replace('(',"").replace("%","").replace(")","").upper()
+#         cd=''.join([i for i in cd if not i.isdigit()])
         slson=st.number_input('Số kg cần lấy')
 
 
@@ -185,7 +205,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Giờ lấy sơn']=time[0]
     data['SL sản phẩm']=sl_sp
     data['Loại đề xuất']=kh[0]
-    data['Bước sơn']=cd
+    data['Bước sơn']=cd[0]
     data['Khách hàng']=namesp
     data['MÀU SƠN']=mauson
     data['Khối lượng sơn']=slson
