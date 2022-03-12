@@ -123,8 +123,10 @@ with st.form(key='abcd'):
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
 #         cd=st.multiselect('Loại Bước sơn',['Lót 1',"Stain 1",'Bóng','Lót 2',"Stain 2",'Sửa gỗ','Dặm màu','Glaze màu','Màu','Xăng','Lau màu','Fw màu','Tẩy gỗ',"chống mốc"])
-        cd=st.text_input('Loại Bước Sơn',)
-        slson=st.number_input('Số kg cần lấy')
+        cd=st.text_input('Loại bước sơn',)
+        cd=cd.replace('(',"").replace("%","").replace(")","").upper()
+        cd=''.join([i for i in cd if not i.isdigit()])
+        slson=st.text_input('Số kg cần lấy')
 
 
     st.form_submit_button('Hoàn tất')
