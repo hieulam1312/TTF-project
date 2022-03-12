@@ -126,7 +126,7 @@ with st.form(key='abcd'):
         cd=st.text_input('Loại bước sơn',)
         cd=cd.replace('(',"").replace("%","").replace(")","").upper()
         cd=''.join([i for i in cd if not i.isdigit()])
-        slson=st.text_input('Số kg cần lấy')
+        slson=st.number_input('Số kg cần lấy')
 
 
     st.form_submit_button('Hoàn tất')
