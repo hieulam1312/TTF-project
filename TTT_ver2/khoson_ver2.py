@@ -129,6 +129,7 @@ with st.form(key='abcd'):
 "BÓNG NC SCR",
 "BÓNG NC NY",
 "BÓNG BEX",
+"BÓNG NC PAK",
 "BÓNG PU NANO CHEM" ,
 "LÓT MÀU",
 "LÓT NC HB",
