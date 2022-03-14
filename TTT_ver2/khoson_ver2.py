@@ -122,7 +122,7 @@ with st.form(key='abcd'):
    
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-#         cd=st.multiselect('Loại Bước sơn',[
+        cd=st.multiselect('Loại Bước sơn',[
 "BÓNG HJFD",
 "BÓNG HXXT",
 "BÓNG NC HB",
