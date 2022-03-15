@@ -148,7 +148,7 @@ with st.form(key='abcd'):
 #         cd=st.text_input('Loại bước sơn',)
 #         cd=cd.replace('(',"").replace("%","").replace(")","").upper()
 #         cd=''.join([i for i in cd if not i.isdigit()])
-        slson=st.number_input('Số kg cần lấy')
+        slson=st.text_input('Số kg cần lấy')
 
 
     st.form_submit_button('Hoàn tất')
@@ -210,7 +210,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Bước sơn']=cd[0]
     data['Khách hàng']=namesp
     data['MÀU SƠN']=mauson
-    data['Khối lượng sơn']=slson
+    data['Khối lượng sơn']=float(slson)
     from datetime import datetime
     import pytz
     tz = pytz.timezone('asia/ho_chi_minh')
