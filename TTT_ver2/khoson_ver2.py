@@ -137,6 +137,7 @@ with st.form(key='abcd'):
 "LÓT NC 2307",
 "LÓT PU",
 "LÓT SO",
+"LÓT LĂN",
 "STAIN MÀU",
 "LAU MÀU",
 "SỬA GỖ",
