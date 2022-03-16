@@ -133,7 +133,7 @@ def dataset(gc1):
 #Call API Trello
 import requests
 import json
-import trello
+# import trello
 from trello import TrelloClient
 client = TrelloClient(
     api_key=st.secrets["api_key"],
@@ -207,9 +207,12 @@ def pull(my_board,lable_table):
             # print(card.
 
             for cl in card.fetch_checklists():
+                cl
                 cards[card.name]=len(card.fetch_checklists()[0].items)
+            # cards
             dict2[card.name]=card.listCardMove_date()
             dict3[card]=card.idLabels
+    
     a=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict2.items()]))
     b=a.transpose().reset_index()
     b=b.rename(columns={'index':'LSX'})
