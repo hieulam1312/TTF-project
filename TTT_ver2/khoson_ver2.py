@@ -198,8 +198,9 @@ dic2={'Tên vật tư':b1,'Tỉ lệ':b2}
 data2=pd.DataFrame.from_dict(dic2)
 data2['Số lượng']=(float(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
 data2
-if st.button('Hoàn tất xuất kho'):
+if st.button('Hoàn tất xuất kho - Bấm 1 lần duy nhất'):
     st.info('Từ từ, bình tĩnh đợi nghen!')
+    
     data=data2.copy()
     data['Tên Sản phẩm']=nam
     
@@ -218,7 +219,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Ngày xuất kho']=datetime.now(tz).date().strftime("%m/%d/%Y")
     data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
     data=data.astype(str)
-    data
+#     data
     barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M')
 
     data['Mã phiếu đề xuất']=barcode
