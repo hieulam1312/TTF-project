@@ -199,6 +199,7 @@ data2=pd.DataFrame.from_dict(dic2)
 data2['Số lượng']=(float(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
 data2
 if st.button('Hoàn tất xuất kho'):
+    st.info('Từ từ, bình tĩnh đợi nghen!")
     data=data2.copy()
     data['Tên Sản phẩm']=nam
     
@@ -223,6 +224,7 @@ if st.button('Hoàn tất xuất kho'):
     data['Mã phiếu đề xuất']=barcode
     data1=data.copy()
     push(data1,gc,'Xuất kho')
+    st.success('Xuất danh sách xong rồi nè! Đợi tải file nha")
     data2=data1[['Tên vật tư','Số lượng']]
     
     if len(nam) ==0:
