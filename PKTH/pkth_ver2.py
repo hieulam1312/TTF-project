@@ -134,8 +134,8 @@ def dataset(gc1):
 import requests
 import json
 import trello
-from trello import trelloclient
-client = trelloclient(
+from trello import TrelloClient
+client = TrelloClient(
     api_key=st.secrets["api_key"],
     token=st.secrets["token"],
 )
