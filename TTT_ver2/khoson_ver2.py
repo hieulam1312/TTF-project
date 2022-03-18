@@ -96,8 +96,9 @@ gc=gspread.authorize(Cre)
 # data=sheet1.get_all_records()
 # df=pd.DataFrame(data)
 # order_list=df['Đơn hàng'].unique().tolist()
-time=st.sidebar.date_input('Ngày',)
 st.sidebar.title('PHẦN CỦA KẾ TOÁN')
+
+time=st.sidebar.date_input('Ngày',)
 if st.sidebar.button('Tải DS cho Kế toán'):
     data=pull(gc,time)
     st.sidebar.download_button(label='📥 Tải file xuống',
