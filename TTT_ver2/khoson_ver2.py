@@ -61,14 +61,17 @@ def push(df,gc,sheet):
     new_df=data.append(df)
     # new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
     gd.set_with_dataframe(sheet,new_df)
-def pull(gc):
+def pull(gc,time):
     import gspread_dataframe as gd
     import gspread as gs
     sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
     sheet=sh.get_all_records()
     data=pd.DataFrame(sheet).astype(str)
 
-    data=data[data['FILTER']=="C"]
+    data['Ngày xuất kho']=pd.to_datetime(data['Ngày xuất kho'],format="%m/%d/%Y").dt.date
+    data=data[data['Ngày xuất kho']==time]
+    data
+
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("'",""),data['Lệnh SX'].str.replace("'","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("[",""),data['Lệnh SX'].str.replace("[","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("]",""),data['Lệnh SX'].str.replace("]","")
@@ -93,12 +96,13 @@ gc=gspread.authorize(Cre)
 # data=sheet1.get_all_records()
 # df=pd.DataFrame(data)
 # order_list=df['Đơn hàng'].unique().tolist()
+time=st.sidebar.date_input('Ngày',)
 
 if st.sidebar.button('Tải DS cho Kế toán'):
-    data=pull(gc)
+    data=pull(gc,time)
     st.sidebar.download_button(label='📥 Tải file xuống',
                             data=data,
-                            file_name= "phieu_xuat_kho.xlsx")
+                            file_name= "{}.xlsx".format(time))
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 lsx_df=pull_lsx(gc)
 
