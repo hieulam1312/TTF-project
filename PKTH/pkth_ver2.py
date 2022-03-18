@@ -50,7 +50,7 @@ def push_doing(doing):
     scopes=['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive'],)
     gc=gs.authorize(credentials)
-    done11=gc.open('PKTH 2022 - Theo dõi CV').worksheet('ĐANG XỬ LÍ')
+    done11=gc.open('test').worksheet('Sheet6')
     gd.set_with_dataframe(done11,doing)
 
 def dataset(gc1):
