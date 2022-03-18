@@ -194,6 +194,7 @@ def literal_return(val):
     except ValueError:
         return (val)
 #Pull data transecsiton
+
 def pull(my_board,lable_table):
     dict1={}
     dict2={}
@@ -207,13 +208,12 @@ def pull(my_board,lable_table):
             # print(card.
 
             for cl in card.fetch_checklists():
-#                 cl
                 cards[card.name]=len(card.fetch_checklists()[0].items)
-            # cards
             dict2[card.name]=card.listCardMove_date()
             dict3[card]=card.idLabels
-    
     a=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict2.items()]))
+ 
+    
     b=a.transpose().reset_index()
     b=b.rename(columns={'index':'LSX'})
 
@@ -269,7 +269,6 @@ def pull(my_board,lable_table):
     done_df.columns=['ID_CV', 'TÊN SP', 'S/L', 'Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','Ngày hoàn thành', 'Loại CV']
 
     return doing_df,done_df
-
 st.subheader('MỚI')
 # with st.form(key='abc'):
 
