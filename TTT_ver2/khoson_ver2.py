@@ -220,7 +220,7 @@ if st.button('Hoàn tất xuất kho - Bấm 1 lần duy nhất'):
     data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
     data=data.astype(str)
 #     data
-    barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M')
+    barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M%S')
 
     data['Mã phiếu đề xuất']=barcode
     data1=data.copy()
