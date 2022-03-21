@@ -147,7 +147,7 @@ def pull_data():
     sh=gc.open('Kho NVL - NCC').worksheet('Sheet2')
     sheet=sh.get_all_records()
     df=pd.DataFrame(sheet).astype(str)
-    df
+    
     return df    
 
 def push(df,str):
