@@ -47,47 +47,13 @@ def ncc_f():
 abv=ncc_f()
 list_ncc=abv[0]
 list_int=abv[1]
-from list_info import qc_list
+# from list_info import qc_list
 go_list=["ALDER",
-"ASH VN",
-"ASH",
-"BẠCH ĐÀN",
-"BEECH",
-"CĂM XE",
-"CAO SU ĐEN",
-"CAO SU",
-"CHERRY",
-"CHÒ CHỈ",
-"SYCAMORE",
-"DỪA",
-"DƯƠNG LIỄU",
-"GÒN",
-"HICKORY",
-"KAPUS",
-"LÒNG MỨT",
-"MAPLE",
-"MÍT",
-"MUỒNG",
-"NEP PALLET",
-"OAK",
-"PƠ MU",
-"POPLAR",
-"RED ELM",
-"RED OAK",
-"SỌ KHỈ",
-"TẠP",
-"TEAK",
-"THÔNG",
-"TRÀM",
-"TRÅU",
-"WALNUT",
-"WHITE OAK",
-"WHITE POPLAR",
-"WILLOW",
-"XOÀI"
-]
+"ASH VN","ASH","BẠCH ĐÀN","BEECH","CĂM XE","CAO SU ĐEN","CAO SU","CHERRY","CHÒ CHỈ","SYCAMORE","DỪA","DƯƠNG LIỄU","GÒN","HICKORY","KAPUS","LÒNG MỨT","MAPLE","MÍT","MUỒNG","NEP PALLET","OAK","PƠ MU","POPLAR","RED ELM","RED OAK","SỌ KHỈ",
+"TẠP","TEAK","THÔNG","TRÀM","TRÅU","WALNUT","WHITE OAK","WHITE POPLAR","WILLOW","XOÀI"]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 # abv
+
 
 import barcode
 from barcode.writer import ImageWriter
@@ -95,6 +61,7 @@ def qr_code(link="https://engineering.catholic.edu/eecs/index.html"):
         ean = barcode.get('code128', link, writer=ImageWriter())
         filename = ean.save('code128',{"module_width":0.15, "module_height":5, "font_size":11, "text_distance": 1, "quiet_zone": 1})
         return filename
+
 def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
     # (1) Create the email head (sender, receiver, and subject)
     sender_email = st.secrets['SENDER_EMAIL']
@@ -105,48 +72,8 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
     # email["To"] = 'abc'
     email['Subject']=subject
 
-
-
-    html3="""
-    <html>
-    <h2>
-    Tổng số khối:                 {}<h2>
-    QC kiểm: {}<h2>
-    Mã lô: {}<h2>
-    Ngày kiểm: {}<h2>
-    Độ ẩm:{}<h2>
-    </html>
-    """.format(total,qc,ml,td,dm)
-    # now create a Content-ID for the image
-    image_cid = make_msgid(domain='xyz.com')
-    # if `domain` argument isn't provided, it will 
-    # use your computer's name
-
-    # set an alternative html body
-    html4="""\
-    <html>
-        <body>
-            <p>This is an HTML body.<br>
-            It also has an image.
-            </p>
-            <img src="cid:{image_cid}">
-        </body>
-    </html>
-    """.format(image_cid=image_cid[1:-1])
-
-   
-    # maintype, subtype = mimetypes.guess_type(fp)[0].split('/')
-
-    #     # attach it
+   # email.attach(msgImage)
     fp = open('code128.png', 'rb')
-
-    msgImage = MIMEImage(fp.read())
-    fp.close()
-    msgImage.add_header('Content-ID', 'barcode')
-    # email.attach(msgImage)
-
-    fp = open('code128.png', 'rb')
-
     img = MIMEImage(fp.read())
     img.add_header('Content-Disposition', 'attachment', filename='code128.png')
     img.add_header('X-Attachment-Id', '0')
@@ -165,10 +92,6 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
         '''.format(td,total,qc,ml,dm),
         'html', 'utf-8'))
     part1 = MIMEText(html, 'html')
-    # part2=MIMEText(html3,'html')
-    # part3=MIMEText(html4,'html')
-    # email.attach(part2)
-    # email.attach(part3)
     email.attach(part1)
     try:
         session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
@@ -185,10 +108,7 @@ def send_email(subject,total,tk,QC,NCC,qc,ml,td,html,receiver_list,dm):
         print("Could not send mail to")
         return(0)
 
-
-# new_dict = df.groupby('THẺ KIỆN').apply(lambda x: x.values.tolist()).to_dict()
-
-def eccount():
+def eccount(df):
     df4=df.copy()
     uni_tk=df4['THẺ KIỆN'].unique().tolist()
     uni_dai=df4['Dài'].unique().tolist()
@@ -211,6 +131,24 @@ def eccount():
 
     eccount_gr=eccount.groupby(['THẺ KIỆN','THẺ KIỆN2','THẺ KIỆN 3','Dày','DÀI 2','Mã lô','Loại Gỗ','Dày2','ncc'])['SỐ KHỐI'].sum().reset_index()
     return eccount_gr
+
+def pull_data():
+    #Library to call Google API
+    from google.oauth2 import service_account
+    import gspread #-> Để update data lên Google Spreadsheet
+    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet 
+    #Call Credetials
+    credentials=service_account.Credentials.from_service_account_info(
+        st.secrets['gcp_service_account'],
+        scopes=['https://spreadsheets.google.com/feeds',
+        'https://www.googleapis.com/auth/drive'],)
+
+    gc=gspread.authorize(credentials)
+    sh=gc.open('Kho NVL - NCC').worksheet('Sheet2')
+    sheet=sh.get_all_records()
+    df=pd.DataFrame(sheet).astype(str)
+    df
+    return df    
 
 def push(df,str):
     import streamlit as st
@@ -322,15 +260,9 @@ else:
                 
             st.form_submit_button('submit')
 
-
-
-
-
-    
         b=["0" if v =="" else v for v in b]
         c=["0" if v =="" else v for v in c]
         d=["0 "if v =="" else v for v in d]
-
         # a
         b1=[]
         c1=[]
@@ -343,8 +275,6 @@ else:
         for c_ in c:
             new_string = c_.replace(',','.')
             c1.append(new_string)
-
-
         ncc_index=list_ncc.index(ncc[0])
         ini=list_int[ncc_index]
 
@@ -393,10 +323,6 @@ else:
                 # 
                 st.write('**Điều chỉnh số thanh mã cuối cùng thành:**',stt[0]-round(test[0],0))
 
-
-
-            
-
         st.subheader('KẾT QUẢ:')
 
         c1,c2=st.columns(2)
@@ -413,6 +339,12 @@ else:
         # with c2:
         #    image= image=st.image(qr_code(link=tk))
 
+        
+        #XUẤT THẺ KIỆN
+
+    def xuat(ma_tk):
+        data=pull_data()
+        df=data[data['THẺ KIỆN']==ma_tk]
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
 
         df2['Số thanh']=df2['Số thanh'].astype(int)
@@ -496,21 +428,21 @@ else:
                     </body>
                     </html>
                     """.format(df22.to_html(index=False,col_space=100,justify='center'))
-        list_email=['qlcl@tanthanhgroup.com']
+        return html,df
 
-        if st.button('Hoàn tất'):
-            send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,html,list_email,da)
-            sheet='Ecount'
-            # from cv import push
-            ECC=eccount()
-            push(ECC,sheet)
-            push(df,'Sheet2')
-        if st.button("Xóa nội dung thẻ kiện cũ"):
-            placeholder.empty()
+    list_email=['qlcl@tanthanhgroup.com']
 
-
-
-
-
+    if st.button('Lưu thông tin'):
+        push(df,'Sheet2')
+    if st.button("Xóa nội dung thẻ kiện cũ"):
+        placeholder.empty()
+    
+    if st.button('Tạo thẻ kiện'):
+        list_dt=xuat(tk)
+        send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,list_dt[0],list_email,da)
+        sheet='Ecount'
+        # from cv import push
+        ECC=eccount(list_dt[1])
+        push(ECC,sheet)
 
 
