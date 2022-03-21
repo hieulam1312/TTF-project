@@ -47,7 +47,7 @@ def ncc_f():
 abv=ncc_f()
 list_ncc=abv[0]
 list_int=abv[1]
-# from list_info import qc_list
+from list_info import qc_list
 go_list=["ALDER",
 "ASH VN","ASH","BẠCH ĐÀN","BEECH","CĂM XE","CAO SU ĐEN","CAO SU","CHERRY","CHÒ CHỈ","SYCAMORE","DỪA","DƯƠNG LIỄU","GÒN","HICKORY","KAPUS","LÒNG MỨT","MAPLE","MÍT","MUỒNG","NEP PALLET","OAK","PƠ MU","POPLAR","RED ELM","RED OAK","SỌ KHỈ",
 "TẠP","TEAK","THÔNG","TRÀM","TRÅU","WALNUT","WHITE OAK","WHITE POPLAR","WILLOW","XOÀI"]
