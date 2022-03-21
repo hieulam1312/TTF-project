@@ -431,12 +431,12 @@ else:
         return html,df
 
     list_email=['qlcl@tanthanhgroup.com']
-
+    st.info('Sau mỗi quy cách dài thì bấm lưu thông tin để lưu lại, tránh trường hợp bị xóa mất. Lưu xong thì bấm Xóa nội dung kiện cũ, nhập thêm quy cách dài mới và tiếp tục bấm lưu thông tin cho đến khi xong')
     if st.button('Lưu thông tin'):
         push(df,'Sheet2')
     if st.button("Xóa nội dung thẻ kiện cũ"):
         placeholder.empty()
-    
+    st.info('Sau khi nhập liệu xong toàn bộ thẻ kiện, bấm Tạo thẻ kiện để hoàn thành')
     if st.button('Tạo thẻ kiện'):
         list_dt=xuat(tk)
         send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,list_dt[0],list_email,da)
