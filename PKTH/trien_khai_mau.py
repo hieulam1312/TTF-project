@@ -16,7 +16,7 @@ from google.oauth2 import service_account
 
 
 from io import BytesIO
-from pyxlsb import open_workbook as open_xlsb
+# from pyxlsb import open_workbook as open_xlsb
 import streamlit as st
 
 credentials=service_account.Credentials.from_service_account_info(
