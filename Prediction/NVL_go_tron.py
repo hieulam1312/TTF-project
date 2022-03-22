@@ -202,7 +202,7 @@ def form(ncc):
             df2=df1.groupby(['MÃ THẺ KIỆN','QC Dài']).agg({'KHỐI LƯỢNG':'sum'}).reset_index()
             sum(df2['KHỐI LƯỢNG'])
             st.write('Tổng số khối {}'.format(sum(df2['KHỐI LƯỢNG']))
-        return df1
+    return df1
 data=form(ncc)
 # data
 ncc_index=list_ncc.index(ncc[0])
