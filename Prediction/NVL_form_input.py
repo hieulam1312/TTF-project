@@ -345,6 +345,7 @@ else:
     def xuat(ma_tk):
         data=pull_data()
         df=data[data['THẺ KIỆN']==ma_tk]
+        df['SỐ KHỐI']=df['SỐ KHỐI'].astype(float)
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
 
         df2['Số thanh']=df2['Số thanh'].astype(int)
