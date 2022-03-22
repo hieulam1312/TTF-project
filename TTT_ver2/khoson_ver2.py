@@ -27,6 +27,7 @@ def pull_lsx(gc):
     ncc=ncc[['LỆNH SX','SỐ ĐH','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','MÀU SƠN']]
     return ncc
 
+
 def form(pr,sl,order_item,production):
     with st.form(key='columns_in_form'):
         rowss=len(production['Đơn hàng'].tolist())
@@ -53,6 +54,7 @@ def form(pr,sl,order_item,production):
         data['Đơn hàng']=order_item[0]
         data['Ngày nhập kho']=pd.to_datetime('today').date()
         return data
+    
 def push(df,gc,sheet):
     import gspread_dataframe as gd
     import gspread as gs
@@ -61,6 +63,14 @@ def push(df,gc,sheet):
     new_df=data.append(df)
     # new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
     gd.set_with_dataframe(sheet,new_df)
+def pull_vattu(gc):
+    import gspread_dataframe as gd
+    import gspread as gs
+    sh=gc.open("Kho sơn - Vật tư").worksheet('Vật tư')
+    sheet=sh.get_all_records()    
+    df=pd.DataFrame(sheet)
+    vatu=df['Tên sản phẩm'].unique().tolist()
+    return vatu
 def pull(gc,time):
     import gspread_dataframe as gd
     import gspread as gs
@@ -187,8 +197,8 @@ with c3:
     st.write('Tổng số dòng: {}'.format(h ))
 with st.form(key='abc'):
     st.subheader('Bước sơn có các vật tư sau:')
-    df=pd.read_excel('TTT_ver2/t.xlsx')
-    vattu=df['Tên sản phẩm'].unique().tolist()
+#     df=pd.read_excel('TTT_ver2/t.xlsx')
+    vattu=pull_vattu(gc)
     r1,r2,=st.columns(2)
     with r1:
         b1=[]
