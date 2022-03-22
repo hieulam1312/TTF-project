@@ -201,7 +201,7 @@ def form(ncc):
         with r4:
             df2=df1.groupby(['MÃ THẺ KIỆN','QC Dài']).agg({'KHỐI LƯỢNG':'sum'}).reset_index()
             df2
-            st.write(sum(df2['KHỐI LƯỢNG']))
+            st.subheader('Tổng số khối là {}'.format(sum(df2['KHỐI LƯỢNG']))
         return df1
 data=form(ncc)
 # data
