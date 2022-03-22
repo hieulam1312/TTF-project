@@ -71,6 +71,14 @@ def pull_vattu(gc):
     df=pd.DataFrame(sheet)
     vatu=df['Tên sản phẩm'].unique().tolist()
     return vatu
+def pull_buocson(gc):
+    import gspread_dataframe as gd
+    import gspread as gs
+    sh=gc.open("Kho sơn - Vật tư").worksheet('Bước sơn')
+    sheet=sh.get_all_records()    
+    df=pd.DataFrame(sheet)
+    buocson=df['Tên bước sơn'].unique().tolist()
+    return buocson
 def pull(gc,time):
     import gspread_dataframe as gd
     import gspread as gs
@@ -137,30 +145,7 @@ with st.form(key='abcd'):
    
     with l2:
         sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-        cd=st.multiselect('Loại Bước sơn',[
-"BÓNG HJFD",
-"BÓNG HXXT",
-"BÓNG NC HB",
-"BÓNG NC SCR",
-"BÓNG NC NY",
-"BÓNG BEX",
-"BÓNG NC PAK",
-"BÓNG PU NANO CHEM" ,
-"LÓT MÀU",
-"LÓT NC HB",
-"LÓT NC PAK",
-"LÓT NC 2307",
-"LÓT PU",
-"LÓT SO",
-"LÓT LĂN",
-"STAIN MÀU",
-"LAU MÀU",
-"SỬA GỖ",
-"TẨY GỖ",
-"CHỐNG MỐC",
-"XĂNG NC",
-"XĂNG PU",
-        "LÓT NƯỚC"])
+        cd=st.multiselect('Loại Bước sơn',pull_buocson(gc))
 #         cd=st.text_input('Loại bước sơn',)
 #         cd=cd.replace('(',"").replace("%","").replace(")","").upper()
 #         cd=''.join([i for i in cd if not i.isdigit()])
