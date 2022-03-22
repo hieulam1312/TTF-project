@@ -354,7 +354,7 @@ else:
         df2=df2.astype(str)
         df2=df2.replace("0"," ")
         df2=df2.replace("0.0"," ")
-        df2
+        df
         st.write('**Tổng số khối:** ',total)
 
         len_=len(df.index.tolist())
@@ -440,7 +440,7 @@ else:
     st.info('Sau khi nhập liệu xong toàn bộ thẻ kiện, bấm Tạo thẻ kiện để hoàn thành')
     if st.button('Tạo thẻ kiện'):
         list_dt=xuat(tk)
-        list_dt[0]
+#         list_dt[0]
         send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,list_dt[0],list_email,da)
         sheet='Ecount'
         # from cv import push
