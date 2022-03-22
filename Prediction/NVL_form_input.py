@@ -440,6 +440,7 @@ else:
     st.info('Sau khi nhập liệu xong toàn bộ thẻ kiện, bấm Tạo thẻ kiện để hoàn thành')
     if st.button('Tạo thẻ kiện'):
         list_dt=xuat(tk)
+        list_dt[0]
         send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,list_dt[0],list_email,da)
         sheet='Ecount'
         # from cv import push
