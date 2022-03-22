@@ -149,7 +149,8 @@ with st.form(key='abcd'):
 "TẨY GỖ",
 "CHỐNG MỐC",
 "XĂNG NC",
-"XĂNG PU"])
+"XĂNG PU",
+        "LÓT NƯỚC"])
 #         cd=st.text_input('Loại bước sơn',)
 #         cd=cd.replace('(',"").replace("%","").replace(")","").upper()
 #         cd=''.join([i for i in cd if not i.isdigit()])
