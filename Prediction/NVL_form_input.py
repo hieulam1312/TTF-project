@@ -26,7 +26,7 @@ def ncc_f():
     from google.oauth2 import service_account
     import gspread #-> Để update data lên Google Spreadsheet
     from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
-    from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
+    # from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
     credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=['https://spreadsheets.google.com/feeds',
@@ -195,6 +195,11 @@ with cls1:
     tk1=st.number_input('Thẻ Kiện:',step=1)
 with cls2:
     ml=st.text_input('Mã lô:',)
+c1,c2,c3=st.columns(3)
+with c1:
+    a=st.text_input('Dày',)
+with c2:
+    c=st.text_input('Dài')
 if 'count' not in st.session_state:
     st.session_state.count = 0
 
@@ -229,8 +234,8 @@ else:
 
 
             r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
-            with r1:
-                a=r1.text_input('Dày',)
+            # with r1:
+            #     a=r1.text_input('Dày',)
             with r2:
                 # placeholder = r2.empty()
                 with placeholder.container():
@@ -239,29 +244,29 @@ else:
                         # b=r2.text_input('Dài',)
                    
                         b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
-            with r3:
-                # placeholder2 = r3.empty()
-                with placeholder.container():
-                    c=[]
-                    for nr in range(5+st.session_state.count):
-                                # b=r2.text_input('Dài',)
+            # with r3:
+            #     # placeholder2 = r3.empty()
+            #     with placeholder.container():
+            #         c=[]
+            #         for nr in range(5+st.session_state.count):
+            #                     # b=r2.text_input('Dài',)
                         
-                        c.append(r3.text_input(label='Dài', key=f'2`1 {nr}'))
+            #             c.append(r3.text_input(label='Dài', key=f'2`1 {nr}'))
                 # c.append(placeholder.text_input(label='Dài', key=f'dfuestion {ng}'))
-            with r4:            
+            with r3:            
                 # placeholder2 = r4.empty()
                 with placeholder.container():
                     d=[]
                     for nr in range(5+st.session_state.count):
                         
-                        d.append(r4.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
+                        d.append(r3.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
             st.form_submit_button('submit')
 
         b=["0" if v =="" else v for v in b]
-        c=["0" if v =="" else v for v in c]
+        # c=["0" if v =="" else v for v in c]
         d=["0 "if v =="" else v for v in d]
         # a
         b1=[]
@@ -272,19 +277,19 @@ else:
         for b_ in b:
             new_string = b_.replace(',','.')
             b1.append(new_string)
-        for c_ in c:
-            new_string = c_.replace(',','.')
-            c1.append(new_string)
+        # for c_ in c:
+        #     new_string = c_.replace(',','.')
+        #     c1.append(new_string)
         ncc_index=list_ncc.index(ncc[0])
         ini=list_int[ncc_index]
 
-        dict={'Rộng':b1,'Dài':c1,'Số thanh':d}
+        dict={'Rộng':b1,'Số thanh':d}
     
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
         df=df.astype(float)
         df['Rộng']=round(df['Rộng'],2)
-        df['Dài']=round(df['Dài'],2)
+        df['Dài']=round(float(c),2)
         df['Dày']=round(float(a),2)
 
         khoi=df['Dày']*df['Rộng']*df['Dài']*df['Số thanh']
@@ -446,5 +451,4 @@ else:
         # from cv import push
         ECC=eccount(list_dt[1])
         push(ECC,sheet)
-
 
