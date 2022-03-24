@@ -21,7 +21,6 @@ import PIL
 from email.utils import make_msgid
 import mimetypes
 
-from sympy import true
 st.set_page_config(layout='wide')
 
 def ncc_f():
