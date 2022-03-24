@@ -241,7 +241,7 @@ else:
                         b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
             with r2:
                     c=st.text_input('Dài')
-            with r3:            
+            with r4:            
                 # placeholder2 = r4.empty()
                 with placeholder.container():
                     d=[]
