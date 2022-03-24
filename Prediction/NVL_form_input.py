@@ -236,26 +236,16 @@ else:
         with st.form(key='columns_in_form'):
 
 
-            r2,r3=st.columns(2)
-            # with r1:
-            #     a=r1.text_input('Dày',)
-            with r2:
-                # placeholder = r2.empty()
+            r1,r2,r3,r4=st.columns(4)
+            with r1:
+                a=r1.text_input('Dày',)
+            with r3:
                 with placeholder.container():
                     b=[]
-                    for nr in range(5+st.session_state.count):
-                        # b=r2.text_input('Dài',)
-                   
+                    for nr in range(5+st.session_state.count):                 
                         b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
-            # with r3:
-            #     # placeholder2 = r3.empty()
-            #     with placeholder.container():
-            #         c=[]
-            #         for nr in range(5+st.session_state.count):
-            #                     # b=r2.text_input('Dài',)
-                        
-            #             c.append(r3.text_input(label='Dài', key=f'2`1 {nr}'))
-                # c.append(placeholder.text_input(label='Dài', key=f'dfuestion {ng}'))
+            with r2:
+                    c=st.text_input('Dài')
             with r3:            
                 # placeholder2 = r4.empty()
                 with placeholder.container():
