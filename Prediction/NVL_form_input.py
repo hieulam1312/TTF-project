@@ -198,11 +198,6 @@ with cls1:
     tk1=st.number_input('Thẻ Kiện:',step=1)
 with cls2:
     ml=st.text_input('Mã lô:',)
-c1,c2,c3=st.columns(3)
-with c1:
-    a=st.text_input('Dày',)
-with c2:
-    c=st.text_input('Dài')
 if 'count' not in st.session_state:
     st.session_state.count = 0
 
