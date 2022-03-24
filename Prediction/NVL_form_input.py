@@ -1,4 +1,6 @@
+from pickle import TRUE
 import smtplib
+from xmlrpc.client import TRANSPORT_ERROR
 import numpy as np
 from logging import error
 from mimetypes import MimeTypes
@@ -18,6 +20,8 @@ from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 from email.utils import make_msgid
 import mimetypes
+
+from sympy import true
 st.set_page_config(layout='wide')
 
 def ncc_f():
@@ -349,7 +353,7 @@ else:
 
     def xuat(ma_tk):
         data=pull_data()
-        df=data[data['THẺ KIỆN']==ma_tk]
+        df=data[data['THẺ KIỆN']==ma_tk].reset_index(drop=True)
         df['SỐ KHỐI']=df['SỐ KHỐI'].astype(float)
         df2=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI']]
 
@@ -360,12 +364,13 @@ else:
         df2=df2.replace("0"," ")
         df2=df2.replace("0.0"," ")
         df
-        st.write('**Tổng số khối:** ',total)
+        # df2
+        st.write('**Tổng số khối:** ',round(sum(df['SỐ KHỐI']),4))
 
         len_=len(df.index.tolist())
 
-        if len_ >35:
-            df_20=df2.iloc[:35]
+        if len_<51 and len_>25:    
+            df_20=df2.iloc[:25]
             df_20=df_20.astype(str)
             df_20['Dày']=df_20['Dày'].str.replace(".",",")
             df_20['Dày']=df_20['Dày'].str.replace(",0","")
@@ -374,12 +379,13 @@ else:
             df_20['Rộng']=df_20['Rộng'].str.replace(",0","")
             df_20['Dài']=df_20['Dài'].str.replace(".",",")
             df_20['Dài']=df_20['Dài'].str.replace(",0","")
+
             df_o=df_20.copy()
             df_o=df_o.notnull()
             df_o=df_o.replace(True,0)
         
 
-            df_ov=df2.iloc[35:].reset_index(drop=True)
+            df_ov=df2.iloc[25:].reset_index(drop=True)
    
             df_o.loc[df_ov.index, :] = df_ov[:]
             df_o=df_o.astype(str)
@@ -392,7 +398,7 @@ else:
             df_o['Dài']=df_o['Dài'].str.replace(".",",")
             df_o['Dài']=df_o['Dài'].str.replace(",0","")           
             df_over=df_o.copy()
-            
+
             # df_over=df_0.loc[df1.index, :] = df1[:]
             html = """ DANH SÁCH THẺ KIỆN\n
                     <body> 
@@ -410,7 +416,76 @@ else:
                     </table> 
                     </body>
                         """.format(df_20.to_html(index=False,col_space=50),df_over.to_html(index=False,col_space=50))
+        elif len_>50:
+            df_20=df2.iloc[:25]
+            df_20=df_20.astype(str)
+            df_20['Dày']=df_20['Dày'].str.replace(".",",")
+            df_20['Dày']=df_20['Dày'].str.replace(",0","")
+            
+            df_20['Rộng']=df_20['Rộng'].str.replace(".",",")
+            df_20['Rộng']=df_20['Rộng'].str.replace(",0","")
+            df_20['Dài']=df_20['Dài'].str.replace(".",",")
+            df_20['Dài']=df_20['Dài'].str.replace(",0","")
+            # df_20
+            df_o=df_20.copy()
+            df_o=df_o.notnull()
+            df_o=df_o.replace(True,0)
+
+            df_ov=df2.iloc[25:50].reset_index(drop=True)
+   
+            df_o.loc[df_ov.index, :] = df_ov[:]
+            df_o=df_o.astype(str)
+            df_o=df_o.replace("0",".")
+            df_o['Dày']=df_o['Dày'].str.replace(".",",")
+            df_o['Dày']=df_o['Dày'].str.replace(",0","")
+            # df22
+            df_o['Rộng']=df_o['Rộng'].str.replace(".",",")
+            df_o['Rộng']=df_o['Rộng'].str.replace(",0","")
+            df_o['Dài']=df_o['Dài'].str.replace(".",",")
+            df_o['Dài']=df_o['Dài'].str.replace(",0","")           
+            df_over=df_o.copy()
+
+
+
+            df_50=df2.iloc[51:]
+            df_50=df_50.astype(str)
+            df_50['Dày']=df_50['Dày'].str.replace(".",",")
+            df_50['Dày']=df_50['Dày'].str.replace(",0","")
+            
+            df_50['Rộng']=df_50['Rộng'].str.replace(".",",")
+            df_50['Rộng']=df_50['Rộng'].str.replace(",0","")
+            df_50['Dài']=df_50['Dài'].str.replace(".",",")
+            df_50['Dài']=df_50['Dài'].str.replace(",0","")
+
+
+
+            # df_over=df_0.loc[df1.index, :] = df1[:]
+            html = """ DANH SÁCH THẺ KIỆN 1/2\n
+                    <body> 
+                    <table  margin-bottom= "2000" cellpadding="2" cellspacing="2.2" padding="10">     
+                    <tr>         
+                    <td>             
+                    <table  margin-bottom= "2000" cellpadding="2" cellspacing="2.2" padding="10">                  
+                    <tr>                     
+                    <td>{0}<td> 
+                    <td>{1}</td>                 
+                    </tr>  
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    </body>
+                    DANH SÁCH THẺ KIỆN 2/2
+                    <body>
+                        {2}
+                        <br>
+                    </body>
+                        """.format(df_20.to_html(index=False,col_space=60),df_over.to_html(index=False,col_space=60),df_50.to_html(index=False,col_space=120,justify='center'))
+
+
+
         else:
+
             df22=df2.copy()
             # df22=df22.astype(str)
             df22['Dày']=df22['Dày'].str.replace(".",",")
@@ -434,7 +509,7 @@ else:
                     </body>
                     </html>
                     """.format(df22.to_html(index=False,col_space=100,justify='center'))
-        return html,df
+        return html,df,round(sum(df['SỐ KHỐI']),4)
 
     list_email=['qlcl@tanthanhgroup.com']
     st.info('Sau mỗi quy cách dài thì bấm lưu thông tin để lưu lại, tránh trường hợp bị xóa mất. Lưu xong thì bấm Xóa nội dung kiện cũ, nhập thêm quy cách dài mới và tiếp tục bấm lưu thông tin cho đến khi xong')
@@ -446,7 +521,7 @@ else:
     if st.button('Tạo thẻ kiện'):
         list_dt=xuat(tk)
 #         list_dt[0]
-        send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],total,tk,qr_code(link=tk),NCC,qc[0],ml,td,list_dt[0],list_email,da)
+        send_email("Thẻ kiện: "+tk+" - "+NCC+" - "+qc[0],list_dt[2],tk,qr_code(link=tk),NCC,qc[0],ml,td,list_dt[0],list_email,da)
         sheet='Ecount'
         # from cv import push
         ECC=eccount(list_dt[1])
