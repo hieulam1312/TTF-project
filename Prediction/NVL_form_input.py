@@ -238,7 +238,7 @@ else:
                 with placeholder.container():
                     b=[]
                     for nr in range(5+st.session_state.count):                 
-                        b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
+                        b.append(r3.text_input(label='Rộng', key=f'2`1 {nr}'))
             with r2:
                     c=st.text_input('Dài')
             with r4:            
@@ -247,7 +247,7 @@ else:
                     d=[]
                     for nr in range(5+st.session_state.count):
                         
-                        d.append(r3.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
+                        d.append(r4.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
