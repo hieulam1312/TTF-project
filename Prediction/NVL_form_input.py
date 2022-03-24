@@ -233,7 +233,7 @@ else:
         with st.form(key='columns_in_form'):
 
 
-            r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
+            r2,r3=st.columns(2)
             # with r1:
             #     a=r1.text_input('Dày',)
             with r2:
