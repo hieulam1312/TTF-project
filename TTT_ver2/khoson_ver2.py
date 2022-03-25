@@ -114,7 +114,7 @@ gc=gspread.authorize(Cre)
 # data=sheet1.get_all_records()
 # df=pd.DataFrame(data)
 # order_list=df['Đơn hàng'].unique().tolist()
-st.sidebar.title('PHẦN CỦA KẾ TOÁN')
+st.sidebar.title('PHẦN DÀNH CHO KẾ TOÁN')
 
 time=st.sidebar.date_input('Ngày',)
 if st.sidebar.button('Tải DS cho Kế toán'):
@@ -125,7 +125,7 @@ if st.sidebar.button('Tải DS cho Kế toán'):
 st.sidebar.title('PHẦN DÀNH CHO THỦ KHO')
 if st.sidebar.button('Tổng hợp phiếu xuất trong ngày'):
     data=pull(gc,time)
-    group_data=data[1][['Nhà máy','Mã phiếu đề xuất']].drop_duplicates().sort_values(by='Nhà máy').reset_index(drop=True)
+    group_data=data[1][['Nhà máy','Mã phiếu đề xuất']]
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     group_data.to_excel(writer, sheet_name='Sheet1',index=False)
