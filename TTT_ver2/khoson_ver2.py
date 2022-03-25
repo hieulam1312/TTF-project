@@ -101,7 +101,7 @@ def pull(gc,time):
     # worksheet = writer.sheets['Sheet1','Sheet2']
     writer.save()
     processed_data = output.getvalue()
-    return processed_data
+    return processed_data,data
 Cre=service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=['https://spreadsheets.google.com/feeds',
@@ -125,7 +125,7 @@ if st.sidebar.button('Tải DS cho Kế toán'):
 st.sidebar.title('PHẦN DÀNH CHO THỦ KHO')
 if st.sidebar.button('Tổng hợp phiếu xuất trong ngày'):
     data=pull(gc,time)
-    group_data=data[1][['Nhà máy','Mã phiếu đề xuất']]
+    group_data=data[1][['Nhà máy','Mã phiếu đề xuất']].drop_duplicates().sort_values(by='Nhà máy').reset_index(drop=True)
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     group_data.to_excel(writer, sheet_name='Sheet1',index=False)
