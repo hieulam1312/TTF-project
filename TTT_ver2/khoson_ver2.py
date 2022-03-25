@@ -122,6 +122,20 @@ if st.sidebar.button('Tải DS cho Kế toán'):
     st.sidebar.download_button(label='📥 Tải file xuống',
                             data=data,
                             file_name= "{}.xlsx".format(time))
+st.sidebar.title('PHẦN DÀNH CHO THỦ KHO')
+if st.sidebar.button('Tổng hợp phiếu xuất trong ngày'):
+    data=pull(gc,time)
+    group_data=data[1].groupby(['Nhà máy','Mã phiếu đề xuất']).agg({'Tên vật tư':'count'}).reset_index().sort_values(by='Nhà máy').reset_index(drop=True)
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    group_data.to_excel(writer, sheet_name='Sheet1',index=False)
+    workbook = writer.book
+    # worksheet = writer.sheets['Sheet1','Sheet2']
+    writer.save()
+    processed_data = output.getvalue()
+    st.sidebar.download_button(label='📥 Tải file xuống',
+                            data=processed_data,
+                            file_name= "{}.xlsx".format(time))
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 lsx_df=pull_lsx(gc)
 
