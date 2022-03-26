@@ -122,7 +122,7 @@ st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
 t1,t2 =st.columns(2)
 with t1:
     user=st.text_input('Tên đăng nhập',)
- with t2:
+with t2:
     password=st.text_input('Mật khẩu',type='password')
   
 if st.serects['user']==user and st.serects['password']==password:
