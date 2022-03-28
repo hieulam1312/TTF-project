@@ -19,7 +19,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 if 'count' not in st.session_state:
     st.session_state.count = 0
 def pull_lsx(gc):
-    sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('1.Master DH')
+    sh=gc.open('SX1.1 - Database ĐHNB 2022').worksheet('1.Master DH')
     sheet=sh.get_all_values()
     ncc=pd.DataFrame(sheet).astype(str)
     ncc.columns=ncc.iloc[0]
