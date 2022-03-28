@@ -22,7 +22,7 @@ from gspread.utils import A1_ADDR_ROW_COL_RE
 st.set_page_config(layout='wide')
 def pull_lsx(gc):
     spreadsheet_key='1dUUWEBwnD4kSJAwI3Oi4_fXN1Yji8cdth4Rs2RewCuw'
-    sh=gc.open('DSX1.1 - Master Đơn hàng').worksheet('1.Master DH')
+    sh=gc.open('SX1.1 - Database ĐHNB 2022').worksheet('1.Master DH')
     sheet=sh.get_all_values()
     ncc=pd.DataFrame(sheet)
     ncc=ncc.astype(str)
