@@ -402,6 +402,8 @@ if aa:
             annotation_text = 'Nhà máy                                         Thủ kho sơn'
             sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
             reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
-
+            st.sidebar.download_button(label='📥 Tải file xuống',
+                        data=reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode),
+                        file_name= "phieu_xuat_kho.pdf")
 
        
