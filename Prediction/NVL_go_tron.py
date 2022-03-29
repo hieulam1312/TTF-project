@@ -22,7 +22,30 @@ import PIL
 st.set_page_config(layout='wide')
 
 # from cvcv import ncc_f
-from ncc import abv
+def ncc_f():
+    import streamlit as st
+    import pandas as pd
+    from google.oauth2 import service_account
+    import gspread #-> Để update data lên Google Spreadsheet
+    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
+    # from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
+    credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive'],
+    )
+    gc = gspread.authorize(credentials)
+    spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
+
+    sh=gc.open('Kho NVL - NCC').worksheet('Sheet1')
+    sheet=sh.get_all_values()
+    ncc=pd.DataFrame(sheet)
+    ncc.columns=ncc.iloc[0]
+    ncc=ncc[1:]
+    # ncc
+    A = ncc['TÊN NCC'].tolist()
+    B= ncc['MÃ'].tolist()
+    return A,B
 from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
@@ -64,9 +87,9 @@ go_list=["ALDER",
 ]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 # abv
-list_ncc = abv[0]
-
-list_int= abv[1]
+abv=ncc_f()
+list_ncc=abv[0]
+list_int=abv[1]
 # cv.ncc_f()
 # def increment_counter(increment_value=0):
 #     rowss += increment_value
