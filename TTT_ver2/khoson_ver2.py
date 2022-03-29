@@ -63,6 +63,9 @@ def push(df,gc,sheet):
     new_df=data.append(df)
     # new_df['Tên vật tư']=new_df['Tên vật tư'].dropna()
     gd.set_with_dataframe(sheet,new_df)
+    st.success('xong')
+
+
 def pull_vattu(gc):
     import gspread_dataframe as gd
     import gspread as gs
@@ -387,7 +390,6 @@ if aa:
 
         data['Mã phiếu đề xuất']=barcode
         data1=data.copy()
-        push(data1,gc,'Xuất kho')
 
         if st.button('Hoàn tất xuất kho - Bấm 1 lần duy nhất'):
             st.info('Từ từ, bình tĩnh đợi nghen!')
@@ -402,9 +404,10 @@ if aa:
             subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
             annotation_text = 'Nhà máy                                         Thủ kho sơn'
             sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
-            reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
             st.download_button(label='📥 Tải file xuống',
                         data=reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode),
                         file_name= "phieu_xuat_kho.pdf")
+            push(data1,gc,'Xuất kho')
+
 
        
