@@ -86,7 +86,7 @@ def pull(gc,time):
     sheet=sh.get_all_records()
     data=pd.DataFrame(sheet).astype(str)
 
-    data['Ngày xuất kho']=pd.to_datetime(data['Ngày xuất kho'],format="%m/%d/%Y").dt.date
+    data['Ngày xuất kho']=pd.to_datetime(data['Ngày xuất kho']).dt.date
     data=data[data['Ngày xuất kho']==time]
     
 
