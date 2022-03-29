@@ -401,7 +401,7 @@ if aa:
             subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
             annotation_text = 'Nhà máy                                         Thủ kho sơn'
             sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
-            reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp)
+            reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
 
 
        
