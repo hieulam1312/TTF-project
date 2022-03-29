@@ -236,11 +236,12 @@ def rePrint(gc,pdx):
     sl_sp=df['SL sản phẩm'].unique().tolist()
     cd=df['Bước sơn'].unique().tolist()
     slson=df['Khối lượng sơn'].unique().tolist()
+    gls=df['Giờ lấy sơn'].unique().tolist()
     title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(time,hour)
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
     barcode=pdx
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(hour,kh[0],tsp,sl_sp[0],cd[0],slson[0])
+    sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(gls[0],kh[0],tsp,sl_sp[0],cd[0],slson[0])
 
     return reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
 
