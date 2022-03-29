@@ -234,8 +234,8 @@ def rePrint(gc,pdx):
     tsp=df['Tên Sản phẩm'].tolist()[0]
     kh=df['Loại đề xuất'].unique().tolist()
     sl_sp=df['SL sản phẩm'].unique().tolist()
-    cd=df['Khối lượng sơn'].unique().tolist()
-    slson=df['Bước sơn'].unique().tolist()
+    cd=df['Bước sơn'].unique().tolist()
+    slson=df['Khối lượng sơn'].unique().tolist()
     title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(time,hour)
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
     barcode=pdx
