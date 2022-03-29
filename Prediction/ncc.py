@@ -22,8 +22,8 @@ def ncc_f():
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
     # ncc
-    A = ncc['TÊN NCC'].unique().tolist()
-    B= ncc['MÃ'].unique().tolist()
+    A = ncc['TÊN NCC'].tolist()
+    B= ncc['MÃ'].tolist()
     return A,B
 # ncc_list=ncc()
 
