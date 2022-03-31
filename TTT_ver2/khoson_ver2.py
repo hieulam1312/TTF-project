@@ -24,7 +24,7 @@ def pull_lsx(gc):
     ncc=pd.DataFrame(sheet).astype(str)
     ncc.columns=ncc.iloc[0]
     ncc=ncc[1:]
-    ncc=ncc[['LỆNH SX','SỐ ĐH','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','MÀU SƠN']]
+    ncc=ncc[['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','MÀU SƠN']]
     return ncc
 
 
