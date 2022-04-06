@@ -269,8 +269,8 @@ if aa:
         if st.sidebar.button('Tải DS cho Kế toán'):
             data=pull(gc,time)
             st.sidebar.download_button(label='📥 Tải file xuống',
-                                    data=data,
-                                    file_name= "{}.xlsx".format(time))
+                                    data=data[0],
+                                    file_name= "{}.xlsx".format(time)
         st.sidebar.title('PHẦN DÀNH CHO THỦ KHO')
         if st.sidebar.button('Tổng hợp phiếu xuất trong ngày'):
             data=pull(gc,time)
