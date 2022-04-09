@@ -42,18 +42,10 @@ def pull_lsx(gc):
 # ncc_list=ncc()
 
 def push_lsx(df,ws1,ws2):
-
-    import gspread_dataframe as gd
-    import gspread as gs
-
-    existing1 = gd.get_as_dataframe(ws1)
-    existing1=existing1[existing1['LỆNH SX'].isnull()==False]
-    updated1 = existing1.append(df)
-    gd.set_with_dataframe(ws1,updated1)
-
-    existing2 = gd.get_as_dataframe(ws2)
-    updated2 = existing2.append(df)
-    gd.set_with_dataframe(ws2, updated2)
+    data_list = df.values.tolist()
+    ws1.append_rows(data_list)
+    ws2.append_rows(data_list)
+    st.success('Done')
 
 
     st.success('Done')
@@ -185,7 +177,7 @@ if aa:
                 lsx_info["MÀU SƠN"]=lsx_info["MÀU SƠN"].str.replace('NA','N/A ')
                 lsx_info=lsx_info.astype(str)
 #                 lsx_info=lsx_info[["LỆNH SX",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF",	"ĐVT",	"LOẠI GỖ",	"MÀU SƠN"	,"NỆM"	,"NGÀY XUẤT",	"GHI CHÚ"]]
-                lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)",		"LOẠI GỖ"	,"NỆM",	"SỐ ĐƠN HÀNG",'MÃ KH',	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"  ,'QUI CÁCH SP (W x D x H) cm',	"ĐVT","SỐ LƯỢNG",	"GHI CHÚ",	"MÀU SƠN",	"NGÀY XUẤT"]]
+                lsx_info=lsx_info[["LỆNH SX",	 "NMSX",	"SẢN PHẨM (C/M)",	"GIA CÔNG (Y/N)",	"V/E U/CONG (Y/N)",	"DÁN VNR (Y/N)",	"K/L ĐB (Y/N)","SỐ ĐƠN HÀNG",	"TÊN KHÁCH HÀNG",	"TÊN SẢN PHẨM TTF"  ,"LOẠI GỖ","NỆM",		"ĐVT",	"SỐ LƯỢNG",	"GHI CHÚ",		"MÀU SƠN"	,	"NGÀY XUẤT"	]]
                 ws1 = gc.open("DSX2.1 - Lệnh sản xuất").worksheet("1. LENH SX")
                 ws2 = gc.open("LSX - lưu trữ").worksheet("LSX ĐÃ IN")
                 push_lsx(lsx_info, ws1, ws2)
