@@ -233,12 +233,12 @@ else:
 
             r1,r2,r3,r4=st.columns(4)
             with r1:
-                a=r1.number_input('Dày',,step=1)
+                a=r1.number_input('Dày',)
             with r3:
                 with placeholder.container():
                     b=[]
                     for nr in range(5+st.session_state.count):                 
-                        b.append(r3.number_input(label='Rộng', key=f'2`1 {nr}',step=1))
+                        b.append(r3.number_input(label='Rộng', key=f'2`1 {nr}'))
             with r2:
                     c=st.number_input('Dài',step=1)
             with r4:            
