@@ -233,21 +233,21 @@ else:
 
             r1,r2,r3,r4=st.columns(4)
             with r1:
-                a=r1.number_input('Dày',)
+                a=r1.number_input('Dày',,step=1)
             with r3:
                 with placeholder.container():
                     b=[]
                     for nr in range(5+st.session_state.count):                 
-                        b.append(r3.number_input(label='Rộng', key=f'2`1 {nr}'))
+                        b.append(r3.number_input(label='Rộng', key=f'2`1 {nr}',step=1))
             with r2:
-                    c=st.number_input('Dài')
+                    c=st.number_input('Dài',step=1)
             with r4:            
                 # placeholder2 = r4.empty()
                 with placeholder.container():
                     d=[]
                     for nr in range(5+st.session_state.count):
                         
-                        d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
+                        d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {nr}',step=1))
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
