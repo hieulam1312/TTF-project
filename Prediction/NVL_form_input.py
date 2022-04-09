@@ -268,7 +268,7 @@ else:
         ncc_index=list_ncc.index(ncc[0])
         ini=list_int[ncc_index]
 
-        dict={'Rộng':b1,'Số thanh':d}
+        dict={'Rộng':b,'Số thanh':d}
     
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
