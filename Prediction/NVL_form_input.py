@@ -233,41 +233,38 @@ else:
 
             r1,r2,r3,r4=st.columns(4)
             with r1:
-                a=r1.text_input('Dày',)
+                a=r1.number_input('Dày',)
             with r3:
                 with placeholder.container():
                     b=[]
                     for nr in range(5+st.session_state.count):                 
-                        b.append(r3.text_input(label='Rộng', key=f'2`1 {nr}'))
+                        b.append(r3.number_input(label='Rộng', key=f'2`1 {nr}'))
             with r2:
-                    c=st.text_input('Dài')
+                    c=st.number_input('Dài')
             with r4:            
                 # placeholder2 = r4.empty()
                 with placeholder.container():
                     d=[]
                     for nr in range(5+st.session_state.count):
                         
-                        d.append(r4.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
+                        d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
             st.form_submit_button('submit')
 
-        b=["0" if v =="" else v for v in b]
-        # c=["0" if v =="" else v for v in c]
-        d=["0 "if v =="" else v for v in d]
-        # a
-        b1=[]
-        c1=[]
-        # a1=a.replace(',','.')
-        # st.form_submit_button('Submit')
+#         b=["0" if v =="" else v for v in b]
+#         # c=["0" if v =="" else v for v in c]
+#         d=["0 "if v =="" else v for v in d]
 
-        for b_ in b:
-            new_string = b_.replace(',','.')
-            b1.append(new_string)
-        # for c_ in c:
-        #     new_string = c_.replace(',','.')
-        #     c1.append(new_string)
+#         b1=[]
+#         c1=[]
+
+
+#         for b_ in b:
+#             new_string = b_.replace(',','.')
+#             b1.append(new_string)
+
         ncc_index=list_ncc.index(ncc[0])
         ini=list_int[ncc_index]
 
@@ -275,7 +272,7 @@ else:
     
         import pandas as pd
         df=pd.DataFrame.from_dict(dict)    
-        df=df.astype(float)
+#         df=df.astype(float)
         df['Rộng']=round(df['Rộng'],2)
         df['Dài']=round(float(c),2)
         df['Dày']=round(float(a),2)
@@ -289,7 +286,6 @@ else:
         df['NCC']=ncc[0]
         df['LOẠI GỖ']=go[0]
         df['QC KIỂM']=qc[0]
-#         df['NGÀY KIỂM']=df['NGÀY KIỂM'].dt.date 
 
         total=round(sum(df['SỐ KHỐI']),4)
         df=df[df['SỐ KHỐI']>0]
