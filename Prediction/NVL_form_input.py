@@ -247,7 +247,7 @@ else:
                     d=[]
                     for nr in range(5+st.session_state.count):
                         
-                        d.append(r4.number_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
+                        d.append(r4.number_input(label='Số thanh',value =int, key=f'Quesdfgtion {nr}'))
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
