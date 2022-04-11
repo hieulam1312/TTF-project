@@ -285,7 +285,7 @@ if aa:
         tab=tab.drop(columns={'variable'})
         tabb=tab.copy() # .merge(form,how='left',on='Bộ phận')
         tabb['Ngày']=datetime.date.today()
-        tabb=tabb[['Ngày','LỆNH SX','Version LSX','Bộ phận','Loại thông tin']]
+        tabb=tabb[['LỆNH SX','Version LSX','Bộ phận','Loại thông tin','Ngày']]
         tabb=tabb.astype(str)
         if st.button('Xuất danh sách!'):
             ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
