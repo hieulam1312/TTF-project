@@ -284,9 +284,9 @@ if aa:
         tab=table.melt(id_vars=['LỆNH SX','SỐ ĐƠN HÀNG','TÊN KHÁCH HÀNG','TÊN SẢN PHẨM TTF','SỐ LƯỢNG','LOẠI GỖ','Version LSX','Loại thông tin'],value_name='Bộ phận')
         tab=tab.drop(columns={'variable'})
         tabb=tab.copy() # .merge(form,how='left',on='Bộ phận')
-        tabb['Ngày']=datetime.date.today().astype(str)
+        tabb['Ngày']=datetime.date.today()
         tabb=tabb[['Ngày','LỆNH SX','Version LSX','Bộ phận','Loại thông tin']]
-        tabb
+        tabb=tabb.astype(str)
         if st.button('Xuất danh sách!'):
             ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
             ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("TD CHUYỂN GIAO TTSP TKH")
