@@ -287,6 +287,7 @@ if aa:
         tabb['Ngày']=datetime.date.today()
         tabb=tabb[['LỆNH SX','Version LSX','Bộ phận','Loại thông tin','Ngày']]
         tabb=tabb.astype(str)
+        tabb
         if st.button('Xuất danh sách!'):
             ws1 = gc.open("TCHC - Theo dõi Photocopy").worksheet("Trang tính10")
             ws2 = gc.open("TCHC - Theo dõi Photocopy").worksheet("TD CHUYỂN GIAO TTSP TKH")
