@@ -305,6 +305,7 @@ if aa:
             st.form_submit_button('Xác nhận')
             table=pd.DataFrame(list_sdh,columns=['LỆNH SX'])
             table['NGÀY']=datetime.date.today()
+        table
         if st.button('Xuất danh sách!'):
             ws1 = gc.open("CHECK LSX - HÀNG NGÀY").worksheet("Sheet1")
             ws2 = gc.open("CHECK LSX - HÀNG NGÀY").worksheet("Sheet2")
