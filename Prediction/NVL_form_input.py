@@ -497,6 +497,8 @@ else:
     list_email=['qlcl@tanthanhgroup.com']
     st.info('Sau mỗi quy cách dài thì bấm lưu thông tin để lưu lại, tránh trường hợp bị xóa mất. Lưu xong thì bấm Xóa nội dung kiện cũ, nhập thêm quy cách dài mới và tiếp tục bấm lưu thông tin cho đến khi xong')
     if st.button('Lưu thông tin'):
+        df['NGÀY KIỂM']=df['NGÀY KIỂM'].astype(str)
+
         push(df,'Sheet2')
     if st.button("Xóa nội dung thẻ kiện cũ"):
         placeholder.empty()
