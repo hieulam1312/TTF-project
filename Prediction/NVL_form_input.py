@@ -170,13 +170,16 @@ def push(df,str):
 
     import gspread_dataframe as gd
     import gspread as gs
+    data_list = df.values.tolist()
 
     ws = gc.open("Kho NVL - NCC").worksheet(str)
-    existing = gd.get_as_dataframe(ws)
+    # existing = gd.get_as_dataframe(ws)
 
-    updated = existing.append(df)
-    gd.set_with_dataframe(ws, updated)
+    # updated = existing.append(df)
+    # gd.set_with_dataframe(ws, updated)
+    ws.append_rows(data_list)
     st.success('Tải lại trang để tiếp tục nhập liệu')
+
 
 st.subheader('Nhập thông tin:')
 
