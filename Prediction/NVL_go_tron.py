@@ -302,7 +302,8 @@ with c5:
         ECC=eccount(data,ini)
         push(ECC,sheet)
         data['MÃ THẺ KIỆN_2']=data['MÃ THẺ KIỆN'].str.replace('K','T')
-        # data
+        data["NGÀY NHẬP LIỆU"]=data["NGÀY NHẬP LIỆU"].astype(str)
+        data["NGÀY KIỂM"]=data["NGÀY KIỂM"].astype(str)
         data=data[['MÃ THẺ KIỆN_2',"MÃ THẺ KIỆN","NGÀY NHẬP LIỆU","NGÀY KIỂM",	"NGƯỜI KIỂM",	"NCC",	"LOẠI GỖ",	"QC Dày",	"QC Rộng","QC Dài",	"Số thanh",	 "KHỐI LƯỢNG", 	"MÃ LÔ",'ĐỘ ẨM']]
         data=data[data["QC Dài"]>0]
         
