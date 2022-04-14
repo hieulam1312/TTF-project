@@ -280,17 +280,12 @@ def push(df,str):
     )
     gc = gspread.authorize(credentials)
     spreadsheet_key='1_ZhSbjL2EfbyTLyWCpTrHJi6kCku1j0eVwQ_g1R2QTM'
-
+    ws = gc.open("TTF - Nhập liệu gỗ tròn").worksheet(str)
     import gspread_dataframe as gd
     import gspread as gs
-
-    ws = gc.open("TTF - Nhập liệu gỗ tròn").worksheet(str)
-    existing = gd.get_as_dataframe(ws)
-    # existing
-    updated = existing.append(df)
-    gd.set_with_dataframe(ws, updated)
+    data_list = df.values.tolist()
+    ws.append_rows(data_list)
     st.success('Bấm Xóa nội dung thẻ kiện cũ để tiếp tục')
-
 
 
 list_email=['qlcl@tanthanhgroup.com','ttf.qcgo@gmail.com']
