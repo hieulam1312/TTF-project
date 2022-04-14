@@ -330,6 +330,7 @@ else:
         df['ĐỘ ẨM']=da
         # with c2:
         #    image= image=st.image(qr_code(link=tk))
+        df=df[['Dày','Rộng','Dài','Số thanh','SỐ KHỐI','NGÀY KIỂM'	,'NCC',	'LOẠI GỖ',	'QC KIỂM',	'THẺ KIỆN',	'Mã lô',	'ĐỘ ẨM']]
 
         
         #XUẤT THẺ KIỆN
