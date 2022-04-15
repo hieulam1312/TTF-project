@@ -261,7 +261,7 @@ def rePrint(gc,pdx):
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
     sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(gls[0],kh[0],tsp,sl_sp[0],cd[0],slson[0])
 
-    return reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
+    return reciep(df,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
 
 
 def increment_counter(increment_value=0):
