@@ -144,14 +144,22 @@ def reciep(df,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barc
                         barcode,
                         horizontalalignment='right',
                         size=12,style='italic')
-                plt.figtext(0.1, 0.4,
+                plt.figtext(0.1, 0.6,
                             sp,
                             horizontalalignment='left',
                             size=10,
                         )
+                # Add a table at the bottom of the axes
+                the_table = plt.table(cellText=data2.values,
+                                    rowLoc='right',
+                                    colLabels=data2.columns,
+                                    loc='center')
 
-                # Add annotation
-                plt.figtext(0.5, 0.3,
+                # Scaling is the only influence we have over top and bottom cell padding.
+                # Make the rows taller (i.e., make cell y scale larger).
+                the_table.scale(.7, 1 )
+                        # Add annotation
+                plt.figtext(0.5, 0.2,
                             annotation_text,
                             horizontalalignment='center',
                             size=9, weight='light'        
@@ -196,14 +204,21 @@ def reciep(df,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barc
                         barcode,
                         horizontalalignment='right',
                         size=12,style='italic')
-                plt.figtext(0.1, 0.4,
+                plt.figtext(0.1, 0.6,
                             sp,
                             horizontalalignment='left',
                             size=10,
                         )
+                # Add a table at the bottom of the axes
+                the_table = plt.table(cellText=data2.values,
+                                    rowLoc='right',
+                                    colLabels=data2.columns,
+                                    loc='center')
 
-                # Add annotation
-                plt.figtext(0.5, 0.3,
+                # Scaling is the only influence we have over top and bottom cell padding.
+                # Make the rows taller (i.e., make cell y scale larger).
+                the_table.scale(.7, 1 )                        # Add annotation
+                plt.figtext(0.5, 0.2,
                             annotation_text,
                             horizontalalignment='center',
                             size=9, weight='light'        
