@@ -259,7 +259,7 @@ def rePrint(gc,pdx):
     subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
     barcode=pdx
     annotation_text = 'Nhà máy                                         Thủ kho sơn'
-    sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(gls[0],kh[0],tsp,sl_sp[0],cd[0],slson[0])
+    sp='\n Giờ lấy sơn: {} - Loại đề xuất: {} \n \nTên SP: {} - SL ghế: {} \n \nBước sơn: {} - Khối lượng sơn: {} kg'.format(gls[0],kh[0],tsp,sl_sp[0],cd[0],slson[0])
 
     return reciep(df,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
 
