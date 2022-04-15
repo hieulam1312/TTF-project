@@ -418,7 +418,7 @@ if aa:
             title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(datetime.now(tz).date().strftime("%d/%m/%Y"),datetime.now(tz).strftime("%H:%M"))
             subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
             annotation_text = 'Nhà máy                                         Thủ kho sơn'
-            sp='\n \nGiờ lấy sơn: {} \n \nLoại đề xuất: {} \n \nTên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
+            sp='\n Giờ lấy sơn: {} - Loại đề xuất: {} \n \nTên SP: {} - SL ghế: {} \n \nBước sơn: {} - Khối lượng sơn: {} kg'.format(gls[0],kh[0],tsp,sl_sp[0],cd[0],slson[0])
             st.download_button(label='📥 Tải file xuống',
                         data=reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode),
                         file_name= "phieu_xuat_kho.pdf")
