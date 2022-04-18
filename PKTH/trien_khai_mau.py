@@ -61,7 +61,7 @@ under_12td_df=pd.DataFrame(under_12td)
 sh8=gc1.open('TTF - MẪU 2022 - TRIỂN KHAI').worksheet('Sheet53')
 dataaa=sh8.get_all_records()
 data=pd.DataFrame(dataaa)
-nm_df=td_df.loc[(td_df['NHÀ MÁY']!='X4')&(td_df['NHÀ MÁY']!='NM NỆM')]
+nm_df=td_df.loc[(td_df['NHÀ MÁY']!='X4')&(td_df['NHÀ MÁY']!='NM NỆM')&(td_df['NHÀ MÁY']!='NM5')]
 td_new_df=pd.concat([nm_df,td_x4_df])
 td_new_df=td_new_df[['SỐ ĐƠN HÀNG','BƯỚC','IN','OT','NHÀ MÁY','NMVLM','BỘ PHẬN','NGÀY GIẢI QUYẾT','NHÓM MẪU']]
 td_new_df=td_new_df.rename(columns={'IN': 'NGÀY NHẬN','OT':'NGÀY GIAO','NMVLM':'NVLM'})
