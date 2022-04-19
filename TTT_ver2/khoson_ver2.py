@@ -3,9 +3,11 @@ from ipaddress import collapse_addresses
 from os import close
 from re import T
 from PIL.Image import new
+from libcst import Else
 from numpy.core.fromnumeric import size
 import pandas as pd
 from pyasn1.debug import Scope
+from sqlalchemy import TIME
 import streamlit as st
 import base64,io,gspread
 from google.oauth2 import service_account
@@ -82,24 +84,27 @@ def pull_buocson(gc):
     df=pd.DataFrame(sheet)
     buocson=df['Tên bước sơn'].unique().tolist()
     return buocson
-def pull(gc,time):
+def pull(gc,time,timee):
     import gspread_dataframe as gd
     import gspread as gs
     sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
     sheet=sh.get_all_records()
-    data=pd.DataFrame(sheet).astype(str)
+    data=pd.DataFrame(sheet)
 
     data['Ngày xuất kho']=pd.to_datetime(data['Ngày xuất kho'],format="%m/%d/%Y").dt.date
-    data=data[data['Ngày xuất kho']==time]
-    
-
+    data=data[data[timee]==time]
+    # data
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("'",""),data['Lệnh SX'].str.replace("'","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("[",""),data['Lệnh SX'].str.replace("[","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("]",""),data['Lệnh SX'].str.replace("]","")
-    data=data[['Mã phiếu đề xuất','Tên Sản phẩm','Lệnh SX','Tên vật tư','Số lượng','Ngày xuất kho','Nhà máy','NHÀ MÁY','Khách hàng']]
+    data1=data[['Tên Sản phẩm','Lệnh SX','Tên vật tư','Số lượng','Ngày xuất kho','Nhà máy','NHÀ MÁY','Khách hàng',timee]]
+    if timee=='TUẦN XUẤT':
+        data_group=data1.groupby(['Tên Sản phẩm','Lệnh SX','Tên vật tư','Nhà máy','NHÀ MÁY','Khách hàng',timee]).agg({'Số lượng':sum}).reset_index()
+    else:
+        data_group=data1
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    data.to_excel(writer, sheet_name='Sheet1',index=False)
+    data_group.to_excel(writer, sheet_name='Sheet1',index=False)
     workbook = writer.book
     # worksheet = writer.sheets['Sheet1','Sheet2']
     writer.save()
@@ -244,6 +249,7 @@ def rePrint(gc,pdx):
     sheet=sh.get_all_records()
     data=pd.DataFrame(sheet).astype(str)
     df=data[data['Mã phiếu đề xuất']==pdx]
+    df
     time=df['Ngày xuất kho'].unique().tolist()[0]
     hour=df['Giờ xuất kho'].unique().tolist()[0]
     footer_text = 'Ngày xuất {}'.format(time)
@@ -269,26 +275,144 @@ def increment_counter(increment_value=0):
 def imcrement_counter(increment_value=0):
     st.session_state.count -= increment_value
 st.title("KHO SƠN - XUẤT SƠN CHO SẢN XUẤT")
-t1,t2 =st.columns(2)
-with t1:
-    user=st.text_input('Tên đăng nhập',)
-    aa=st.checkbox("Login")
-with t2:
-    password=st.text_input('Mật khẩu',type='password')
+
+user=st.sidebar.text_input('Tên đăng nhập',)
+password=st.sidebar.text_input('Mật khẩu',type='password')
+aa=st.sidebar.checkbox("Login")
 if aa:  
     if st.secrets['user']==user and st.secrets['password']==password:
+        selection=st.sidebar.radio('Chọn nội dung',['Nhập phiếu xuất sơn','In lại phiếu xuất','Tổng hợp danh sách trong ngày','Kế toán xuất số liệu'])
+        if selection=='Nhập phiếu xuất sơn':
+            st.header('TẠO PHIẾU XUẤT KHO')
+            lsx_df=pull_lsx(gc)
+            with st.form(key='abcd'):
+                c1,c2,c3=st.columns(3)
+                with c1:
+                    nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
+                with c2:
+                    kh=st.multiselect("Loại đề xuất",['Kế hoạch','Phát sinh'])
+                    lsx_id=lsx_df['LỆNH SX'].unique().tolist()
+                    lsx_id.append('Nội địa')
 
-        st.sidebar.title('PHẦN DÀNH CHO KẾ TOÁN')
+                with c3:
+                    time=st.multiselect('Giờ nhận sơn:',['06:50 - 07:15','09:30 - 09:45',"13:00 - 13:15",'16:00 - 16:15','19:00 - 19:15'])
+                l1,l2=st.columns(2)
+                with l1:
+                    lsx=st.multiselect('Tên Lệnh SX',lsx_id)
 
-        time=st.sidebar.date_input('Ngày',)
-        if st.sidebar.button('Tải DS cho Kế toán'):
-            data=pull(gc,time)
-            st.sidebar.download_button(label='📥 Tải file xuống',
-                                    data=data[0],
-                                    file_name= "{}.xlsx".format(time))
-        st.sidebar.title('PHẦN DÀNH CHO THỦ KHO')
-        if st.sidebar.button('Tổng hợp phiếu xuất trong ngày'):
-            data=pull(gc,time)
+                    sl_sp=st.text_input('Cho số lượng ghế:',)
+
+
+                with l2:
+                    sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
+                    cd=st.multiselect('Loại Bước sơn',pull_buocson(gc))
+
+                    slson=st.text_input('Số kg cần lấy')
+
+
+                st.form_submit_button('Hoàn tất')
+
+
+            c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
+            with c1:
+                st.button('Thêm dòng', on_click=increment_counter,
+                    kwargs=dict(increment_value=1))
+            with c2:
+                st.button('Giảm dòng', on_click=imcrement_counter,
+                    kwargs=dict(increment_value=1))
+            with c3:
+                h=st.session_state.count+4   
+
+                st.write('Tổng số dòng: {}'.format(h ))
+            with st.form(key='abc'):
+                st.subheader('Bước sơn có các vật tư sau:')
+            #     df=pd.read_excel('TTT_ver2/t.xlsx')
+                vattu=pull_vattu(gc)
+                r1,r2,=st.columns(2)
+                with r1:
+                    b1=[]
+                    for nr in range(h):
+                        r=r1.selectbox('Tên vật tư',vattu,key=f'dfuestidn {nr}')
+                        b1.append(r)
+                with r2:
+                    b2=[]
+                    for nr in range (h):
+                        b2.append(r2.number_input('Khối lượng',key=f'dfuesidn {nr}'))
+                st.form_submit_button('Hoàn tất')
+            dic2={'Tên vật tư':b1,'Tỉ lệ':b2}
+            data2=pd.DataFrame.from_dict(dic2)
+            data2['Số lượng']=(float(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
+            data2
+            
+            data=data2.copy()
+            
+            if lsx[0]!="Nội địa":
+                namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
+                nam=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
+                mauson=str(sanpham['MÀU SƠN'].tolist()[0])
+            else:
+                sanpham=""
+                namesp=""
+                nam=""
+                mauson=""
+
+
+            data['Tên Sản phẩm']=nam
+            data['Nhà máy']=nm[0]
+            data['Lệnh SX']=str(lsx)
+            data['Giờ lấy sơn']=time[0]
+            data['SL sản phẩm']=sl_sp
+            data['Loại đề xuất']=kh[0]
+            data['Bước sơn']=cd[0]
+            data['Khách hàng']=namesp
+            data['MÀU SƠN']=mauson
+            data['Khối lượng sơn']=float(slson)
+            from datetime import datetime
+            import pytz
+            tz = pytz.timezone('asia/ho_chi_minh')
+            data['Ngày xuất kho']=datetime.now(tz).date().strftime("%m/%d/%Y")
+            data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
+            data=data.astype(str)
+        #     data
+            barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M%S')
+
+            data['Mã phiếu đề xuất']=barcode
+            data1=data.copy()
+
+            if st.button('Hoàn tất xuất kho - Bấm 1 lần duy nhất'):
+                st.info('Từ từ, bình tĩnh đợi nghen!')
+                footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
+                
+                if len(nam) ==0:
+                    tsp=""
+                else:
+                    tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
+
+                title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(datetime.now(tz).date().strftime("%d/%m/%Y"),datetime.now(tz).strftime("%H:%M"))
+                subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
+                annotation_text = 'Nhà máy                                         Thủ kho sơn'
+                sp='\n \nGiờ lấy sơn: {} \n Loại đề xuất: {} \n Tên SP: {} \n \nSL ghế: {} \n \nBước sơn: {}\n \nKhối lượng sơn: {} kg'
+                sp='\n Giờ lấy sơn: {} - Loại đề xuất: {} \n \nTên SP: {} - SL ghế: {} \n \nBước sơn: {} - Khối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
+
+                st.download_button(label='📥 Tải file xuống',
+                            data=reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode),
+                            file_name= "phieu_xuat_kho.pdf")
+                push(data1,gc,'Xuất kho')
+
+
+        elif selection=='In lại phiếu xuất':
+            st. header('PHẦN CHO VIỆC IN LẠI PHIẾU XUẤT')
+            pdx=st. text_input('Nhập mã phiếu xuất',)
+            df=rePrint(gc,pdx)
+ 
+            st.download_button(label='📥 Tải file xuống',
+                                    data=df ,
+                                    file_name= "phieu_xuat_kho.pdf")
+
+        elif selection=='Tổng hợp danh sách trong ngày':
+            st.header('Tổng hợp danh sách trong ngày')
+            time=st.date_input('Ngày',)
+            data=pull(gc,time,'Ngày xuất kho')
             group_data=data[1][['Nhà máy','Mã phiếu đề xuất']].drop_duplicates().sort_values(by='Nhà máy').reset_index(drop=True)
             output = BytesIO()
             writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -297,132 +421,22 @@ if aa:
             # worksheet = writer.sheets['Sheet1','Sheet2']
             writer.save()
             processed_data = output.getvalue()
-            st.sidebar.download_button(label='📥 Tải file xuống',
+            st.download_button(label='📥 Tải file xuống',
                                     data=processed_data,
                                     file_name= "{}.xlsx".format(time))
 
-
-
-        st.sidebar.title('PHẦN CHO VIỆC IN LẠI PHIẾU XUẤT')
-        pdx=st.sidebar.text_input('Nhập mã phiếu xuất',)
-        if st.sidebar.button('In lại phiếu xuất kho'):
-            st.sidebar.download_button(label='📥 Tải file xuống',
-                                    data=rePrint(gc,pdx)  ,
-                                    file_name= "phieu_xuat_kho.pdf")
-
-        lsx_df=pull_lsx(gc)
-
-        with st.form(key='abcd'):
-            c1,c2,c3=st.columns(3)
-            with c1:
-                nm=st.multiselect('Xuất cho chuyền sơn:',['Treo 1','Treo 2','Pallet 1','Pallet 2','Pallet 3','Pallet 5',"Metro",'Handpick'])
-            with c2:
-                kh=st.multiselect("Loại đề xuất",['Kế hoạch','Phát sinh'])
-                lsx_id=lsx_df['LỆNH SX'].unique().tolist()
-                lsx_id.append('Nội địa')
-
-            with c3:
-                time=st.multiselect('Giờ nhận sơn:',['06:50 - 07:15','09:30 - 09:45',"13:00 - 13:15",'16:00 - 16:15','19:00 - 19:15'])
-            l1,l2=st.columns(2)
-            with l1:
-                lsx=st.multiselect('Tên Lệnh SX',lsx_id)
-
-                sl_sp=st.text_input('Cho số lượng ghế:',)
-
-
-            with l2:
-                sanpham = lsx_df[lsx_df['LỆNH SX'].isin(lsx)]
-                cd=st.multiselect('Loại Bước sơn',pull_buocson(gc))
-
-                slson=st.text_input('Số kg cần lấy')
-
-
-            st.form_submit_button('Hoàn tất')
-
-
-        c1,c2,c3,c4,c5=st.columns((1,1,1,1,1))
-        with c1:
-            st.button('Thêm dòng', on_click=increment_counter,
-                kwargs=dict(increment_value=1))
-        with c2:
-            st.button('Giảm dòng', on_click=imcrement_counter,
-                kwargs=dict(increment_value=1))
-        with c3:
-            h=st.session_state.count+4   
-
-            st.write('Tổng số dòng: {}'.format(h ))
-        with st.form(key='abc'):
-            st.subheader('Bước sơn có các vật tư sau:')
-        #     df=pd.read_excel('TTT_ver2/t.xlsx')
-            vattu=pull_vattu(gc)
-            r1,r2,=st.columns(2)
-            with r1:
-                b1=[]
-                for nr in range(h):
-                    r=r1.selectbox('Tên vật tư',vattu,key=f'dfuestidn {nr}')
-                    b1.append(r)
-            with r2:
-                b2=[]
-                for nr in range (h):
-                    b2.append(r2.number_input('Khối lượng',key=f'dfuesidn {nr}'))
-            st.form_submit_button('Hoàn tất')
-        dic2={'Tên vật tư':b1,'Tỉ lệ':b2}
-        data2=pd.DataFrame.from_dict(dic2)
-        data2['Số lượng']=(float(slson)*data2["Tỉ lệ"].astype(float))/sum(b2) 
-        data2
-        
-        data=data2.copy()
-        
-        if lsx[0]!="Nội địa":
-            namesp=str(sanpham['TÊN KHÁCH HÀNG'].tolist()[0])
-            nam=str(sanpham['TÊN SẢN PHẨM TTF'].tolist())
-            mauson=str(sanpham['MÀU SƠN'].tolist()[0])
-        else:
-            sanpham=""
-            namesp=""
-            nam=""
-            mauson=""
-
-
-        data['Tên Sản phẩm']=nam
-        data['Nhà máy']=nm[0]
-        data['Lệnh SX']=str(lsx)
-        data['Giờ lấy sơn']=time[0]
-        data['SL sản phẩm']=sl_sp
-        data['Loại đề xuất']=kh[0]
-        data['Bước sơn']=cd[0]
-        data['Khách hàng']=namesp
-        data['MÀU SƠN']=mauson
-        data['Khối lượng sơn']=float(slson)
-        from datetime import datetime
-        import pytz
-        tz = pytz.timezone('asia/ho_chi_minh')
-        data['Ngày xuất kho']=datetime.now(tz).date().strftime("%m/%d/%Y")
-        data["Giờ xuất kho"]=datetime.now(tz).strftime("%H:%M")
-        data=data.astype(str)
-    #     data
-        barcode=nm[0][0]+datetime.now(tz).strftime('%d%m%H%M%S')
-
-        data['Mã phiếu đề xuất']=barcode
-        data1=data.copy()
-
-        if st.button('Hoàn tất xuất kho - Bấm 1 lần duy nhất'):
-            st.info('Từ từ, bình tĩnh đợi nghen!')
-            footer_text = 'Ngày xuất {}'.format(pd.to_datetime('today').date())
-            
-            if len(nam) ==0:
-                tsp=""
+        elif selection=='Kế toán xuất số liệu':
+            st.header('Kế toán xuất số liệu')
+            time=st.date_input('Ngày',)
+            select=st.radio('Chọn loại tổng hợp',['Theo Ngày','Theo tuần'])
+            if select=='Theo Ngày':
+                data=pull(gc,time,'Ngày xuất kho') 
             else:
-                tsp=sanpham['TÊN SẢN PHẨM TTF'].tolist()[0]
+                time=time.isocalendar()[1]+1
 
-            title_text ='TTF - Phiếu xuất kho ngày {} lúc {}'.format(datetime.now(tz).date().strftime("%d/%m/%Y"),datetime.now(tz).strftime("%H:%M"))
-            subtitle_text = '\n \nLSX: {} - Chuyền sơn: {}'.format(lsx[0],nm[0])
-            annotation_text = 'Nhà máy                                         Thủ kho sơn'
-            sp='\n Giờ lấy sơn: {} - Loại đề xuất: {} \n \nTên SP: {} - SL ghế: {} \n \nBước sơn: {} - Khối lượng sơn: {} kg'.format(time[0],kh[0],tsp,sl_sp,cd,slson)
+                data=pull(gc,time,'TUẦN XUẤT') 
+
             st.download_button(label='📥 Tải file xuống',
-                        data=reciep(data,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode),
-                        file_name= "phieu_xuat_kho.pdf")
-            push(data1,gc,'Xuất kho')
-
-
-       
+                                    data=data[0],
+                                    file_name= "{}.xlsx".format(time))
+         
