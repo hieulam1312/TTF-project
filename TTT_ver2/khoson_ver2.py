@@ -3,7 +3,12 @@ from ipaddress import collapse_addresses
 from os import close
 from re import T
 from PIL.Image import new
+from cv2 import DFT_COMPLEX_INPUT
+from libcst import Else
+from numpy.core.fromnumeric import size
 import pandas as pd
+from pyasn1.debug import Scope
+from sqlalchemy import TIME
 import streamlit as st
 import base64,io,gspread
 from google.oauth2 import service_account
@@ -80,7 +85,7 @@ def pull_buocson(gc):
     df=pd.DataFrame(sheet)
     buocson=df['Tên bước sơn'].unique().tolist()
     return buocson
-def pull(gc,time,timee):
+def pull(gc,start_date,end_date):
     import gspread_dataframe as gd
     import gspread as gs
     sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
@@ -88,16 +93,19 @@ def pull(gc,time,timee):
     data=pd.DataFrame(sheet)
 
     data['Ngày xuất kho']=pd.to_datetime(data['Ngày xuất kho'],format="%m/%d/%Y").dt.date
-    data=data[data[timee]==time]
-    # data
+    if start_date!=end_date:
+
+        data=data[(data['Ngày xuất kho']>= start_date) & (data['Ngày xuất kho'] < end_date)]
+    else:
+        data=data[(data['Ngày xuất kho']== start_date)]
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("'",""),data['Lệnh SX'].str.replace("'","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("[",""),data['Lệnh SX'].str.replace("[","")
     data['Tên Sản phẩm'],data['Lệnh SX']=data['Tên Sản phẩm'].str.replace("]",""),data['Lệnh SX'].str.replace("]","")
-    data1=data[['Tên Sản phẩm','Lệnh SX','Tên vật tư','Số lượng','Ngày xuất kho','Nhà máy','NHÀ MÁY','Khách hàng',timee]]
-    if timee=='TUẦN XUẤT':
-        data_group=data1.groupby(['Tên Sản phẩm','Lệnh SX','Tên vật tư','Nhà máy','NHÀ MÁY','Khách hàng',timee]).agg({'Số lượng':sum}).reset_index()
-    else:
-        data_group=data1
+    data1=data[['Tên Sản phẩm','Lệnh SX','Tên vật tư','Số lượng','Ngày xuất kho','Nhà máy','NHÀ MÁY','Khách hàng']]
+    
+    data_group=data1.groupby(['Tên Sản phẩm','Lệnh SX','Tên vật tư','Nhà máy','NHÀ MÁY','Khách hàng']).agg({'Số lượng':sum}).reset_index()
+    data_group['Ngày']=str(start_date) +' / '+str(end_date)
+
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     data_group.to_excel(writer, sheet_name='Sheet1',index=False)
@@ -265,6 +273,24 @@ def rePrint(gc,pdx):
 
     return reciep(df,footer_text,tsp, title_text, subtitle_text,annotation_text,sp,barcode)
 
+def pull_trans(gc):
+    import gspread_dataframe as gd
+    import gspread as gs
+    sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
+    sheet=sh.get_all_records()
+    data=pd.DataFrame(sheet)
+    lsx_list=data['Lệnh SX'].unique().tolist()
+    return lsx_list
+
+def pull_report(gc,list_lsx):
+    import gspread_dataframe as gd
+    import gspread as gs
+    sh=gc.open("Kho sơn - DS đặt hàng").worksheet('Xuất kho')
+    sheet=sh.get_all_records()
+    data=pd.DataFrame(sheet)
+    df=data[data['Lệnh SX'].isin(list_lsx)]
+    return df
+
 
 def increment_counter(increment_value=0):
     st.session_state.count += increment_value
@@ -277,7 +303,7 @@ password=st.sidebar.text_input('Mật khẩu',type='password')
 aa=st.sidebar.checkbox("Login")
 if aa:  
     if st.secrets['user']==user and st.secrets['password']==password:
-        selection=st.sidebar.radio('Chọn nội dung',['Nhập phiếu xuất sơn','In lại phiếu xuất','Tổng hợp danh sách trong ngày','Kế toán xuất số liệu'])
+        selection=st.sidebar.radio('Chọn nội dung',['Nhập phiếu xuất sơn','In lại phiếu xuất','Tổng hợp danh sách trong ngày','Thủ kho tổng hợp số liệu','Kế toán xuất số liệu'])
         if selection=='Nhập phiếu xuất sơn':
             st.header('TẠO PHIẾU XUẤT KHO')
             lsx_df=pull_lsx(gc)
@@ -408,7 +434,7 @@ if aa:
         elif selection=='Tổng hợp danh sách trong ngày':
             st.header('Tổng hợp danh sách trong ngày')
             time=st.date_input('Ngày',)
-            data=pull(gc,time,'Ngày xuất kho')
+            data=pull(gc,time,time)
             group_data=data[1][['Nhà máy','Mã phiếu đề xuất']].drop_duplicates().sort_values(by='Nhà máy').reset_index(drop=True)
             output = BytesIO()
             writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -423,16 +449,31 @@ if aa:
 
         elif selection=='Kế toán xuất số liệu':
             st.header('Kế toán xuất số liệu')
-            time=st.date_input('Ngày',)
-            select=st.radio('Chọn loại tổng hợp',['Theo Ngày','Theo tuần'])
-            if select=='Theo Ngày':
-                data=pull(gc,time,'Ngày xuất kho') 
-            else:
-                time=time.isocalendar()[1]+1
+            c1,c2=st.columns(2)
+            with c1:
+                start_date=st.date_input('Ngày bắt đầu',)
+            with c2:
+                end_date=st.date_input('Ngày kết thúc',)
 
-                data=pull(gc,time,'TUẦN XUẤT') 
-
+            data=pull(gc,start_date,end_date)
             st.download_button(label='📥 Tải file xuống',
                                     data=data[0],
-                                    file_name= "{}.xlsx".format(time))
-         
+                                    file_name= "{}.xlsx".format(start_date))
+        elif selection=='Thủ kho tổng hợp số liệu':
+            lsx_id=pull_trans(gc)
+
+            list_lsx=st.multiselect('Nhập mã LSX',lsx_id)
+            df=pull_report(gc,list_lsx)
+            df=df.groupby(['NHÀ MÁY','Bước sơn','Tên vật tư']).agg({'Số lượng':sum}).reset_index()
+            df=df[df['Số lượng']!=""]
+            df
+            output = BytesIO()
+            writer = pd.ExcelWriter(output, engine='xlsxwriter')
+            df.to_excel(writer, sheet_name='Sheet1',index=False)
+            workbook = writer.book
+            # worksheet = writer.sheets['Sheet1','Sheet2']
+            writer.save()
+            processed_data = output.getvalue()
+            st.download_button(label='📥 Tải file xuống',
+                        data=processed_data,
+                        file_name= "báo_cáo.xlsx")
