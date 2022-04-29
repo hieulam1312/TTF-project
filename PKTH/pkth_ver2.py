@@ -35,7 +35,7 @@ def push_done(done,new_done):
     scopes=['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive'],)
     gc=gs.authorize(credentials)
-    done11=gc.open('test').worksheet('Sheet3')
+    done11=gc.open('PKH - Kết quả công việc').worksheet('Dữ liệu')
 
     new_done=new_done[new_done['ID_CV'].isin(done['ID_CV'].tolist())==False]
     df=done.append(new_done)
@@ -50,7 +50,7 @@ def push_doing(doing):
     scopes=['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive'],)
     gc=gs.authorize(credentials)
-    done11=gc.open('test').worksheet('Sheet6')
+    done11=gc.open('PKH - Kết quả công việc').worksheet('Dữ liệu 1')
     gd.set_with_dataframe(done11,doing)
 
 def dataset(gc1):
@@ -74,11 +74,11 @@ def dataset(gc1):
     pyc=pyc[4:]
 
 
-    sh4=gc1.open('test').worksheet('Sheet3')
+    sh4=gc1.open('PKH - Kết quả công việc').worksheet('Dữ liệu')
     sh44=sh4.get_all_records()
     done=pd.DataFrame(sh44)
     done1=done.astype(str)
-    sh5=gc1.open('test').worksheet('Sheet6')
+    sh5=gc1.open('PKH - Kết quả công việc').worksheet('Dữ liệu 1')
     sh45=sh5.get_all_records()
     done22=pd.DataFrame(sh45)
     done2=done22.astype(str)
