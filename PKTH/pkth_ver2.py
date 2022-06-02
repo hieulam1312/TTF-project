@@ -207,9 +207,8 @@ def pull(my_board,lable_table):
             dict1[card]=[card.get_list().name,card.created_date,card.name,card.date_last_activity]
             # print(card.
 
-            for cl in card.fetch_checklists():
-                cl
-                cards[card.name]=len(card.fetch_checklists()[0].items)
+            
+            cards[card.name]=1
             dict2[card.name]=card.listCardMove_date()
             dict3[card]=card.idLabels
     a=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict2.items()]))
