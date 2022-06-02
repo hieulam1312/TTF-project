@@ -39,7 +39,7 @@ def push_done(done,new_done):
 
     new_done=new_done[new_done['ID_CV'].isin(done['ID_CV'].tolist())==False]
     df=done.append(new_done)
-    df
+    st.write('done')
     gd.set_with_dataframe(done11,df)
 def push_doing(doing):
     import gspread as gs
