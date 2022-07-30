@@ -235,7 +235,7 @@ def pull(my_board,lable_table):
     doing=doing.merge(df_lable,how='left',on='LSX').drop(columns={'LSX'})
     df_lable=df_lable[['LSX','Lable']]
     df_2=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict1.items()]))
-    doing=df_2.transpose().reset_index()
+    doing=df_2.transpose().reset_index().astype(str)
     doing
     doing.columns=['LSX','Bộ phận hiện tại','Ngày tạo CV','TÊn','NGÀY NHẬN']
     
