@@ -219,7 +219,7 @@ def pull(my_board,lable_table):
     b=b.rename(columns={'index':'LSX'})
 
     SL=pd.DataFrame.from_dict(cards,orient='index').reset_index().rename(columns={'index':'TÊn',0:'S/L'})
-
+    SL
     df_1=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict3.items()]))
     df_l=df_1.transpose().reset_index()
 
