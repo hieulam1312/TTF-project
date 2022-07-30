@@ -238,6 +238,7 @@ def pull(my_board,lable_table):
     doing=df_2.transpose().reset_index()
 
     doing.columns=['LSX','Bộ phận hiện tại','Ngày tạo CV','TÊn','NGÀY NHẬN']
+    doing
     doing=doing.merge(SL,how='left',on='TÊn')
     doing[['ID_CV','TÊN SP']]=doing['TÊn'].astype(str).str.split('+',1, expand=True)
 
