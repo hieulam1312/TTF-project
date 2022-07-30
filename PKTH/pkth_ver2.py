@@ -236,14 +236,14 @@ def pull(my_board,lable_table):
     df_lable=df_lable[['LSX','Lable']]
     df_2=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict1.items()]))
     doing=df_2.transpose().reset_index().astype(str)
-    print(doing)
+   
     doing.columns=['LSX','Bộ phận hiện tại','Ngày tạo CV','TÊn','NGÀY NHẬN']
     
     doing=doing.merge(SL,how='left',on='TÊn')
     doing[['ID_CV','TÊN SP']]=doing['TÊn'].astype(str).str.split('+',1, expand=True)
     
     doing['S/L']=doing['S/L'].fillna(1)
-    doing
+    print(doing)
     doing=doing.merge(df_lable,how='left',on='LSX').drop(columns={'LSX'})
     DONE=doing[doing['Bộ phận hiện tại']=='HOÀN THÀNH']
     DONE_ID=DONE['TÊn'].to_list()
@@ -264,6 +264,7 @@ def pull(my_board,lable_table):
 
 
     done_df=DONE.merge(pivot,how='left',on='TÊn')[[ 'ID_CV','TÊN SP', 'S/L','Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','NGÀY NHẬN', 'Lable']]
+    print(done_df)
     done_df.columns=['ID_CV', 'TÊN SP', 'S/L', 'Nhân viên', 'Ngày tạo CV', 'Thời gian nhận','Ngày hoàn thành', 'Loại CV']
 
     doing_df=doing[doing['Bộ phận hiện tại']!='HOÀN THÀNH'].drop(columns={'TÊn'}).reset_index(drop=True)
