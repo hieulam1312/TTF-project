@@ -208,7 +208,7 @@ def pull(my_board,lable_table):
                 # print(card.
             for cl in card.fetch_checklists():
                 cards[card.name ] =len(card.fetch_checklists()[0].items)
-             print(cards)
+            print(cards)
 #             cards[card.name]=1
             dict2[card.name]=card.listCardMove_date()
             dict3[card]=card.idLabels
