@@ -208,7 +208,7 @@ def pull(my_board,lable_table):
                 # print(card.
             for cl in card.fetch_checklists():
                 cards[card.name ] =len(card.fetch_checklists()[0].items)
-            print(cards)
+           
 #             cards[card.name]=1
             dict2[card.name]=card.listCardMove_date()
             dict3[card]=card.idLabels
@@ -219,7 +219,7 @@ def pull(my_board,lable_table):
     b=b.rename(columns={'index':'LSX'})
 
     SL=pd.DataFrame.from_dict(cards,orient='index').reset_index().rename(columns={'index':'TÊn',0:'S/L'})
-    SL
+    print(SL)
     df_1=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict3.items()]))
     df_l=df_1.transpose().reset_index()
 
@@ -236,7 +236,7 @@ def pull(my_board,lable_table):
     df_lable=df_lable[['LSX','Lable']]
     df_2=pd.DataFrame(dict([(k, pd.Series(v)) for k, v in dict1.items()]))
     doing=df_2.transpose().reset_index().astype(str)
-    doing
+    print(doing)
     doing.columns=['LSX','Bộ phận hiện tại','Ngày tạo CV','TÊn','NGÀY NHẬN']
     
     doing=doing.merge(SL,how='left',on='TÊn')
