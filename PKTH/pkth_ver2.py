@@ -41,88 +41,88 @@ def push_done(done,new_done):
     df=done.append(new_done)
     st.write('done')
     gd.set_with_dataframe(done11,df)
-def push_doing(doing):
-    import gspread as gs
-    import gspread_dataframe as gd
-    from gspread_dataframe import set_with_dataframe
-    credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive'],)
-    gc=gs.authorize(credentials)
-    done11=gc.open('PKH - Kết quả công việc').worksheet('Dữ liệu 1')
-    gd.set_with_dataframe(done11,doing)
+# def push_doing(doing):
+#     import gspread as gs
+#     import gspread_dataframe as gd
+#     from gspread_dataframe import set_with_dataframe
+#     credentials = service_account.Credentials.from_service_account_info(
+#     st.secrets["gcp_service_account"],
+#     scopes=['https://spreadsheets.google.com/feeds',
+#          'https://www.googleapis.com/auth/drive'],)
+#     gc=gs.authorize(credentials)
+#     done11=gc.open('PKH - Kết quả công việc').worksheet('Dữ liệu 1')
+#     gd.set_with_dataframe(done11,doing)
 
-def dataset(gc1):
-    sh1=gc1.open("TTF - MẪU 2022 - TRIỂN KHAI").worksheet('D.SÁCH')
-    sh11=sh1.get_all_records()
-    dhm=pd.DataFrame(sh11)
-
-
-    sh2=gc1.open('LSX - lưu trữ').worksheet('LSX ĐÃ IN')
-    sh22=sh2.get_all_records()
-    lsx=pd.DataFrame(sh22)
-    lsx=lsx.astype(str)
+# def dataset(gc1):
+#     sh1=gc1.open("TTF - MẪU 2022 - TRIỂN KHAI").worksheet('D.SÁCH')
+#     sh11=sh1.get_all_records()
+#     dhm=pd.DataFrame(sh11)
 
 
-
-    sh3=gc1.open('TTF - TRIỂN KHAI BẢN VẼ & BOM').worksheet('D.SÁCH')
-    sh33=sh3.get_all_values()
-    pyc=pd.DataFrame(sh33)
-    pyc=pyc[3:]
-    pyc.columns=pyc.iloc[0]
-    pyc=pyc[4:]
+#     sh2=gc1.open('LSX - lưu trữ').worksheet('LSX ĐÃ IN')
+#     sh22=sh2.get_all_records()
+#     lsx=pd.DataFrame(sh22)
+#     lsx=lsx.astype(str)
 
 
-    sh4=gc1.open('PKH - Kết quả công việc').worksheet('Dữ liệu')
-    sh44=sh4.get_all_records()
-    done=pd.DataFrame(sh44)
-    done1=done.astype(str)
-    sh5=gc1.open('PKH - Kết quả công việc').worksheet('Dữ liệu 1')
-    sh45=sh5.get_all_records()
-    done22=pd.DataFrame(sh45)
-    done2=done22.astype(str)
-    list_done=done1['ID_CV'].tolist()+done2['ID_CV'].tolist()
-    # list_done
-    dhm=dhm[['SỐ ĐƠN HÀNG', 'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM', 'S/L', 'GỖ', 'NGÀY GIAO', 'GHI CHÚ', 'NHÀ MÁY']]
-    dhm['LOẠI CV']='Đơn hàng mẫu'
-    dhm=dhm.replace("",np.nan)
-    dhm['SỐ ĐƠN HÀNG']=dhm['SỐ ĐƠN HÀNG'].dropna()
-    dhm=dhm[dhm['SỐ ĐƠN HÀNG'].str.contains('TM')==False]
-    dhm.columns=['ID_CV','TÊN KH','TÊN SẢN PHẨM','S/L','GỖ','NGÀY GIAO','GHI CHÚ','NHÀ MÁY','LOẠI CV']
+
+#     sh3=gc1.open('TTF - TRIỂN KHAI BẢN VẼ & BOM').worksheet('D.SÁCH')
+#     sh33=sh3.get_all_values()
+#     pyc=pd.DataFrame(sh33)
+#     pyc=pyc[3:]
+#     pyc.columns=pyc.iloc[0]
+#     pyc=pyc[4:]
+
+
+#     sh4=gc1.open('PKH - Kết quả công việc').worksheet('Dữ liệu')
+#     sh44=sh4.get_all_records()
+#     done=pd.DataFrame(sh44)
+#     done1=done.astype(str)
+#     sh5=gc1.open('PKH - Kết quả công việc').worksheet('Dữ liệu 1')
+#     sh45=sh5.get_all_records()
+#     done22=pd.DataFrame(sh45)
+#     done2=done22.astype(str)
+#     list_done=done1['ID_CV'].tolist()+done2['ID_CV'].tolist()
+#     # list_done
+#     dhm=dhm[['SỐ ĐƠN HÀNG', 'TÊN KHÁCH HÀNG','TÊN SẢN PHẨM', 'S/L', 'GỖ', 'NGÀY GIAO', 'GHI CHÚ', 'NHÀ MÁY']]
+#     dhm['LOẠI CV']='Đơn hàng mẫu'
+#     dhm=dhm.replace("",np.nan)
+#     dhm['SỐ ĐƠN HÀNG']=dhm['SỐ ĐƠN HÀNG'].dropna()
+#     dhm=dhm[dhm['SỐ ĐƠN HÀNG'].str.contains('TM')==False]
+#     dhm.columns=['ID_CV','TÊN KH','TÊN SẢN PHẨM','S/L','GỖ','NGÀY GIAO','GHI CHÚ','NHÀ MÁY','LOẠI CV']
  
 
-    lsx=lsx[['LỆNH SX',"SỐ ĐƠN HÀNG",'TÊN KHÁCH HÀNG', 'TÊN SẢN PHẨM TTF','SỐ LƯỢNG', 'LOẠI GỖ',  'NGÀY XUẤT', 'GHI CHÚ', 'NMSX','SẢN PHẨM (C/M)']]
-    lsx['LOẠI CV']='Lệnh SX'
-    lsx.columns=['ID_CV',"SỐ ĐƠN HÀNG",'TÊN KH','TÊN SẢN PHẨM','S/L','GỖ','NGÀY GIAO','GHI CHÚ','NHÀ MÁY','LOẠI ĐH','LOẠI CV']
+#     lsx=lsx[['LỆNH SX',"SỐ ĐƠN HÀNG",'TÊN KHÁCH HÀNG', 'TÊN SẢN PHẨM TTF','SỐ LƯỢNG', 'LOẠI GỖ',  'NGÀY XUẤT', 'GHI CHÚ', 'NMSX','SẢN PHẨM (C/M)']]
+#     lsx['LOẠI CV']='Lệnh SX'
+#     lsx.columns=['ID_CV',"SỐ ĐƠN HÀNG",'TÊN KH','TÊN SẢN PHẨM','S/L','GỖ','NGÀY GIAO','GHI CHÚ','NHÀ MÁY','LOẠI ĐH','LOẠI CV']
 
 
-    sxnc=lsx[lsx['LOẠI ĐH']=='C']
-    sxnc['LOẠI CV']='SXNC'
-    sxmoi=lsx[lsx['LOẠI ĐH']=='M']
-    sxmoi['LOẠI CV']='SX MỚI'
+#     sxnc=lsx[lsx['LOẠI ĐH']=='C']
+#     sxnc['LOẠI CV']='SXNC'
+#     sxmoi=lsx[lsx['LOẠI ĐH']=='M']
+#     sxmoi['LOẠI CV']='SX MỚI'
 
 
-    pyc['TÊN SẢN PHẨM']=pyc['TÊN SP'] +" - "+pyc['NỘI DUNG YC']
-    pyc2=pyc[['SỐ PHIẾU', 'TÊN KH',  'TÊN SẢN PHẨM',  'NGÀY YC GIAO','ƯU TIÊN','Ghi chú']]
-    pyc2['LOẠI CV']='Phiếu Y/C'
-    pyc2['S/L']=1
-    pyc2['GỖ']=""
-    pyc2.columns=['ID_CV','TÊN KH','TÊN SẢN PHẨM','NGÀY GIAO','ƯU TIÊN','GHI CHÚ','LOẠI CV','S/L','GỖ']
+#     pyc['TÊN SẢN PHẨM']=pyc['TÊN SP'] +" - "+pyc['NỘI DUNG YC']
+#     pyc2=pyc[['SỐ PHIẾU', 'TÊN KH',  'TÊN SẢN PHẨM',  'NGÀY YC GIAO','ƯU TIÊN','Ghi chú']]
+#     pyc2['LOẠI CV']='Phiếu Y/C'
+#     pyc2['S/L']=1
+#     pyc2['GỖ']=""
+#     pyc2.columns=['ID_CV','TÊN KH','TÊN SẢN PHẨM','NGÀY GIAO','ƯU TIÊN','GHI CHÚ','LOẠI CV','S/L','GỖ']
 
 
 
-    BB=lsx[lsx['LOẠI ĐH']=='M']
-    BB['LOẠI CV']='Bao bì'
-    BB['ID_CV']=BB['ID_CV']+'.BB'
+#     BB=lsx[lsx['LOẠI ĐH']=='M']
+#     BB['LOẠI CV']='Bao bì'
+#     BB['ID_CV']=BB['ID_CV']+'.BB'
 
-    ### combine data source
-    df=dhm.append([sxnc,sxmoi,pyc2,BB])
-    df=df.replace("",np.nan)
-    df=df[df['ID_CV'].isnull()==False]
-    df=df.drop(columns=['LOẠI ĐH','ƯU TIÊN'])
+#     ### combine data source
+#     df=dhm.append([sxnc,sxmoi,pyc2,BB])
+#     df=df.replace("",np.nan)
+#     df=df[df['ID_CV'].isnull()==False]
+#     df=df.drop(columns=['LOẠI ĐH','ƯU TIÊN'])
 
-    return sxmoi,sxnc,dhm,BB,pyc2,list_done,done1
+#     return sxmoi,sxnc,dhm,BB,pyc2,list_done,done1
 
 
 
