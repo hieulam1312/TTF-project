@@ -311,6 +311,6 @@ def trello_df():
 
 if st.button('Xuất Tiến độ'):
     data_dff=pull(my_board,lable_table)
-    data_dff[1]
+
     push_done(done,data_dff[1])
     #push_doing(data_dff[0])
