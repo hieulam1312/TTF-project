@@ -276,8 +276,7 @@ def pull(my_board,lable_table):
 st.subheader('MỚI')
 # with st.form(key='abc'):
 
-dhn_demo=dataset(gc1)
-sxmoi,sxnc,dhm,BB,pyc,list_done,done=dhn_demo[0],dhn_demo[1],dhn_demo[2],dhn_demo[3],dhn_demo[4],dhn_demo[5],dhn_demo[6]
+# sxmoi,sxnc,dhm,BB,pyc,list_done,done=dhn_demo[0],dhn_demo[1],dhn_demo[2],dhn_demo[3],dhn_demo[4],dhn_demo[5],dhn_demo[6]
 b=st.selectbox('Loại công việc',['SX MỚI','SXNC','Đơn hàng mẫu','Phiếu Y/C','Bao bì'])
 def trello_df():
     if b=='SX MỚI':
@@ -304,11 +303,11 @@ def trello_df():
             BB1=doing[doing['SỐ ĐƠN HÀNG'].str.contains(order)]
             list_id[order]=(BB1['ID_CV']+" | "+BB1['TÊN KH']+" | "+BB1['TÊN SẢN PHẨM']+" | "+BB1['S/L']+" | "+BB1['GỖ']).to_list()
     return doing,list_id
-df=trello_df()
-doing,list_id=df[0],df[1]
-doing
-if st.button('Xuất lên Trello'):        
-    add_card(doing,list_id,lable_table)
+# df=trello_df()
+# doing,list_id=df[0],df[1]
+# doing
+# if st.button('Xuất lên Trello'):        
+#     add_card(doing,list_id,lable_table)
 
 if st.button('Xuất Tiến độ'):
     data_dff=pull(my_board,lable_table)
