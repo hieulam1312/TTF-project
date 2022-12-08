@@ -15,7 +15,7 @@ seaborn
 xlsxwriter
 gspread
 streamlit-pandas-profiling
-sklearn
+
 waterfallcharts
 gspread-dataframe
 python-barcode 
