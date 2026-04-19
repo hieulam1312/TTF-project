@@ -14,7 +14,7 @@ def ncc_f():
          'https://www.googleapis.com/auth/drive'],
     )
     gc = gspread.authorize(credentials)
-    spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
+    spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
 
     sh=gc.open('Kho NVL - NCC').worksheet('Sheet1')
     sheet=sh.get_all_values()
