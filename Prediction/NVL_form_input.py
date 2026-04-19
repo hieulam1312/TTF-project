@@ -14,7 +14,6 @@ import datetime as dt # to work with date, time
 from bs4 import BeautifulSoup # to work with web scrapping (HTML)
 import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
-from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 from email.utils import make_msgid
 import mimetypes
