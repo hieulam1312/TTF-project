@@ -233,7 +233,7 @@ else:
 
     with placeholder.container():
     # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
-          with st.form(key="columns_in_form"):
+        with st.form(key="columns_in_form"):
 
             r1, r2, r3, r4, r5 = st.columns((1,1,1,2,2))
         
@@ -274,10 +274,6 @@ else:
                     )
         
             submitted = st.form_submit_button("Submit")
-
-
-
-    
         b=["0" if v =="" else v for v in b]
         c=["0" if v =="" else v for v in c]
         d=["0 "if v =="" else v for v in d]
