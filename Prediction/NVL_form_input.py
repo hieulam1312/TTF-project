@@ -14,14 +14,35 @@ import datetime as dt # to work with date, time
 from bs4 import BeautifulSoup # to work with web scrapping (HTML)
 import pandas as pd # to work with tables (DataFrames) data
 from IPython.core.display import HTML
+from streamlit.elements import multiselect # to display HTML in the notebook
 import PIL
 from email.utils import make_msgid
 import mimetypes
 st.set_page_config(layout='wide')
 
 def ncc_f():
-    A = ["ABC","DEF","DGD"]
-    B= ["Công ty ABC","Công ty DEF","Công ty DGD"]
+    import streamlit as st
+    import pandas as pd
+    from google.oauth2 import service_account
+    import gspread #-> Để update data lên Google Spreadsheet
+    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
+    from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
+    credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive'],
+    )
+    gc = gspread.authorize(credentials)
+    spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
+
+    sh=gc.open('NCC').worksheet('Sheet10')
+    sheet=sh.get_all_values()
+    ncc=pd.DataFrame(sheet)
+    ncc.columns=ncc.iloc[0]
+    ncc=ncc[1:]
+    # ncc
+    A = ncc['TÊN NCC'].unique().tolist()
+    B= ncc['MÃ'].unique().tolist()
     return A,B
 abv=ncc_f()
 list_ncc=abv[0]
@@ -204,12 +225,12 @@ def push(df,str):
          'https://www.googleapis.com/auth/drive'],
     )
     gc = gspread.authorize(credentials)
-    spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
+    spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
 
     import gspread_dataframe as gd
     import gspread as gs
 
-    ws = gc.open("NCC").worksheet(str)
+    ws = gc.open("Kho NVL - NCC").worksheet(str)
     existing = gd.get_as_dataframe(ws)
 
     updated = existing.append(df)
@@ -266,53 +287,43 @@ else:
 
     with placeholder.container():
     # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
-        with st.form(key="columns_in_form"):
-        
-            r1, r2, r3, r4, r5 = st.columns((1,1,1,2,2))
-        
+        with st.form(key='columns_in_form'):
+
+
+            r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
             with r1:
-                a = st.text_input("Dày")
-        
+                a=r1.text_input('Dày',)
             with r2:
-                b = []
+                # placeholder = r2.empty()
                 with placeholder.container():
-                    for nr in range(5 + st.session_state.count):
-                        b.append(
-                            st.text_input(
-                                "Rộng",
-                                key=f"rong_{nr}"
-                            )
-                        )
-        
+                    b=[]
+                    for nr in range(5+st.session_state.count):
+                        # b=r2.text_input('Dài',)
+                   
+                        b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
             with r3:
-                c = []
+                # placeholder2 = r3.empty()
                 with placeholder.container():
-                    for nr in range(5 + st.session_state.count):
-                        c.append(
-                            st.text_input(
-                                "Dài",
-                                key=f"dai_{nr}"
-                            )
-                        )
-        
-            with r4:
-                d = []
+                    c=[]
+                    for nr in range(5+st.session_state.count):
+                                # b=r2.text_input('Dài',)
+                        
+                        c.append(r3.text_input(label='Dài', key=f'2`1 {nr}'))
+                # c.append(placeholder.text_input(label='Dài', key=f'dfuestion {ng}'))
+            with r4:            
+                # placeholder2 = r4.empty()
                 with placeholder.container():
-                    for nr in range(5 + st.session_state.count):
-                        d.append(
-                            st.text_input(
-                                "Số thanh",
-                                key=f"sothanh_{nr}"
-                            )
-                        )
-        
-            name = st.text_input("Name")
-        
-            submitted = st.form_submit_button("Submit")
-            
-            if submitted:
-                st.write(name)
-    
+                    d=[]
+                    for nr in range(5+st.session_state.count):
+                        
+                        d.append(r4.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
+            # click_clear = st.checkbox('clear text input', key=1)
+
+                
+            st.form_submit_button('submit')
+
+
+
 
 
     
@@ -496,7 +507,6 @@ else:
             push(df,'Sheet2')
         if st.button("Xóa nội dung thẻ kiện cũ"):
             placeholder.empty()
-
 
 
 
