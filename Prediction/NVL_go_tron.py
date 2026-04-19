@@ -259,7 +259,7 @@ def push(df,str):
     import gspread_dataframe as gd
     import gspread as gs
 
-    ws = gc.open("TTF - Nhập liệu gỗ tròn").worksheet(str)
+    ws = gc.open("StreamlitApp").worksheet(str)
     existing = gd.get_as_dataframe(ws)
     # existing
     updated = existing.append(df)
