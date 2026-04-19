@@ -33,7 +33,6 @@ def ncc_f():
     )
     gc = gspread.authorize(credentials)
     spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
-
     sh=gc.open('NCC').worksheet('Sheet10')
     sheet=sh.get_all_values()
     ncc=pd.DataFrame(sheet)
