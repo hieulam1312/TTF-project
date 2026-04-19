@@ -20,28 +20,8 @@ import mimetypes
 st.set_page_config(layout='wide')
 
 def ncc_f():
-    import streamlit as st
-    import pandas as pd
-    from google.oauth2 import service_account
-    import gspread #-> Để update data lên Google Spreadsheet
-    from gspread_dataframe import set_with_dataframe #-> Để update data lên Google Spreadsheet
-    from oauth2client.service_account import ServiceAccountCredentials #-> Để nhập Google Spreadsheet Credentials
-    credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive'],
-    )
-    gc = gspread.authorize(credentials)
-    spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
-
-    sh=gc.open('NCC').worksheet('Sheet10')
-    sheet=sh.get_all_values()
-    ncc=pd.DataFrame(sheet)
-    ncc.columns=ncc.iloc[0]
-    ncc=ncc[1:]
-    # ncc
-    A = ncc['TÊN NCC'].unique().tolist()
-    B= ncc['MÃ'].unique().tolist()
+    A = ["A","B",["C"]
+    B= ["A","B",["C"]
     return A,B
 abv=ncc_f()
 list_ncc=abv[0]
@@ -50,42 +30,9 @@ from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
 "ASH",
-"BẠCH ĐÀN",
-"BEECH",
-"CĂM XE",
-"CAO SU ĐEN",
-"CAO SU",
-"CHERRY",
-"CHÒ CHỈ",
-"SYCAMORE",
-"DỪA",
-"DƯƠNG LIỄU",
-"GÒN",
-"HICKORY",
-"KAPUS",
-"LÒNG MỨT",
-"MAPLE",
-"MÍT",
-"MUỒNG",
-"NEP PALLET",
-"OAK",
-"PƠ MU",
-"POPLAR",
-"RED ELM",
-"RED OAK",
-"SỌ KHỈ",
-"TẠP",
-"TEAK",
-"THÔNG",
-"TRÀM",
-"TRÅU",
-"WALNUT",
-"WHITE OAK",
-"WHITE POPLAR",
-"WILLOW",
-"XOÀI"
+"BẠCH ĐÀN"
 ]
-in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
+in_list=["ADL","ASV","ASH","BDA"]
 # abv
 
 import barcode
