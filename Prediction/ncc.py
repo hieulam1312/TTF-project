@@ -16,7 +16,7 @@ def ncc_f():
     gc = gspread.authorize(credentials)
     spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
 
-    sh=gc.open('Kho NVL - NCC').worksheet('Sheet1')
+    sh=gc.open('NCC').worksheet('Sheet10')
     sheet=sh.get_all_values()
     ncc=pd.DataFrame(sheet)
     ncc.columns=ncc.iloc[0]
@@ -40,7 +40,7 @@ def push(df):
          'https://www.googleapis.com/auth/drive'],
     )
     gc = gspread.authorize(credentials)
-    spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
+    spreadsheet_key=''1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8''
 
     sheet_index_no1= 8
 
@@ -50,7 +50,7 @@ def push(df):
     import gspread_dataframe as gd
     import gspread as gs
 
-    ws = gc.open("Kho NVL - NCC").worksheet('Sheet2')
+    ws = gc.open("NCC").worksheet('Sheet2')
 
     existing = gd.get_as_dataframe(ws)
     updated = existing.append(df)
