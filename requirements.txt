@@ -1,22 +1,17 @@
-
+streamlit>=1.30.0
 pandas
 numpy
-streamlit == 1.4.0
 requests-oauthlib==1.3.0
 matplotlib
 seaborn
 gsheetsdb==0.1.13
-bs4
-secure-smtplib
+beautifulsoup4
 oauth2client
-openpyxl==3.0.5
-matplotlib
-seaborn
+openpyxl>=3.1.0
 xlsxwriter
 gspread
-streamlit-pandas-profiling==0.1.2
-sklearn
+scikit-learn
 waterfallcharts
 gspread-dataframe
-python-barcode 
-# python-barcode-writer>=1.0.1
+python-barcode
+ydata-profiling
