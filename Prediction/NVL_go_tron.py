@@ -19,10 +19,6 @@ import PIL
 # from barcode.writer import ImageWriter
 # import cv
 st.set_page_config(layout='wide')
-
-# from cvcv import ncc_f
-from ncc import abv
-from list_info import qc_list
 go_list=["ALDER",
 "ASH VN",
 "ASH",
@@ -63,9 +59,8 @@ go_list=["ALDER",
 ]
 in_list=["ADL","ASV","ASH","BDA","BEE","CXE","CSD","CSU","CHE","CCI","SYC","DUA","DLI","GON","HIC","KAP","LMU","MAP","MIT","MNG","NPL","OAK","PMU","PLR","REL","ROK","SOK","TAP","TEK","THO","TRM","TRU","WAL","WOK","WPR","WIL","XOA"]
 # abv
-list_ncc = abv[0]
-
-list_int= abv[1]
+list_ncc=["ABC","DEF"]
+list_int=["DGE","DSE"]
 # cv.ncc_f()
 # def increment_counter(increment_value=0):
 #     rowss += increment_value
@@ -78,7 +73,7 @@ a2,a3,a4,a5=st.columns((1.5,1.5,1,1))
 with a2:
     ncc=st.multiselect('NCC:',list_ncc)
 with a3:
-    qc=st.multiselect('QC kiểm:',qc_list)
+    qc=st.multiselect('QC kiểm:',["Staff A","Staff B"])
 with a4:
     go=st.multiselect('Loại gỗ:',go_list)
 with a5:
