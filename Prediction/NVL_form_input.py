@@ -225,12 +225,12 @@ def push(df,str):
          'https://www.googleapis.com/auth/drive'],
     )
     gc = gspread.authorize(credentials)
-    spreadsheet_key='1KBTVmlT5S2_x9VGseHdk_QDvZIfNBOLJy78lM0p3ORQ'
+    spreadsheet_key='1rbsXxCJA0ILbOEy1zMfRzFuUXP3-o9T0L8GybaoG5Q8'
 
     import gspread_dataframe as gd
     import gspread as gs
 
-    ws = gc.open("Kho NVL - NCC").worksheet(str)
+    ws = gc.open("NCC").worksheet(str)
     existing = gd.get_as_dataframe(ws)
 
     updated = existing.append(df)
