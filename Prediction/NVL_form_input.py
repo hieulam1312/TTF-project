@@ -281,13 +281,15 @@ else:
                    
                         b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
             with r3:
-                # placeholder2 = r3.empty()
                 with placeholder.container():
-                    c=[]
-                    for nr in range(5+st.session_state.count):
-                                # b=r2.text_input('Dài',)
-                        
-                        c.append(r3.text_input(label='Dài', key=f'2`1 {nr}'))
+                    c = []
+            
+                    for nr in range(5 + st.session_state.count):
+                        value = st.text_input(
+                            label="Dài",
+                            key=f"dai_r3_{nr}"
+                        )
+                        c.append(value)
                 # c.append(placeholder.text_input(label='Dài', key=f'dfuestion {ng}'))
             with r4:            
                 # placeholder2 = r4.empty()
