@@ -14,3 +14,4 @@ scikit-learn
 waterfallcharts
 gspread-dataframe
 python-barcode
+ipython
