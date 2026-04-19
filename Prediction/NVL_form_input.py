@@ -20,8 +20,8 @@ import mimetypes
 st.set_page_config(layout='wide')
 
 def ncc_f():
-    A = ["A","B",["C"]
-    B= ["A","B",["C"]
+    A = ["A","B","C"]
+    B= ["A","B","C"]
     return A,B
 abv=ncc_f()
 list_ncc=abv[0]
