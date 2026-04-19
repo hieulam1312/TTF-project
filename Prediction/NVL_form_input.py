@@ -299,8 +299,12 @@ else:
             # click_clear = st.checkbox('clear text input', key=1)
 
                 
-            st.form_submit_button('submit')
-
+            with st.form("my_form"):
+                name = st.text_input("Name")
+                submitted = st.form_submit_button("Submit")
+            
+            if submitted:
+                st.write(name)
 
 
 
