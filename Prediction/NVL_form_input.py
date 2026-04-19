@@ -309,9 +309,9 @@ else:
                 name = st.text_input("Name")
             
                 submitted = st.form_submit_button("Submit")
-
-if submitted:
-    st.write(name)
+                
+                if submitted:
+                    st.write(name)
 
 
 
