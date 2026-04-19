@@ -266,48 +266,52 @@ else:
 
     with placeholder.container():
     # dv=st.selectbox('Đơn vị đo:',['mm','Inch','feet'])
-        with st.form(key='columns_in_form'):
-
-
-            r1,r2,r3,r4,r5=st.columns((1,1,1,2,2))
-            with r1:
-                a=r1.text_input('Dày',)
-            with r2:
-                # placeholder = r2.empty()
-                with placeholder.container():
-                    b=[]
-                    for nr in range(5+st.session_state.count):
-                        # b=r2.text_input('Dài',)
-                   
-                        b.append(r2.text_input(label='Rộng', key=f'2`1 {nr}'))
-            with r3:
-                with placeholder.container():
+            with st.form(key="columns_in_form"):
+            
+                r1, r2, r3, r4, r5 = st.columns((1,1,1,2,2))
+            
+                with r1:
+                    a = st.text_input("Dày")
+            
+                with r2:
+                    b = []
+                    with placeholder.container():
+                        for nr in range(5 + st.session_state.count):
+                            b.append(
+                                st.text_input(
+                                    "Rộng",
+                                    key=f"rong_{nr}"
+                                )
+                            )
+            
+                with r3:
                     c = []
+                    with placeholder.container():
+                        for nr in range(5 + st.session_state.count):
+                            c.append(
+                                st.text_input(
+                                    "Dài",
+                                    key=f"dai_{nr}"
+                                )
+                            )
             
-                    for nr in range(5 + st.session_state.count):
-                        value = st.text_input(
-                            label="Dài",
-                            key=f"dai_r3_{nr}"
-                        )
-                        c.append(value)
-                # c.append(placeholder.text_input(label='Dài', key=f'dfuestion {ng}'))
-            with r4:            
-                # placeholder2 = r4.empty()
-                with placeholder.container():
-                    d=[]
-                    for nr in range(5+st.session_state.count):
-                        
-                        d.append(r4.text_input(label='Số thanh', key=f'Quesdfgtion {nr}'))
-            # click_clear = st.checkbox('clear text input', key=1)
-
-                
-            with st.form("my_form"):
+                with r4:
+                    d = []
+                    with placeholder.container():
+                        for nr in range(5 + st.session_state.count):
+                            d.append(
+                                st.text_input(
+                                    "Số thanh",
+                                    key=f"sothanh_{nr}"
+                                )
+                            )
+            
                 name = st.text_input("Name")
-                submitted = st.form_submit_button("Submit")
             
-            if submitted:
-                st.write(name)
+                submitted = st.form_submit_button("Submit")
 
+if submitted:
+    st.write(name)
 
 
 
